@@ -1,4 +1,5 @@
 ﻿namespace Domain.Entities;
+
 public class User
 {
     public User(string userName, string password, string role)
@@ -6,6 +7,8 @@ public class User
         Username = userName;
         Password = password;
         Role = role;
+
+        new UserValidator().ValidateAndThrow(this);
     }
 
     protected User() {}

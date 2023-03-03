@@ -24,7 +24,8 @@ public class AuthenticationController : ControllerBase
     public ActionResult<dynamic> Authenticate([FromBody] Credentials model)
     {
         UserModel? user = Service.GetUser(model.Username, model.Password);
-        if (user == null)
+        
+        if (user is null)
             return NotFound(new { message = "Usuário ou senha inválidos" });
 
         var token = TokenHandler.GenerateToken(user);
@@ -33,11 +34,5 @@ public class AuthenticationController : ControllerBase
             user = user,
             token = token
         };
-    }
-
-    [HttpGet("Teste")]
-    public string Teste()
-    {
-        return "hello world!";
     }
 }

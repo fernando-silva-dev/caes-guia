@@ -2,6 +2,7 @@
     "recommendations": [
         "ms-dotnettools.csharp",
         "formulahendry.dotnet-test-explorer",
-        "adrianwilczynski.user-secrets"
+        "adrianwilczynski.user-secrets",
+        "jmrog.vscode-nuget-package-manager"
     ]
 }
