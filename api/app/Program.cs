@@ -3,6 +3,7 @@ using App;
 using Crosscutting;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
+using Service;
 
 var builder = WebApplication.CreateBuilder(args);
 var key = builder.Configuration.GetValue<string>("TOKEN_KEY") ?? throw new ArgumentNullException("TOKEN_KEY");
@@ -30,6 +31,9 @@ builder.Services.AddScoped<TokenGenerator>();
 // Add services to the container.
 builder.Services.AddControllers();
 builder.Services.InjectDependencies();
+
+builder.Services.AddAutoMapper(typeof(MapperProfile));
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

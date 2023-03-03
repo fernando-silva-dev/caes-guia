@@ -10,7 +10,7 @@ public static class DependencyInjectionExtensions
     public static void InjectDependencies(this IServiceCollection services){
         services.AddDbContext<Context>();
 
-        services.AddScoped<UserService>();
-        services.AddScoped<UserRepository>();
+        services.Scan(x => x.FromAssembliesOf(typeof(UserService)).AddClasses(c => c.InExactNamespaceOf<UserService>()).AsSelf().WithScopedLifetime());
+        services.Scan(x => x.FromAssembliesOf(typeof(UserRepository)).AddClasses(c => c.InExactNamespaceOf<UserRepository>()).AsSelf().WithScopedLifetime());
     }
 }
