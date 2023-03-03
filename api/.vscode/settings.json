@@ -8,5 +8,7 @@
         "**/Thumbs.db": true,
         "*/bin/": true,
         "*/obj/": true,
+        ".gitignore": true,
     },
+    "dotnet-test-explorer.testProjectPath": "./test/test.csproj",
 }
