@@ -8,11 +8,11 @@ namespace App.Controllers;
 [ApiController]
 [Authorize]
 [Route("[controller]")]
-public class AuthenticationController : ControllerBase
+public class UserController : ControllerBase
 {
     private readonly TokenGenerator TokenHandler;
     private readonly UserService Service;
-    public AuthenticationController(TokenGenerator tokenHandler, UserService service)
+    public UserController(TokenGenerator tokenHandler, UserService service)
     {
         TokenHandler = tokenHandler;
         Service = service;
@@ -21,7 +21,7 @@ public class AuthenticationController : ControllerBase
     [HttpPost]
     [Route("login")]
     [AllowAnonymous]
-    public ActionResult<dynamic> Authenticate([FromBody] Credentials model)
+    public ActionResult<AuthenticationResult> Authenticate([FromBody] Credentials model)
     {
         UserModel? user = Service.GetUser(model.Username, model.Password);
         
@@ -29,10 +29,23 @@ public class AuthenticationController : ControllerBase
             return NotFound(new { message = "Usuário ou senha inválidos" });
 
         var token = TokenHandler.GenerateToken(user);
-        return new
+        return new AuthenticationResult
         {
-            user = user,
-            token = token
+            User = user,
+            Token = token
         };
     }
+
+    [HttpGet]
+    [Route("teste")]
+    public ActionResult<string> Teste(){
+        return "teste";
+    }
+
+    // Recuperação de senha
+    // Get User
+    // Get users paginado
+    // Create User
+    // Update user
+    // Delete user
 }

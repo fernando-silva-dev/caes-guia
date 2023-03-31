@@ -29,13 +29,13 @@ function Login() {
 
     const submitForm = () => {
         console.log(username);
-        Api.post('authentication/login', { username, password })
+        Api.post('user/login', { username, password })
             .then((response) => {
                 if (rememberMe) {
                     cookies.set("username", username);
                     cookies.set("remember-me", true);
                 }
-                console.log(response.data)
+                cookies.set("token", response.data.token);
             })
             .catch(function (error) {
                 console.log(error);
