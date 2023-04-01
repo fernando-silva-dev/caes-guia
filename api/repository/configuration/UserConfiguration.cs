@@ -10,6 +10,6 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
         builder.Property(x => x.Password).HasMaxLength(200);
         builder.Property(x => x.Role).HasMaxLength(10);
         
-        builder.HasKey(x => x.Username);
+        builder.HasKey(x => x.Id);
     }
 }

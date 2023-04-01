@@ -6,7 +6,7 @@ using Service.Models;
 namespace App.Controllers;
 
 [ApiController]
-[Authorize]
+[Authorize(Roles = "Admin")]
 [Route("[controller]")]
 public class UserController : ControllerBase
 {
@@ -23,29 +23,40 @@ public class UserController : ControllerBase
     [AllowAnonymous]
     public ActionResult<AuthenticationResult> Authenticate([FromBody] Credentials model)
     {
-        UserModel? user = Service.GetUser(model.Username, model.Password);
-        
+        UserModel? user = Service.Login(model.Username, model.Password);
+
         if (user is null)
             return NotFound(new { message = "Usuário ou senha inválidos" });
 
         var token = TokenHandler.GenerateToken(user);
-        return new AuthenticationResult
+        return Ok(new AuthenticationResult
         {
             User = user,
             Token = token
-        };
+        });
     }
 
     [HttpGet]
-    [Route("teste")]
-    public ActionResult<string> Teste(){
-        return "teste";
-    }
+    [Route("{id}")]
+    [Authorize]
+    public ActionResult<UserModel> GetUser(Guid id)
+        => Ok(Service.GetUser(id));
 
-    // Recuperação de senha
-    // Get User
-    // Get users paginado
-    // Create User
-    // Update user
-    // Delete user
+    [HttpGet]
+    public ActionResult<IEnumerable<UserModel>> List([FromQuery] int page = 0, [FromQuery] int size = 10)
+        => Ok(Service.List(page, size));
+
+    [HttpPost]
+    public ActionResult<Guid> AddUser([FromBody] UserInsertionModel model)
+        => Ok(Service.AddUser(model));
+
+    [HttpPut]
+    [Route("{id}")]
+    public void UpdateUser([FromRoute] Guid id, [FromBody] UserInsertionModel model)
+        => Service.UpdateUser(id, model);
+
+    [HttpDelete]
+    [Route("{id}")]
+    public void RemoveUser([FromRoute] Guid id)
+        => Service.RemoveUser(id);
 }

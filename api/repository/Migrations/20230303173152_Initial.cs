@@ -22,8 +22,6 @@ namespace repository.Migrations
                 {
                     table.PrimaryKey("PK_Users", x => x.Username);
                 });
-
-            migrationBuilder.InsertData("Users", new String[] { "Username", "Password", "Role" }, new Object[] { "Admin", "Admin", "Admin" });
         }
 
         /// <inheritdoc />

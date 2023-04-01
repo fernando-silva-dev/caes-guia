@@ -13,6 +13,21 @@ public class UserService
         Mapper = mapper;
     }
 
-    public virtual UserModel? GetUser(string? username, string? password)
-        => Mapper.Map<UserModel>(Repository.GetUser(username, password));
+    public virtual UserModel? Login(string? username, string? password)
+        => Mapper.Map<UserModel>(Repository.Login(username, password));
+
+    public virtual UserModel GetUser(Guid id)
+        => Mapper.Map<UserModel>(Repository.GetUser(id));
+
+    public virtual IQueryable<UserModel> List(int page, int size)
+        => Mapper.ProjectTo<UserModel>(Repository.List(page, size));
+
+    public virtual Guid AddUser(UserInsertionModel model)
+        => Repository.AddUser(Mapper.Map<User>(model));
+
+    public virtual void UpdateUser(Guid id, UserInsertionModel model)
+        => Repository.UpdateUser(id, Mapper.Map<User>(model));
+
+    public virtual void RemoveUser(Guid id)
+        => Repository.RemoveUser(id);
 }
