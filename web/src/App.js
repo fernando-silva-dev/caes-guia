@@ -1,14 +1,17 @@
-import React from 'react';
+import React from "react";
+import { Provider } from "react-redux";
 
-import Login from "./pages/Login";
+import Router from "./router/Router";
 
+import store from "./redux/store";
 
-import './App.css';
+import "./App.css";
 
 function App() {
   return (
-    <div>
-    </div>
+    <Provider store={store}>
+      <Router />
+    </Provider>
   );
 }
 
