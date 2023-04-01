@@ -14,8 +14,22 @@ public class User
 
     protected User() { }
 
-    public Guid Id { get; set; }
+    public Guid Id { get; protected set; }
     public string Username { get; protected set; }
     public string Password { get; protected set; }
     public string Role { get; protected set; }
+
+    public void SetId(Guid id)
+    {
+        Id = id;
+
+        new UserValidator().ValidateAndThrow(this);
+    }
+
+    public void SetPassword(string password)
+    {
+        Password = password;
+        
+        new UserValidator().ValidateAndThrow(this);
+    }
 }

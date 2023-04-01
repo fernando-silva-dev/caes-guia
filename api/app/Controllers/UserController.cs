@@ -47,16 +47,35 @@ public class UserController : ControllerBase
         => Ok(Service.List(page, size));
 
     [HttpPost]
-    public ActionResult<Guid> AddUser([FromBody] UserInsertionModel model)
-        => Ok(Service.AddUser(model));
+    public CreatedResult AddUser([FromBody] UserInsertionModel model)
+    {
+        var entity = Service.AddUser(model);
+        string uri = $"user/{entity.Id}";
+
+        return Created(uri, entity);
+    }
 
     [HttpPut]
     [Route("{id}")]
-    public void UpdateUser([FromRoute] Guid id, [FromBody] UserInsertionModel model)
-        => Service.UpdateUser(id, model);
+    public ActionResult UpdateUser([FromRoute] Guid id, [FromBody] UserInsertionModel model)
+    {
+        Service.UpdateUser(id, model);
+        return NoContent();
+    }
 
     [HttpDelete]
     [Route("{id}")]
-    public void RemoveUser([FromRoute] Guid id)
-        => Service.RemoveUser(id);
+    public ActionResult RemoveUser([FromRoute] Guid id)
+    {
+        Service.RemoveUser(id);
+        return NoContent();
+    }
+
+    [HttpPatch]
+    [Route("{id}")]
+    public ActionResult ResetPassword([FromRoute] Guid id, [FromBody] PasswordResetModel model)
+    {
+        Service.ResetPassword(id, model.OldPassord, model.NewPassword);
+        return NoContent();
+    }
 }

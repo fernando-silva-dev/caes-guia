@@ -22,7 +22,7 @@ public class UserService
     public virtual IQueryable<UserModel> List(int page, int size)
         => Mapper.ProjectTo<UserModel>(Repository.List(page, size));
 
-    public virtual Guid AddUser(UserInsertionModel model)
+    public virtual User AddUser(UserInsertionModel model)
         => Repository.AddUser(Mapper.Map<User>(model));
 
     public virtual void UpdateUser(Guid id, UserInsertionModel model)
@@ -30,4 +30,7 @@ public class UserService
 
     public virtual void RemoveUser(Guid id)
         => Repository.RemoveUser(id);
+
+    public virtual void ResetPassword(Guid id, string oldPassword, string newPassord)
+        => Repository.ResetPassword(id, oldPassword, newPassord);
 }
