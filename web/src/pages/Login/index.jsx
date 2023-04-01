@@ -8,7 +8,7 @@ import Api from "../../services/api";
 
 import Logo from "../../assets/helen-keller-logo.png";
 
-import "./styles.css";
+import './styles.css';
 
 function Login() {
   const cookies = new Cookies();
@@ -49,7 +49,7 @@ function Login() {
         <Row className="justify-content-md-center vertical-center">
           <Col md={4}>
             <Form className="shadow p-3 rounded bg-white">
-              <Image className="d-block mx-auto mb-4" src={Logo}></Image>
+              <Image className="d-block mx-auto mb-4" src={Logo} />
               <Form.Group className="mb-3" controlId="username">
                 <Form.Label>Nome de usuário</Form.Label>
                 <Form.Control

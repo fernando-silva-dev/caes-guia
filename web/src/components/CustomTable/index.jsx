@@ -1,6 +1,7 @@
-import Table from "react-bootstrap/Table";
+import React from 'react';
+import Table from 'react-bootstrap/Table';
 
-import "./styles.css";
+import './styles.css';
 
 export default function CustomTable({ columns = [], data = [], onRowClick }) {
   const columnIndexKey = (key) => `th-${key}`;
