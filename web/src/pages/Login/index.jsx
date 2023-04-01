@@ -1,31 +1,29 @@
-import React, { useState } from "react";
-import { Button, Form, Image, Container, Row, Col } from "react-bootstrap";
-import { useDispatch } from "react-redux";
+import React, { useState } from 'react';
+import { Button, Form, Image, Container, Row, Col } from 'react-bootstrap';
+import { useDispatch } from 'react-redux';
 
-import { login } from "../../redux/slicers/auth";
+import { login } from '../../redux/slicers/auth';
 
-import Api from "../../services/api";
-import Logo from "../../assets/helen-keller-logo.png";
+import Api from '../../services/api';
+import Logo from '../../assets/helen-keller-logo.png';
 
-import "./styles.css";
+import './styles.css';
 
 function Login() {
   const [credentials, setCredentials] = useState({
-    username: "",
-    password: "",
+    username: '',
+    password: '',
   });
   const dispatch = useDispatch();
 
   const onChangeHandler = (event) => {
     const { name, value } = event;
-    setCredentials((prev) => {
-      return { ...prev, [name]: value };
-    });
+    setCredentials((prev) => ({ ...prev, [name]: value }));
   };
 
   const submitForm = async () => {
     try {
-      Api.post("authentication/login", credentials).then((response) => {
+      Api.post('authentication/login', credentials).then((response) => {
         dispatch(login(response.data));
       });
     } catch (error) {
@@ -39,7 +37,7 @@ function Login() {
         <Row className="justify-content-md-center vertical-center">
           <Col md={4}>
             <Form className="shadow p-3 rounded bg-white">
-              <Image className="d-block mx-auto mb-4" src={Logo}></Image>
+              <Image className="d-block mx-auto mb-4" src={Logo} />
               <Form.Group className="mb-3" controlId="username">
                 <Form.Label>Nome de usuário</Form.Label>
                 <Form.Control
