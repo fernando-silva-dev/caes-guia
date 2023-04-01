@@ -22,8 +22,8 @@ public class UserService
     public virtual IQueryable<UserModel> List(int page, int size)
         => Mapper.ProjectTo<UserModel>(Repository.List(page, size));
 
-    public virtual User AddUser(UserInsertionModel model)
-        => Repository.AddUser(Mapper.Map<User>(model));
+    public virtual UserModel AddUser(UserInsertionModel model)
+        => Mapper.Map<UserModel>(Repository.AddUser(Mapper.Map<User>(model)));
 
     public virtual void UpdateUser(Guid id, UserInsertionModel model)
         => Repository.UpdateUser(id, Mapper.Map<User>(model));
