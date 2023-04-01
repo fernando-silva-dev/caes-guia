@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
@@ -8,32 +8,42 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Api from '../../services/api';
 import { useState } from 'react';
+import Cookies from 'universal-cookie';
 
 import Logo from "../../assets/helen-keller-logo.png";
 
 import "./styles.css"
 
 function Login() {
-    const [credentials, setCredentials] = useState({
-        username: "",
-        password: ""
-    })
+    const cookies = new Cookies();
+    const [username, setUsername] = useState("");
+    const [password, setPassword] = useState("");
+    const [rememberMe, setRememberMe] = useState(false);
 
-    const onChangeHandler = (event) => {
-        const { name, value } = event
-        setCredentials((prev) => {
-            return { ...prev, [name]: value }
-        })
-        console.log(credentials);
-    }
+    useEffect(() => {
+        if (cookies.get("remember-me")) {
+            setUsername(cookies.get("username"));
+            setRememberMe(true);
+        }
+    }, []);
 
     const submitForm = () => {
-        Api.post('authentication/login', credentials)
+        console.log(username);
+        Api.post('user/login', { username, password })
             .then((response) => {
-                console.log(response.data)
+                if (rememberMe) {
+                    cookies.set("username", username);
+                    cookies.set("remember-me", true);
+                }
+                cookies.set("token", response.data.token);
             })
             .catch(function (error) {
                 console.log(error);
+            }).finally(_ => {
+                if (!rememberMe) {
+                    cookies.remove("username");
+                    cookies.set("remember-me", false);
+                }
             });
     }
 
@@ -45,16 +55,16 @@ function Login() {
                         <Form className='shadow p-3 rounded bg-white' >
                             <Image className='d-block mx-auto mb-4' src={Logo}></Image>
                             <Form.Group className="mb-3" controlId="username">
-                                <Form.Label>Nome de usuário ou endereço de e-mail</Form.Label>
-                                <Form.Control placeholder="E-mail" name="username" onChange={(e) => onChangeHandler(e.target)} />
+                                <Form.Label>Nome de usuário</Form.Label>
+                                <Form.Control placeholder="Nome de usuário" name="username" defaultValue={username} onChange={(e) => setUsername(e.target.value)} />
                             </Form.Group>
                             <Form.Group className="mb-3" controlId="password">
                                 <Form.Label>Senha</Form.Label>
-                                <Form.Control type="password" placeholder="Senha" name="password" onChange={(e) => onChangeHandler(e.target)} />
+                                <Form.Control type="password" placeholder="Senha" name="password" onChange={(e) => setPassword(e.target.value)} />
                             </Form.Group>
 
                             <Form.Group className="mb-3" controlId="lembrar-me">
-                                <Form.Check type="checkbox" label="Lembrar-me" />
+                                <Form.Check type="checkbox" label="Lembrar-me" checked={rememberMe} onChange={(e) => setRememberMe(e.target.value)} />
                             </Form.Group>
 
                             <Button variant="primary" className='w-100 mb-3' type="button" onClick={submitForm}>

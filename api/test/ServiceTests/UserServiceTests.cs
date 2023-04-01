@@ -21,12 +21,12 @@ public class UserServiceTests
     [Fact]
     public void GetUser_Should_CallRepositoryAndMapperAndReturn()
     {
-        RepositoryMock.Setup(x => x.GetUser(It.IsAny<string>(), It.IsAny<string>())).Returns(User).Verifiable();
+        RepositoryMock.Setup(x => x.Login(It.IsAny<string>(), It.IsAny<string>())).Returns(User).Verifiable();
         MapperMock.Setup(x => x.Map<UserModel>(It.IsAny<User>())).Returns(Model).Verifiable();
 
-        var result = Service.GetUser("user", "password");
+        var result = Service.Login("user", "password");
 
-        RepositoryMock.Verify(x => x.GetUser("user", "password"), Times.Once());
+        RepositoryMock.Verify(x => x.Login("user", "password"), Times.Once());
         MapperMock.Verify(x => x.Map<UserModel>(User), Times.Once());
         result.Should().Be(Model);
     }
