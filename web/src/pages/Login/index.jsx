@@ -23,7 +23,7 @@ function Login() {
 
   const submitForm = async () => {
     try {
-      Api.post('authentication/login', credentials).then((response) => {
+      Api.post('user/login', credentials).then((response) => {
         dispatch(login(response.data));
       });
     } catch (error) {

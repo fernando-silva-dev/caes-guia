@@ -22,15 +22,13 @@ function TutorForm() {
   const fetchTutor = async (id) => {
     setIsFetching(true);
     try {
-      // TODO: Buscar Tutor
-      // const response = await Api.get(`authentication/tutor/${id}`, tutor);
+      const response = await Api.get(`user/${id}`, tutor);
       setIsFetching(false);
     } catch (error) {
       console.log(error);
     }
   };
 
-  // TODO: chamar no inicio da página
   // if (id) {
   //   fetchTutor(id);
   // }
@@ -154,6 +152,7 @@ function TutorForm() {
                 >
                   Salvar
                 </Button>
+                {/* TODO: Não faz sentido remover no form de cadastro */}
                 <Button
                   variant="danger"
                   type="button"
