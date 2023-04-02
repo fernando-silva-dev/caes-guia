@@ -49,8 +49,14 @@ public class UserController : ControllerBase
         => Ok(Service.GetUser(id));
 
     [HttpGet]
-    public ActionResult<IEnumerable<UserModel>> List([FromQuery] int page = 0, [FromQuery] int size = 10)
-        => Ok(Service.List(page, size));
+    public ActionResult<PagedResult<UserModel>> List([FromQuery] int page = 0, [FromQuery] int size = 10)
+    {
+        var query = Service.List();
+        var data = query.Take(size).Skip(page * size);
+        var totalRecords = query.Count();
+
+        return Ok(new PagedResult<UserModel> { Data = data, TotalRecords = totalRecords });
+    }
 
     [HttpPost]
     public CreatedResult AddUser([FromBody] UserInsertionModel model)
