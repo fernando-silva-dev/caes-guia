@@ -16,7 +16,7 @@ public class UserRepository
         => Context.Users.SingleOrDefault(x => x.Username == username && x.Password == password);
 
     public virtual User? GetUser(Guid id)
-        => Context.Users.SingleOrDefault(x => x.Id == id);
+        => Context.Users.Include(x => x.Address).SingleOrDefault(x => x.Id == id);
 
     public virtual IQueryable<User> List(int page, int size)
         => Context.Users.Take(size).Skip(page * size);
@@ -47,9 +47,12 @@ public class UserRepository
         Context.SaveChanges();
     }
 
-    public virtual void ResetPassword(Guid id, string oldPassword, string newPassord)
+    public virtual void ResetPassword(Guid id, string oldPassword, string newPassord, string username)
     {
         var user = Context.Users.Single(x => x.Id == id);
+
+        if (user.Username != username)
+            throw new Exception("Você não tem permissão de alterar a senha desse usuário");
 
         if (user.Password != oldPassword)
             throw new Exception("Senha anterior não confere");

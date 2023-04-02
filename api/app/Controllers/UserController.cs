@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Authorization;
 using App.Models;
 using Service.Services;
 using Service.Models;
+using System.Security.Claims;
 
 namespace App.Controllers;
 
@@ -31,7 +32,12 @@ public class UserController : ControllerBase
         var token = TokenHandler.GenerateToken(user);
         return Ok(new AuthenticationResult
         {
-            User = user,
+            User = new UserData
+            {
+                Name = user.Name,
+                Username = user.Name,
+                Role = user.Role
+            },
             Token = token
         });
     }
@@ -75,7 +81,9 @@ public class UserController : ControllerBase
     [Route("{id}")]
     public ActionResult ResetPassword([FromRoute] Guid id, [FromBody] PasswordResetModel model)
     {
-        Service.ResetPassword(id, model.OldPassord, model.NewPassword);
+        var username = HttpContext.User.Claims.First(c => c.Type == ClaimTypes.Name).Value;
+
+        Service.ResetPassword(id, model.OldPassord, model.NewPassword, username);
         return NoContent();
     }
 }
