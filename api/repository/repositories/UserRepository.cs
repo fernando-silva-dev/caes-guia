@@ -18,8 +18,8 @@ public class UserRepository
     public virtual User? GetUser(Guid id)
         => Context.Users.Include(x => x.Address).SingleOrDefault(x => x.Id == id);
 
-    public virtual IQueryable<User> List(int page, int size)
-        => Context.Users.Take(size).Skip(page * size);
+    public virtual IQueryable<User> List()
+        => Context.Users;
 
     public virtual User AddUser(User user)
     {
