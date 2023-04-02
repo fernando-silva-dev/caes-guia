@@ -1,24 +1,24 @@
-import React, { useState, useEffect } from "react";
-import { Button, Form, Image, Container, Row, Col } from "react-bootstrap";
-import { useDispatch } from "react-redux";
-import Cookies from "universal-cookie";
+import React, { useState, useEffect } from 'react';
+import { Button, Form, Image, Container, Row, Col } from 'react-bootstrap';
+import { useDispatch } from 'react-redux';
+import Cookies from 'universal-cookie';
 
-import { login } from "../../redux/slicers/auth";
-import Api from "../../services/api";
+import { login } from '../../redux/slicers/auth';
+import Api from '../../services/api';
 
-import Logo from "../../assets/helen-keller-logo.png";
+import Logo from '../../assets/helen-keller-logo.png';
 
 import './styles.css';
 
 function Login() {
   const cookies = new Cookies();
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
   const [rememberMe, setRememberMe] = useState(false);
 
   useEffect(() => {
-    if (cookies.get("remember-me")) {
-      setUsername(cookies.get("username"));
+    if (cookies.get('remember-me')) {
+      setUsername(cookies.get('username'));
       setRememberMe(true);
     }
   }, []);
@@ -26,19 +26,19 @@ function Login() {
 
   const submitForm = async () => {
     try {
-      const response = await Api.post("user/login", { username, password });
+      const response = await Api.post('user/login', { username, password });
       dispatch(login(response.data));
       if (rememberMe) {
-        cookies.set("username", username);
-        cookies.set("remember-me", true);
+        cookies.set('username', username);
+        cookies.set('remember-me', true);
       }
-      cookies.set("token", response.data.token);
+      cookies.set('token', response.data.token);
     } catch (error) {
       console.log(error);
     } finally {
       if (!rememberMe) {
-        cookies.remove("username");
-        cookies.set("remember-me", false);
+        cookies.remove('username');
+        cookies.set('remember-me', false);
       }
     }
   };
