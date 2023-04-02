@@ -1,0 +1,12 @@
+.navigation-bar {
+}
+
+.navigation-bar .nav-link {
+  font-size: 20px;
+  color: #0f4231;
+  font-family: "Exo", Helvetica, Arial, sans-serif;
+}
+
+.navigation-bar .nav-link.active {
+  color: #8dc63f;
+}
