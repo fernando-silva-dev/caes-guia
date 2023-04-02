@@ -51,7 +51,7 @@ export default function MinhaConta() {
               <fieldset>
                 <h4 className="d-inline-block">Dados pessoais</h4>
                 <Form.Group className="mb-3" controlId="nome">
-                  <Form.Label>Nome</Form.Label>
+                  <Form.Label className="fw-bold">Nome</Form.Label>
                   <Form.Control
                     placeholder="-"
                     name="nome"
@@ -61,7 +61,7 @@ export default function MinhaConta() {
                   />
                 </Form.Group>
                 <Form.Group className="mb-3" controlId="email">
-                  <Form.Label>E-mail</Form.Label>
+                  <Form.Label className="fw-bold">E-mail</Form.Label>
                   <Form.Control
                     placeholder="-"
                     name="email"
@@ -71,7 +71,7 @@ export default function MinhaConta() {
                   />
                 </Form.Group>
                 <Form.Group className="mb-5" controlId="celular">
-                  <Form.Label>Celular</Form.Label>
+                  <Form.Label className="fw-bold">Celular</Form.Label>
                   <Form.Control
                     placeholder="-"
                     name="celular"
@@ -84,7 +84,7 @@ export default function MinhaConta() {
                 <h4 className="d-inline-block">Endereço</h4>
                 <Row className="mb-3">
                   <Form.Group as={Col} controlId="cep">
-                    <Form.Label>CEP</Form.Label>
+                    <Form.Label className="fw-bold">CEP</Form.Label>
                     <Form.Control
                       placeholder="-"
                       name="cep"
@@ -95,7 +95,7 @@ export default function MinhaConta() {
                   </Form.Group>
 
                   <Form.Group as={Col} controlId="uf">
-                    <Form.Label>Estado</Form.Label>
+                    <Form.Label className="fw-bold">Estado</Form.Label>
                     <Form.Select
                       name="uf"
                       placeholder="-"
@@ -136,7 +136,7 @@ export default function MinhaConta() {
 
                 <Row className="mb-3">
                   <Form.Group as={Col} controlId="cidade">
-                    <Form.Label>Cidade</Form.Label>
+                    <Form.Label className="fw-bold">Cidade</Form.Label>
                     <Form.Control
                       name="cidade"
                       defaultValue={usuario.cidade}
@@ -147,7 +147,7 @@ export default function MinhaConta() {
                   </Form.Group>
 
                   <Form.Group as={Col} controlId="bairro">
-                    <Form.Label>Bairro</Form.Label>
+                    <Form.Label className="fw-bold">Bairro</Form.Label>
                     <Form.Control
                       name="bairro"
                       defaultValue={usuario.nome}
@@ -159,7 +159,7 @@ export default function MinhaConta() {
                 </Row>
 
                 <Form.Group className="mb-3" controlId="rua">
-                  <Form.Label>Rua</Form.Label>
+                  <Form.Label className="fw-bold">Rua</Form.Label>
                   <Form.Control
                     name="rua"
                     defaultValue={usuario.rua}
@@ -169,7 +169,7 @@ export default function MinhaConta() {
                   />
                 </Form.Group>
                 <Form.Group controlId="complemento">
-                  <Form.Label>Complemento</Form.Label>
+                  <Form.Label className="fw-bold">Complemento</Form.Label>
                   <Form.Control
                     name="complemento"
                     defaultValue={usuario.complemento}
@@ -186,15 +186,17 @@ export default function MinhaConta() {
               <h4 className="d-inline-block">Alterar Senha</h4>
               <fieldset>
                 <Form.Group className="mb-3" controlId="password">
-                  <Form.Label>Senha Atual</Form.Label>
+                  <Form.Label className="fw-bold">Senha Atual</Form.Label>
                   <Form.Control type="password" name="password" />
                 </Form.Group>
                 <Form.Group className="mb-3" controlId="password">
-                  <Form.Label>Nova Senha</Form.Label>
+                  <Form.Label className="fw-bold">Nova Senha</Form.Label>
                   <Form.Control type="password" name="password" />
                 </Form.Group>
                 <Form.Group className="mb-3" controlId="password">
-                  <Form.Label>Confirmação da Nova Senha</Form.Label>
+                  <Form.Label className="fw-bold">
+                    Confirmação da Nova Senha
+                  </Form.Label>
                   <Form.Control type="password" name="password" />
                 </Form.Group>
                 <Button

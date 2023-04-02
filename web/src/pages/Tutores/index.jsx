@@ -10,22 +10,17 @@ import './styles.css';
 
 const COLUMNS = [
   {
-    key: 'id',
-    title: '#',
-    type: 'int',
-  },
-  {
-    key: 'nome',
+    key: 'name',
     title: 'Nome',
     type: 'str',
   },
   {
-    key: 'email',
+    key: 'username',
     title: 'E-mail',
     type: 'str',
   },
   {
-    key: 'celular',
+    key: 'phone',
     title: 'Celular',
     type: 'str',
   },

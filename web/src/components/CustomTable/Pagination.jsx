@@ -23,7 +23,7 @@ export default function Pagination({
 
   return (
     <div>
-      <p className="d-inline-block mx-1">Itens por página:</p>
+      <p className="d-inline-block mx-1 my-2">Itens por página:</p>
       <Form.Select
         value={pageSize}
         size="sm"
@@ -41,16 +41,24 @@ export default function Pagination({
       </Form.Select>
       <Button
         variant="link"
+        className="float-end"
+        disabled={!hasNextPage}
+        onClick={() => nextPage()}
+      >
+        Próximo
+        <CaretRightFill />
+      </Button>
+      <p className="d-inline-block my-2 mx-1 float-end">
+        {currentShowingDescription}
+      </p>
+      <Button
+        variant="link"
         disabled={!hasPreviousPage}
+        className="float-end"
         onClick={() => previousPage()}
       >
         <CaretLeftFill />
         Anterior
-      </Button>
-      <p className="d-inline-block mx-1">{currentShowingDescription}</p>
-      <Button variant="link" disabled={!hasNextPage} onClick={() => nextPage()}>
-        Próximo
-        <CaretRightFill />
       </Button>
     </div>
   );

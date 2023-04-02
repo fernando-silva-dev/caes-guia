@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Button, Form, Container, Row, Col, Spinner } from 'react-bootstrap';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 import api from '../../services/api';
 import './styles.css';
@@ -9,13 +9,10 @@ function TutorForm() {
   const params = useParams();
   const { id } = params;
   //   console.log(id);
-  const [isFetching, setIsFetching] = useState(!!id);
-  const [tutor, setTutor] = useState({
-    nome: '',
-    email: '',
-    celular: '',
-    rua: '',
-  });
+  const [isFetching, setIsFetching] = useState(false);
+  const [editable, setEditable] = useState(!id);
+  const [tutor, setTutor] = useState({ role: 'Tutor', cpf: '' });
+  const navigate = useNavigate();
 
   const onChangeHandler = (event) => {
     const { name, value } = event;
@@ -26,7 +23,6 @@ function TutorForm() {
     try {
       setIsFetching(true);
       const response = await api.get(`user/${id}`);
-      console.log(response.data);
       setTutor(response.data);
     } catch (error) {
       console.log(error);
@@ -35,8 +31,52 @@ function TutorForm() {
     }
   };
 
+  const updateTutor = async () => {
+    try {
+      setIsFetching(true);
+      const data = {
+        ...tutor,
+        cpf: tutor.cpf.replace(/\D/g, ''),
+      };
+      const response = await api.put(`user/${id}`, data);
+      setTutor(response.data);
+      setEditable(false);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setIsFetching(false);
+    }
+  };
+
+  const createTutor = async () => {
+    try {
+      setIsFetching(true);
+      const data = {
+        ...tutor,
+        cpf: tutor.cpf.replace(/\D/g, ''),
+      };
+      const response = await api.post(`user`, data);
+      navigate('/tutores');
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setIsFetching(false);
+    }
+  };
+
+  const deleteTutor = async () => {
+    try {
+      setIsFetching(true);
+      const response = await api.delete(`user/${id}`, tutor);
+      navigate('/tutores');
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setIsFetching(false);
+    }
+  };
+
   useEffect(() => {
-    console.log(id);
     if (id) {
       fetchTutor();
     }
@@ -45,51 +85,94 @@ function TutorForm() {
   return (
     <div className="tutor-form-page">
       <Container>
+        {isFetching ? <Spinner animation="border" className="me-2" /> : null}
+        <h1 className="d-inline-block">Tutor</h1>
         <Row>
-          <Col md={6}>
+          <Col md={6} className="divider">
             <Form className="">
               <fieldset disabled={isFetching}>
-                {isFetching ? (
-                  <Spinner animation="border" className="me-2" />
-                ) : null}
-                <h1 className="d-inline-block">Tutor</h1>
+                <h4 className="d-inline-block">Dados pessoais</h4>
 
                 <Form.Group className="mb-3" controlId="nome">
-                  <Form.Label>Nome</Form.Label>
+                  <Form.Label className="fw-bold">Nome</Form.Label>
                   <Form.Control
-                    placeholder="Nome"
-                    name="nome"
+                    name="name"
+                    readOnly={!editable}
+                    plaintext={!editable}
+                    defaultValue={tutor.name}
                     onChange={(e) => onChangeHandler(e.target)}
                   />
                 </Form.Group>
                 <Form.Group className="mb-3" controlId="email">
-                  <Form.Label>E-mail</Form.Label>
+                  <Form.Label className="fw-bold">E-mail</Form.Label>
                   <Form.Control
-                    placeholder="E-mail"
-                    name="email"
+                    name="username"
+                    readOnly={!editable}
+                    plaintext={!editable}
+                    defaultValue={tutor.username}
                     onChange={(e) => onChangeHandler(e.target)}
                   />
                 </Form.Group>
-                <Form.Group className="mb-5" controlId="celular">
-                  <Form.Label>Celular</Form.Label>
+                {editable ? (
+                  <Form.Group className="mb-3" controlId="password">
+                    <Form.Label className="fw-bold">Senha</Form.Label>
+                    <Form.Control
+                      name="password"
+                      type="password"
+                      readOnly={!editable}
+                      plaintext={!editable}
+                      onChange={(e) => onChangeHandler(e.target)}
+                    />
+                  </Form.Group>
+                ) : null}
+                <Form.Group className="mb-3" controlId="celular">
+                  <Form.Label className="fw-bold">Celular</Form.Label>
                   <Form.Control
-                    placeholder="Celular"
-                    name="celular"
+                    name="phone"
+                    readOnly={!editable}
+                    plaintext={!editable}
+                    defaultValue={tutor.phone}
                     onChange={(e) => onChangeHandler(e.target)}
                   />
                 </Form.Group>
+                <Form.Group className="mb-5" controlId="cpf">
+                  <Form.Label className="fw-bold">CPF</Form.Label>
+                  <Form.Control
+                    name="cpf"
+                    readOnly={!editable}
+                    plaintext={!editable}
+                    defaultValue={tutor.cpf}
+                    onChange={(e) => onChangeHandler(e.target)}
+                  />
+                </Form.Group>
+              </fieldset>
+            </Form>
+          </Col>
+          <Col md={6}>
+            <Form>
+              <fieldset disabled={isFetching}>
+                <h4 className="d-inline-block">Endereço</h4>
                 <Row className="mb-3">
                   <Form.Group as={Col} controlId="cep">
-                    <Form.Label>CEP</Form.Label>
+                    <Form.Label className="fw-bold">CEP</Form.Label>
                     <Form.Control
                       name="cep"
+                      readOnly={!editable}
+                      plaintext={!editable}
+                      defaultValue={tutor.cep}
                       onChange={(e) => onChangeHandler(e.target)}
                     />
                   </Form.Group>
 
                   <Form.Group as={Col} controlId="uf">
-                    <Form.Label>Estado</Form.Label>
-                    <Form.Select name="uf">
+                    <Form.Label className="fw-bold">Estado</Form.Label>
+                    <Form.Select
+                      name="state"
+                      readOnly={!editable}
+                      plaintext={!editable}
+                      defaultValue={tutor.state}
+                      onChange={(e) => onChangeHandler(e.target)}
+                    >
                       <option value="AC">Acre</option>
                       <option value="AL">Alagoas</option>
                       <option value="AP">Amapá</option>
@@ -122,50 +205,122 @@ function TutorForm() {
                 </Row>
 
                 <Row className="mb-3">
-                  <Form.Group as={Col} controlId="cidade">
-                    <Form.Label>Cidade</Form.Label>
+                  <Form.Group as={Col} controlId="city">
+                    <Form.Label className="fw-bold">Cidade</Form.Label>
                     <Form.Control
-                      name="cidade"
+                      name="city"
+                      readOnly={!editable}
+                      plaintext={!editable}
+                      defaultValue={tutor.city}
                       onChange={(e) => onChangeHandler(e.target)}
                     />
                   </Form.Group>
 
-                  <Form.Group as={Col} controlId="bairro">
-                    <Form.Label>Bairro</Form.Label>
+                  <Form.Group as={Col} controlId="district">
+                    <Form.Label className="fw-bold">Bairro</Form.Label>
                     <Form.Control
-                      name="bairro"
+                      name="district"
+                      readOnly={!editable}
+                      plaintext={!editable}
+                      defaultValue={tutor.district}
                       onChange={(e) => onChangeHandler(e.target)}
                     />
                   </Form.Group>
                 </Row>
 
-                <Form.Group className="mb-3" controlId="rua">
-                  <Form.Label>Rua</Form.Label>
+                <Form.Group className="mb-3" controlId="street">
+                  <Form.Label className="fw-bold">Rua</Form.Label>
                   <Form.Control
-                    name="rua"
+                    name="street"
+                    readOnly={!editable}
+                    plaintext={!editable}
+                    defaultValue={tutor.street}
                     onChange={(e) => onChangeHandler(e.target)}
                   />
                 </Form.Group>
-                <Form.Group className="mb-5" controlId="complemento">
-                  <Form.Label>Complemento</Form.Label>
+                <Form.Group className="mb-3" controlId="number">
+                  <Form.Label className="fw-bold">Número</Form.Label>
                   <Form.Control
-                    name="complemento"
+                    name="number"
+                    readOnly={!editable}
+                    plaintext={!editable}
+                    defaultValue={tutor.number}
                     onChange={(e) => onChangeHandler(e.target)}
                   />
                 </Form.Group>
+                <Form.Group className="mb-5" controlId="complement">
+                  <Form.Label className="fw-bold">Complemento</Form.Label>
+                  <Form.Control
+                    name="complement"
+                    readOnly={!editable}
+                    plaintext={!editable}
+                    defaultValue={tutor.complement}
+                    onChange={(e) => onChangeHandler(e.target)}
+                  />
+                </Form.Group>
+              </fieldset>
+            </Form>
+          </Col>
+          <Col>
+            {!editable && id ? (
+              <>
+                <Button
+                  variant="warning"
+                  className="me-3 mb-3"
+                  type="button"
+                  onClick={() => {
+                    setEditable(true);
+                  }}
+                >
+                  Editar
+                </Button>
+                <Button
+                  variant="danger"
+                  className="me-3 mb-3"
+                  type="button"
+                  onClick={() => {
+                    deleteTutor();
+                  }}
+                >
+                  Remover
+                </Button>
+                <Button
+                  variant="secondary"
+                  className="me-3 mb-3"
+                  type="button"
+                  onClick={() => {
+                    navigate('/tutores');
+                  }}
+                >
+                  Voltar
+                </Button>
+              </>
+            ) : null}
+            {editable ? (
+              <>
                 <Button
                   variant="primary"
-                  className="me-3"
+                  className="me-3 mb-3"
                   type="button"
-                  onClick={() => {}}
+                  onClick={() => {
+                    if (id) updateTutor();
+                    else createTutor();
+                  }}
                 >
                   Salvar
                 </Button>
-                <Button variant="danger" type="button" onClick={() => {}}>
-                  Remover
+                <Button
+                  variant="secondary"
+                  className="me-3 mb-3"
+                  type="button"
+                  onClick={() => {
+                    setEditable(false);
+                  }}
+                >
+                  Cancelar
                 </Button>
-              </fieldset>
-            </Form>
+              </>
+            ) : null}
           </Col>
         </Row>
       </Container>
