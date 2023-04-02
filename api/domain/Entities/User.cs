@@ -37,7 +37,6 @@ public class User
     public void SetPassword(string password)
     {
         Password = password;
-
         new UserValidator().ValidateAndThrow(this);
     }
 }

@@ -1,33 +1,45 @@
-import React, { useState } from 'react';
-import { Button, Form, Image, Container, Row, Col } from 'react-bootstrap';
-import { useDispatch } from 'react-redux';
+import React, { useState, useEffect } from "react";
+import { Button, Form, Image, Container, Row, Col } from "react-bootstrap";
+import { useDispatch } from "react-redux";
+import Cookies from "universal-cookie";
 
-import { login } from '../../redux/slicers/auth';
+import { login } from "../../redux/slicers/auth";
+import Api from "../../services/api";
 
-import Api from '../../services/api';
-import Logo from '../../assets/helen-keller-logo.png';
+import Logo from "../../assets/helen-keller-logo.png";
 
 import './styles.css';
 
 function Login() {
-  const [credentials, setCredentials] = useState({
-    username: '',
-    password: '',
-  });
-  const dispatch = useDispatch();
+  const cookies = new Cookies();
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [rememberMe, setRememberMe] = useState(false);
 
-  const onChangeHandler = (event) => {
-    const { name, value } = event;
-    setCredentials((prev) => ({ ...prev, [name]: value }));
-  };
+  useEffect(() => {
+    if (cookies.get("remember-me")) {
+      setUsername(cookies.get("username"));
+      setRememberMe(true);
+    }
+  }, []);
+  const dispatch = useDispatch();
 
   const submitForm = async () => {
     try {
-      Api.post('user/login', credentials).then((response) => {
-        dispatch(login(response.data));
-      });
+      const response = await Api.post("user/login", { username, password });
+      dispatch(login(response.data));
+      if (rememberMe) {
+        cookies.set("username", username);
+        cookies.set("remember-me", true);
+      }
+      cookies.set("token", response.data.token);
     } catch (error) {
       console.log(error);
+    } finally {
+      if (!rememberMe) {
+        cookies.remove("username");
+        cookies.set("remember-me", false);
+      }
     }
   };
 
@@ -41,21 +53,29 @@ function Login() {
               <Form.Group className="mb-3" controlId="username">
                 <Form.Label>Nome de usuário</Form.Label>
                 <Form.Control
+                  placeholder="Nome de usuário"
                   name="username"
-                  onChange={(e) => onChangeHandler(e.target)}
+                  defaultValue={username}
+                  onChange={(e) => setUsername(e.target.value)}
                 />
               </Form.Group>
               <Form.Group className="mb-3" controlId="password">
                 <Form.Label>Senha</Form.Label>
                 <Form.Control
                   type="password"
+                  placeholder="Senha"
                   name="password"
-                  onChange={(e) => onChangeHandler(e.target)}
+                  onChange={(e) => setPassword(e.target.value)}
                 />
               </Form.Group>
 
               <Form.Group className="mb-3" controlId="lembrar-me">
-                <Form.Check type="checkbox" label="Lembrar-me" />
+                <Form.Check
+                  type="checkbox"
+                  label="Lembrar-me"
+                  checked={rememberMe}
+                  onChange={(e) => setRememberMe(e.target.value)}
+                />
               </Form.Group>
 
               <Button
@@ -65,6 +85,10 @@ function Login() {
                 onClick={submitForm}
               >
                 Acessar
+              </Button>
+
+              <Button variant="link" className="">
+                Recuperar conta
               </Button>
             </Form>
           </Col>
