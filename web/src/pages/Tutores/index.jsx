@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Col, Button, Container, Row } from 'react-bootstrap';
 import { Plus } from 'react-bootstrap-icons';
 import { useNavigate } from 'react-router-dom';
 
+import api from '../../services/api';
 import CustomTable from '../../components/CustomTable';
 import Pagination from '../../components/CustomTable/Pagination';
 import './styles.css';
@@ -30,20 +31,29 @@ const COLUMNS = [
   },
 ];
 
-// TODO: hardcoded data
-const DATA = [
-  {
-    id: 0,
-    nome: 'JOAO',
-    email: 'joao@email.com',
-    celular: '47-9999-9999',
-  },
-];
-
 function Tutores() {
   const navigate = useNavigate();
-  const [currentPage, setCurrentPage] = useState(1);
-  const [pageSize, setPageSize] = useState(10);
+  const [page, setPage] = useState(0);
+  const [size, setSize] = useState(10);
+
+  let [isFetching, setIsFetching] = useState(true);
+  let [tableData, setTableData] = useState([]);
+
+  const fetchTutores = async () => {
+    try {
+      setIsFetching(true);
+      const response = await api.get('user', { params: { page, size } });
+      setTableData(response.data);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setIsFetching(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchTutores();
+  }, [page, size]);
 
   return (
     <div className="dashboard-page">
@@ -64,16 +74,16 @@ function Tutores() {
           <Col>
             <CustomTable
               columns={COLUMNS}
-              data={DATA}
+              data={tableData}
               onRowClick={(id) => {
                 navigate(`/tutores/${id}`);
               }}
             />
             <Pagination
-              pageSize={pageSize}
-              currentPage={currentPage}
-              onPageChange={(value) => setCurrentPage(value)}
-              onSizeChange={(value) => setPageSize(value)}
+              pageSize={size}
+              currentPage={page}
+              onPageChange={(value) => setPage(value)}
+              onSizeChange={(value) => setSize(value)}
               total={10}
             />
           </Col>

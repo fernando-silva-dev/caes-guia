@@ -1,11 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button, Form, Container, Row, Col, Spinner } from 'react-bootstrap';
 import { useParams } from 'react-router-dom';
 
+import api from '../../services/api';
 import './styles.css';
 
 function TutorForm() {
-  const { id } = useParams();
+  const params = useParams();
+  const { id } = params;
+  //   console.log(id);
   const [isFetching, setIsFetching] = useState(!!id);
   const [tutor, setTutor] = useState({
     nome: '',
@@ -19,21 +22,25 @@ function TutorForm() {
     setTutor((prev) => ({ ...prev, [name]: value }));
   };
 
-  const fetchTutor = async (id) => {
-    setIsFetching(true);
+  const fetchTutor = async () => {
     try {
-      // TODO: Buscar Tutor
-      // const response = await Api.get(`authentication/tutor/${id}`, tutor);
-      setIsFetching(false);
+      setIsFetching(true);
+      const response = await api.get(`user/${id}`);
+      console.log(response.data);
+      setTutor(response.data);
     } catch (error) {
       console.log(error);
+    } finally {
+      setIsFetching(false);
     }
   };
 
-  // TODO: chamar no inicio da página
-  // if (id) {
-  //   fetchTutor(id);
-  // }
+  useEffect(() => {
+    console.log(id);
+    if (id) {
+      fetchTutor();
+    }
+  }, []);
 
   return (
     <div className="tutor-form-page">
@@ -154,11 +161,7 @@ function TutorForm() {
                 >
                   Salvar
                 </Button>
-                <Button
-                  variant="danger"
-                  type="button"
-                  onClick={() => {}}
-                >
+                <Button variant="danger" type="button" onClick={() => {}}>
                   Remover
                 </Button>
               </fieldset>
