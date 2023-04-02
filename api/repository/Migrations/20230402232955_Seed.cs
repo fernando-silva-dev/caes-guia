@@ -5,25 +5,20 @@
 namespace repository.Migrations
 {
     /// <inheritdoc />
-    public partial class AddressNumber : Migration
+    public partial class Seed : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.AddColumn<string>(
-                name: "Number",
-                table: "Address",
-                type: "text",
-                nullable: false,
-                defaultValue: "");
+            migrationBuilder.InsertData("Users", new String[] 
+            { "Username", "Password", "Role", "Id", "Name" }, new Object[] 
+            { "Admin", "Admin", "Admin", Guid.NewGuid(), "Administrador" });
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropColumn(
-                name: "Number",
-                table: "Address");
+
         }
     }
 }
