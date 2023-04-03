@@ -1,45 +1,48 @@
-import React, { useState } from 'react';
-import { Button, Form, Container, Row, Col, Spinner } from 'react-bootstrap';
-import { useParams } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { Button, Form, Container, Row, Col } from 'react-bootstrap';
+import api from '../../services/api';
 
 import './styles.css';
 
 export default function MinhaConta() {
-  const { id } = useParams();
-  const [isFetching, setIsFetching] = useState(!!id);
-  const [usuario, setUsuario] = useState({
-    nome: 'João',
-    email: 'joao@email.com',
-    celular: '(47) 99999-9999',
-    cep: '89000-000',
-    uf: 'SC',
-    cidade: 'Blumenau',
-    bairro: 'Centro',
-    rua: 'Rua Sete',
-    numero: '9999',
-    complemento: 'Apt 1000',
-  });
+  const [usuario, setUsuario] = useState({});
 
-  const onChangeHandler = (event) => {
-    const { name, value } = event;
-    setUsuario((prev) => ({ ...prev, [name]: value }));
-  };
-
-  const fetchTutor = async (id) => {
-    setIsFetching(true);
+  const fetchUser = async () => {
     try {
-      // TODO: Buscar Tutor
-      // const response = await Api.get(`authentication/tutor/${id}`, tutor);
-      setIsFetching(false);
+      const response = await api.get('user/self');
+      setUsuario(response.data);
     } catch (error) {
-      console.log(error);
+      // TODO tratamento de erro
     }
   };
 
-  // TODO: chamar no inicio da página
-  // if (id) {
-  //   fetchTutor(id);
-  // }
+  useEffect(() => {
+    fetchUser();
+  }, []);
+
+  const [passwordResetModel, setPasswordResetModel] = useState({
+    oldPassword: "",
+    newPassword: "",
+    passwordConfimation: "",
+  });
+
+  const onChangeHandler = (event) => {
+    const { name, value } = event
+    setPasswordResetModel((prev) => {
+      return { ...prev, [name]: value }
+    })
+  };
+
+  const submitForm = () => {
+    // TODO check if confirmation matches password
+    api.patch(`user/${usuario.id}`, passwordResetModel)
+      .then((response) => {
+        console.log(response.data)
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
 
   return (
     <div className="minha-conta-page">
@@ -55,17 +58,17 @@ export default function MinhaConta() {
                   <Form.Control
                     placeholder="-"
                     name="nome"
-                    defaultValue={usuario.nome}
+                    defaultValue={usuario.name}
                     readOnly
                     plaintext
                   />
                 </Form.Group>
                 <Form.Group className="mb-3" controlId="email">
-                  <Form.Label className="fw-bold">E-mail</Form.Label>
+                  <Form.Label className="fw-bold">Nome de usuário</Form.Label>
                   <Form.Control
                     placeholder="-"
                     name="email"
-                    defaultValue={usuario.email}
+                    defaultValue={usuario.username}
                     readOnly
                     plaintext
                   />
@@ -75,7 +78,7 @@ export default function MinhaConta() {
                   <Form.Control
                     placeholder="-"
                     name="celular"
-                    defaultValue={usuario.celular}
+                    defaultValue={usuario.phone}
                     readOnly
                     plaintext
                   />
@@ -99,7 +102,7 @@ export default function MinhaConta() {
                     <Form.Select
                       name="uf"
                       placeholder="-"
-                      defaultValue={usuario.uf}
+                      defaultValue={usuario.state}
                       readOnly
                       plaintext
                     >
@@ -139,7 +142,7 @@ export default function MinhaConta() {
                     <Form.Label className="fw-bold">Cidade</Form.Label>
                     <Form.Control
                       name="cidade"
-                      defaultValue={usuario.cidade}
+                      defaultValue={usuario.city}
                       placeholder="-"
                       readOnly
                       plaintext
@@ -150,7 +153,7 @@ export default function MinhaConta() {
                     <Form.Label className="fw-bold">Bairro</Form.Label>
                     <Form.Control
                       name="bairro"
-                      defaultValue={usuario.nome}
+                      defaultValue={usuario.district}
                       placeholder="-"
                       readOnly
                       plaintext
@@ -162,7 +165,7 @@ export default function MinhaConta() {
                   <Form.Label className="fw-bold">Rua</Form.Label>
                   <Form.Control
                     name="rua"
-                    defaultValue={usuario.rua}
+                    defaultValue={usuario.street}
                     placeholder="-"
                     readOnly
                     plaintext
@@ -172,7 +175,7 @@ export default function MinhaConta() {
                   <Form.Label className="fw-bold">Complemento</Form.Label>
                   <Form.Control
                     name="complemento"
-                    defaultValue={usuario.complemento}
+                    defaultValue={usuario.complement}
                     placeholder="-"
                     readOnly
                     plaintext
@@ -187,23 +190,23 @@ export default function MinhaConta() {
               <fieldset>
                 <Form.Group className="mb-3" controlId="password">
                   <Form.Label className="fw-bold">Senha Atual</Form.Label>
-                  <Form.Control type="password" name="password" />
+                  <Form.Control type="password" name="oldPassword" onChange={(e) => onChangeHandler(e.target)} />
                 </Form.Group>
                 <Form.Group className="mb-3" controlId="password">
                   <Form.Label className="fw-bold">Nova Senha</Form.Label>
-                  <Form.Control type="password" name="password" />
+                  <Form.Control type="password" name="newPassword" onChange={(e) => onChangeHandler(e.target)} />
                 </Form.Group>
                 <Form.Group className="mb-3" controlId="password">
                   <Form.Label className="fw-bold">
                     Confirmação da Nova Senha
                   </Form.Label>
-                  <Form.Control type="password" name="password" />
+                  <Form.Control type="password" name="passwordConfimation" onChange={(e) => onChangeHandler(e.target)} />
                 </Form.Group>
                 <Button
                   variant="primary"
                   className="me-3"
                   type="button"
-                  onClick={() => {}}
+                  onClick={submitForm}
                 >
                   Alterar Senha
                 </Button>

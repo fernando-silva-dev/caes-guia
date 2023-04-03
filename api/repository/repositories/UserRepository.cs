@@ -47,12 +47,9 @@ public class UserRepository
         Context.SaveChanges();
     }
 
-    public virtual void ResetPassword(Guid id, string oldPassword, string newPassord, string username)
+    public virtual void ResetPassword(Guid id, string oldPassword, string newPassord)
     {
         var user = Context.Users.Single(x => x.Id == id);
-
-        if (user.Username != username)
-            throw new Exception("Você não tem permissão de alterar a senha desse usuário");
 
         if (user.Password != oldPassword)
             throw new Exception("Senha anterior não confere");
