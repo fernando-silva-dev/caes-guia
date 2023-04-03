@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Button, Form, Container, Row, Col, Spinner } from 'react-bootstrap';
+import { useNavigate } from 'react-router-dom';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 
@@ -9,11 +10,12 @@ import api from '../../services/api';
 export default function MinhaConta() {
   const [usuario, setUsuario] = useState({});
   const [isFetching, setIsFetching] = useState(false);
-
+  const navigate = useNavigate();
   const fetchUser = async () => {
     try {
       const response = await api.get('user/self');
       setUsuario(response.data);
+      navigate('/minha-conta');
     } catch (error) {
       // TODO tratamento de erro
     }
@@ -58,28 +60,38 @@ export default function MinhaConta() {
                   <Form.Label className="fw-bold">Nome</Form.Label>
                   <Form.Control
                     placeholder="-"
-                    name="nome"
+                    name="name"
                     defaultValue={usuario.name}
                     readOnly
                     plaintext
                   />
                 </Form.Group>
-                <Form.Group className="mb-3" controlId="email">
+                <Form.Group className="mb-3" controlId="username">
                   <Form.Label className="fw-bold">Nome de usuário</Form.Label>
                   <Form.Control
                     placeholder="-"
-                    name="email"
+                    name="username"
                     defaultValue={usuario.username}
                     readOnly
                     plaintext
                   />
                 </Form.Group>
-                <Form.Group className="mb-5" controlId="celular">
+                <Form.Group className="mb-5" controlId="phone">
                   <Form.Label className="fw-bold">Celular</Form.Label>
                   <Form.Control
                     placeholder="-"
-                    name="celular"
+                    name="phone"
                     defaultValue={usuario.phone}
+                    readOnly
+                    plaintext
+                  />
+                </Form.Group>
+                <Form.Group className="mb-5" controlId="cpf">
+                  <Form.Label className="fw-bold">CPF</Form.Label>
+                  <Form.Control
+                    placeholder="-"
+                    name="cpf"
+                    defaultValue={usuario.cpf}
                     readOnly
                     plaintext
                   />
@@ -98,14 +110,13 @@ export default function MinhaConta() {
                     />
                   </Form.Group>
 
-                  <Form.Group as={Col} controlId="uf">
+                  <Form.Group as={Col} controlId="state">
                     <Form.Label className="fw-bold">Estado</Form.Label>
                     <Form.Select
-                      name="uf"
+                      name="state"
                       placeholder="-"
                       defaultValue={usuario.state}
-                      readOnly
-                      plaintext
+                      disabled
                     >
                       <option value="AC">Acre</option>
                       <option value="AL">Alagoas</option>
@@ -139,10 +150,10 @@ export default function MinhaConta() {
                 </Row>
 
                 <Row className="mb-3">
-                  <Form.Group as={Col} controlId="cidade">
+                  <Form.Group as={Col} controlId="city">
                     <Form.Label className="fw-bold">Cidade</Form.Label>
                     <Form.Control
-                      name="cidade"
+                      name="city"
                       defaultValue={usuario.city}
                       placeholder="-"
                       readOnly
@@ -153,7 +164,7 @@ export default function MinhaConta() {
                   <Form.Group as={Col} controlId="bairro">
                     <Form.Label className="fw-bold">Bairro</Form.Label>
                     <Form.Control
-                      name="bairro"
+                      name="district"
                       defaultValue={usuario.district}
                       placeholder="-"
                       readOnly
@@ -162,20 +173,30 @@ export default function MinhaConta() {
                   </Form.Group>
                 </Row>
 
-                <Form.Group className="mb-3" controlId="rua">
+                <Form.Group className="mb-3" controlId="street">
                   <Form.Label className="fw-bold">Rua</Form.Label>
                   <Form.Control
-                    name="rua"
+                    name="street"
                     defaultValue={usuario.street}
                     placeholder="-"
                     readOnly
                     plaintext
                   />
                 </Form.Group>
-                <Form.Group controlId="complemento">
+                <Form.Group controlId="number">
                   <Form.Label className="fw-bold">Complemento</Form.Label>
                   <Form.Control
-                    name="complemento"
+                    name="number"
+                    defaultValue={usuario.number}
+                    placeholder="-"
+                    readOnly
+                    plaintext
+                  />
+                </Form.Group>
+                <Form.Group controlId="complement">
+                  <Form.Label className="fw-bold">Complemento</Form.Label>
+                  <Form.Control
+                    name="complement"
                     defaultValue={usuario.complement}
                     placeholder="-"
                     readOnly

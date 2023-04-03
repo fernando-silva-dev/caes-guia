@@ -7,11 +7,9 @@ import * as Yup from 'yup';
 import api from '../../services/api';
 import './styles.css';
 
-
 function TutorForm() {
   const params = useParams();
   const { id } = params;
-  //   console.log(id);
   const [isFetching, setIsFetching] = useState(false);
   const [editable, setEditable] = useState(!id);
   const [tutor, setTutor] = useState({ role: 'Tutor', cpf: '' });
@@ -39,7 +37,7 @@ function TutorForm() {
       setIsFetching(true);
       const data = {
         ...params,
-        cpf: tutor.cpf.replace(/\D/g, ''),
+        cpf: params.cpf.replace(/\D/g, ''),
       };
       const response = await api.put(`user/${id}`, params);
       setTutor(response.data);
@@ -56,7 +54,7 @@ function TutorForm() {
       setIsFetching(true);
       const data = {
         ...params,
-        cpf: tutor.cpf.replace(/\D/g, ''),
+        cpf: params.cpf.replace(/\D/g, ''),
       };
       const response = await api.post(`user`, data);
       navigate('/tutores');
