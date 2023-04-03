@@ -31,6 +31,6 @@ public class UserService
     public virtual void RemoveUser(Guid id)
         => Repository.RemoveUser(id);
 
-    public virtual void ResetPassword(Guid id, string oldPassword, string newPassord, string username)
-        => Repository.ResetPassword(id, oldPassword, newPassord, username);
+    public virtual void ResetPassword(Guid id, string oldPassword, string newPassord)
+        => Repository.ResetPassword(id, oldPassword, newPassord);
 }

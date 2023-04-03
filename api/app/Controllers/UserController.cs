@@ -49,6 +49,12 @@ public class UserController : ControllerBase
         => Ok(Service.GetUser(id));
 
     [HttpGet]
+    [Route("self")]
+    [Authorize]
+    public ActionResult<UserModel> GetSelf()
+        => Ok(Service.GetUser(new Guid(HttpContext.User.Claims.First(c => c.Type == "Id").Value)));
+
+    [HttpGet]
     public ActionResult<PagedResult<UserModel>> List([FromQuery] int page = 0, [FromQuery] int size = 10)
     {
         var query = Service.List();
@@ -87,9 +93,12 @@ public class UserController : ControllerBase
     [Route("{id}")]
     public ActionResult ResetPassword([FromRoute] Guid id, [FromBody] PasswordResetModel model)
     {
-        var username = HttpContext.User.Claims.First(c => c.Type == ClaimTypes.Name).Value;
+        var claimedId = HttpContext.User.Claims.First(c => c.Type == "Id").Value;
 
-        Service.ResetPassword(id, model.OldPassord, model.NewPassword, username);
+        if (id.ToString() != claimedId)
+            throw new Exception("Você não tem permissão de alterar a senha desse usuário");
+
+        Service.ResetPassword(id, model.OldPassword, model.NewPassword);
         return NoContent();
     }
 }

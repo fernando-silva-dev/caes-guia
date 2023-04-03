@@ -10,22 +10,17 @@ import './styles.css';
 
 const COLUMNS = [
   {
-    key: 'id',
-    title: '#',
-    type: 'int',
-  },
-  {
-    key: 'nome',
+    key: 'name',
     title: 'Nome',
     type: 'str',
   },
   {
-    key: 'email',
+    key: 'username',
     title: 'E-mail',
     type: 'str',
   },
   {
-    key: 'celular',
+    key: 'phone',
     title: 'Celular',
     type: 'str',
   },
@@ -35,6 +30,7 @@ function Tutores() {
   const navigate = useNavigate();
   const [page, setPage] = useState(0);
   const [size, setSize] = useState(10);
+  const [total, setTotal] = useState(0);
 
   let [isFetching, setIsFetching] = useState(true);
   let [tableData, setTableData] = useState([]);
@@ -43,7 +39,9 @@ function Tutores() {
     try {
       setIsFetching(true);
       const response = await api.get('user', { params: { page, size } });
-      setTableData(response.data);
+      const { data, totalRecords } = response.data;
+      setTableData(data);
+      setTotal(totalRecords);
     } catch (error) {
       console.log(error);
     } finally {
@@ -84,7 +82,7 @@ function Tutores() {
               currentPage={page}
               onPageChange={(value) => setPage(value)}
               onSizeChange={(value) => setSize(value)}
-              total={10}
+              total={total}
             />
           </Col>
         </Row>
