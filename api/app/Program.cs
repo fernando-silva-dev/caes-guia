@@ -45,18 +45,21 @@ if (builder.Environment.IsDevelopment())
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
     app.UseCors("allow-all");
 }
+else
+{
+    app.UseAuthentication();
+    app.UseAuthorization();
+}
+
+app.Services.MigrateDatabase();
 
 app.UseHttpsRedirection();
-
-app.UseAuthentication();
-app.UseAuthorization();
 
 app.MapControllers();
 

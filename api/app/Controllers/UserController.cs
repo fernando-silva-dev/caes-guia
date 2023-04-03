@@ -2,7 +2,6 @@ using Microsoft.AspNetCore.Authorization;
 using App.Models;
 using Service.Services;
 using Service.Models;
-using System.Security.Claims;
 
 namespace App.Controllers;
 
@@ -27,7 +26,7 @@ public class UserController : ControllerBase
         UserModel? user = Service.Login(model.Username, model.Password);
 
         if (user is null)
-            return NotFound(new { message = "Usuário ou senha inválidos" });
+            return BadRequest(new { message = "Usuário ou senha inválidos" });
 
         var token = TokenHandler.GenerateToken(user);
         return Ok(new AuthenticationResult
@@ -57,7 +56,7 @@ public class UserController : ControllerBase
     [HttpGet]
     public ActionResult<PagedResult<UserModel>> List([FromQuery] int page = 0, [FromQuery] int size = 10)
     {
-        var query = Service.List();
+        var query = Service.List().Where(x => x.Role == "Tutor");
         var data = query.Take(size).Skip(page * size);
         var totalRecords = query.Count();
 

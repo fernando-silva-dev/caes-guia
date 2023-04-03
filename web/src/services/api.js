@@ -7,7 +7,7 @@ const api = axios.create({
   baseURL: 'http://localhost:5164',
   timeout: 5000,
   headers: {
-    Authorization: `Bearer ${cookies.get('token')}`,
+    Authorization: `bearer ${cookies.get('token')}`,
     'Content-Type': 'application/json',
   },
 });
