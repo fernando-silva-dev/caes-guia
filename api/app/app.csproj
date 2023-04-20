@@ -6,19 +6,20 @@
     <UserSecretsId>5ec3e8bd-6fa1-4612-9ec6-e7b0136a2200</UserSecretsId>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.Authentication" Version="2.2.0"/>
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="7.0.3"/>
-    <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="7.0.2"/>
+    <PackageReference Include="Microsoft.AspNetCore.Authentication" Version="2.2.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="7.0.3" />
+    <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="7.0.2" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="7.0.3">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
-    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0"/>
-    <PackageReference Include="AutoMapper" Version="12.0.1"/>
-    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.0"/>
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
+    <PackageReference Include="AutoMapper" Version="12.0.1" />
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.0" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\service\service.csproj"/>
-    <ProjectReference Include="..\crosscutting\crosscutting.csproj"/>
+    <ProjectReference Include="..\service\service.csproj" />
+    <ProjectReference Include="..\crosscutting\crosscutting.csproj" />
+    <ProjectReference Include="..\common\common.csproj" />
   </ItemGroup>
 </Project>
