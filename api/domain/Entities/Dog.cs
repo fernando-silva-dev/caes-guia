@@ -2,10 +2,11 @@ using Common.Enum;
 
 namespace Domain.Entities;
 
-public class Dog
+public class Dog : BaseEntity
 {
     public Dog(string name, string? motherName, string? fatherName, DateTime? birthDate, string? color, Status status)
     {
+        Id = Guid.NewGuid();
         Name = name;
         MotherName = motherName;
         FatherName = fatherName;
@@ -25,4 +26,5 @@ public class Dog
     public string? Color { get; protected set; }
     public Status Status { get; protected set; }
     // TODO verificar necessidade de raça
+    // TODO Adicionar relação com responsável(s)
 }

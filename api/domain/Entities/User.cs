@@ -1,6 +1,6 @@
 ﻿namespace Domain.Entities;
 
-public class User
+public class User : BaseEntity
 {
     public User(string userName, string password, string role, string name, string cpf, string phone, Address address)
     {
@@ -18,7 +18,6 @@ public class User
 
     protected User() { }
 
-    public Guid Id { get; protected set; }
     public string Username { get; protected set; }
     public string Name { get; protected set; }
     public string? Phone { get; protected set; }
@@ -26,13 +25,6 @@ public class User
     public string Password { get; protected set; }
     public string Role { get; protected set; }
     public Address? Address { get; protected set; }
-
-    public void SetId(Guid id)
-    {
-        Id = id;
-
-        new UserValidator().ValidateAndThrow(this);
-    }
 
     public void SetPassword(string password)
     {
