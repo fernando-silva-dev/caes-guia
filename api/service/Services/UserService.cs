@@ -1,4 +1,3 @@
-using Domain.Interfazes.Repository;
 using Service.Models.User;
 
 namespace Service.Services;
@@ -6,7 +5,7 @@ namespace Service.Services;
 public class UserService : BaseService<User, UserInsertionModel, UserViewModel>, IUserService
 {
     protected new IUserRepository Repository;
-    public UserService(UserRepository repository, IMapper mapper) : base(repository, mapper)
+    public UserService(IUserRepository repository, IMapper mapper) : base(repository, mapper)
     {
         Repository = repository;
     }

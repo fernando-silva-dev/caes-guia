@@ -1,12 +1,12 @@
 namespace Service.Services;
 
-public abstract class BaseService<TEntity, TInsertModel, TViewModel> : IBaseService<TInsertModel, TViewModel> where TEntity : BaseEntity where TInsertModel : class where TViewModel : BaseViewModel 
+public abstract class BaseService<TEntity, TInsertModel, TViewModel> : IBaseService<TInsertModel, TViewModel> where TEntity : BaseEntity where TInsertModel : class where TViewModel : BaseViewModel
 {
-    
-    protected readonly BaseRepository<TEntity> Repository;
+
+    protected readonly IBaseRepository<TEntity> Repository;
     protected readonly IMapper Mapper;
 
-    public BaseService(BaseRepository<TEntity> repository, IMapper mapper)
+    public BaseService(IBaseRepository<TEntity> repository, IMapper mapper)
     {
         Repository = repository;
         Mapper = mapper;
