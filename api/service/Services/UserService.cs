@@ -1,18 +1,18 @@
 using Domain.Interfazes.Repository;
-using Service.Interfaces;
+using Service.Models.User;
 
 namespace Service.Services;
 
-public class UserService : BaseService<User, UserInsertionModel, UserModel>, IUserService
+public class UserService : BaseService<User, UserInsertionModel, UserViewModel>, IUserService
 {
     protected new IUserRepository Repository;
-    public UserService(UserRepository repository, IMapper mapper) : base (repository, mapper)
+    public UserService(UserRepository repository, IMapper mapper) : base(repository, mapper)
     {
         Repository = repository;
     }
 
-    public UserModel? Login(string? username, string? password)
-        => Mapper.Map<UserModel>(Repository.Login(username, password));
+    public UserViewModel? Login(string? username, string? password)
+        => Mapper.Map<UserViewModel>(Repository.Login(username, password));
 
     public void ResetPassword(Guid id, string oldPassword, string newPassord)
         => Repository.ResetPassword(id, oldPassword, newPassord);

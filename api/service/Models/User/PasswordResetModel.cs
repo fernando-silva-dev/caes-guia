@@ -1,4 +1,4 @@
-namespace Service.Models;
+namespace Service.Models.User;
 
 public class PasswordResetModel
 {

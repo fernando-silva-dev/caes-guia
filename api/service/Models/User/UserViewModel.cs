@@ -1,8 +1,7 @@
-namespace Service.Models;
+namespace Service.Models.User;
 
-public class UserInsertionModel
+public class UserViewModel : BaseViewModel
 {
-    public string Password { get; set; }
     public string Username { get; set; }
     public string Role { get; set; }
     public string Name { get; set; }

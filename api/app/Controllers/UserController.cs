@@ -1,12 +1,10 @@
-using Microsoft.AspNetCore.Authorization;
 using App.Models;
-using Service.Models;
-using Service.Interfaces;
+using Service.Models.User;
 
 namespace App.Controllers;
 
 [Authorize(Roles = "Admin")]
-public class UserController : BaseCrudController<UserInsertionModel, UserModel>
+public class UserController : BaseCrudController<UserInsertionModel, UserViewModel>
 {
     protected readonly TokenGenerator TokenHandler;
     protected new readonly IUserService Service;
@@ -22,7 +20,7 @@ public class UserController : BaseCrudController<UserInsertionModel, UserModel>
     [AllowAnonymous]
     public ActionResult<AuthenticationResult> Authenticate([FromBody] Credentials model)
     {
-        UserModel? user = Service.Login(model.Username, model.Password);
+        UserViewModel? user = Service.Login(model.Username, model.Password);
 
         if (user is null)
             return BadRequest(new { message = "Usuário ou senha inválidos" });
@@ -43,7 +41,7 @@ public class UserController : BaseCrudController<UserInsertionModel, UserModel>
     [HttpGet]
     [Route("self")]
     [Authorize]
-    public ActionResult<UserModel> GetSelf()
+    public ActionResult<UserViewModel> GetSelf()
         => Ok(Service.Get(new Guid(HttpContext.User.Claims.First(c => c.Type == "Id").Value)));
 
     [HttpPatch]

@@ -2,7 +2,7 @@ using System.Text;
 using System.Security.Claims;
 using System.IdentityModel.Tokens.Jwt;
 using Microsoft.IdentityModel.Tokens;
-using Service.Models;
+using Service.Models.User;
 
 namespace App;
 
@@ -15,7 +15,7 @@ public class TokenGenerator
         _key = config.GetValue<string>("TOKEN_KEY") ?? throw new ArgumentNullException("TOKEN_KEY");
     }
 
-    public string GenerateToken(UserModel user)
+    public string GenerateToken(UserViewModel user)
     {
         var tokenHandler = new JwtSecurityTokenHandler();
         var keyBytes = Encoding.ASCII.GetBytes(_key);

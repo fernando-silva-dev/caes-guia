@@ -1,5 +1,3 @@
-using Service.Interfaces;
-
 namespace Service.Services;
 
 public abstract class BaseService<TEntity, TInsertModel, TViewModel> : IBaseService<TInsertModel, TViewModel> where TEntity : BaseEntity where TInsertModel : class where TViewModel : BaseViewModel 
