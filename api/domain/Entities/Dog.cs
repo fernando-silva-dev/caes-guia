@@ -25,6 +25,7 @@ public class Dog : BaseEntity
     public DateTime? BirthDate { get; protected set; }
     public string? Color { get; protected set; }
     public Status Status { get; protected set; }
+    public virtual IEnumerable<Event> Events { get; protected set; }
+    public virtual IEnumerable<User> Responsibles { get; protected set; }
     // TODO verificar necessidade de raça
-    // TODO Adicionar relação com responsável(s)
 }
