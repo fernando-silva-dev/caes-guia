@@ -21,4 +21,5 @@ public class Context : DbContext
 
     public virtual DbSet<User> Users { get; set; }
     public virtual DbSet<Dog> Dogs { get; set; }
+    public virtual DbSet<Responsability> Responsabilities { get; set; }
 }

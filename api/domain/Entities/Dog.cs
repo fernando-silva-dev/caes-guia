@@ -27,5 +27,4 @@ public class Dog : BaseEntity
     public Status Status { get; protected set; }
     public virtual IEnumerable<Event> Events { get; protected set; }
     public virtual IEnumerable<User> Responsibles { get; protected set; }
-    // TODO verificar necessidade de raça
 }
