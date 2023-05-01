@@ -16,6 +16,11 @@ public class User : BaseEntity
         new UserValidator().ValidateAndThrow(this);
     }
 
+    public User(Guid id)
+    {
+        Id = id;
+    }
+
     protected User() { }
 
     public string Username { get; protected set; }

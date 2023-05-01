@@ -10,7 +10,7 @@ public class Event : BaseEntity
         Date = date;
         DogId = dogId;
 
-        // TODO validate
+        new EventValidator().Validate(this);
     }
 
     public string Description { get; protected set; }

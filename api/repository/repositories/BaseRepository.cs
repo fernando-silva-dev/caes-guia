@@ -11,13 +11,13 @@ public abstract class BaseRepository<T> : IBaseRepository<T> where T : BaseEntit
         Context = context;
     }
 
-    public T? Get(Guid id)
+    public virtual T? Get(Guid id)
         => Context.Set<T>().SingleOrDefault(x => x.Id == id);
 
-    public IQueryable<T> List()
+    public virtual IQueryable<T> List()
         => Context.Set<T>();
 
-    public T Add(T entity)
+    public virtual T Add(T entity)
     {
         var result = Context.Add(entity);
         Context.SaveChanges();
@@ -25,7 +25,7 @@ public abstract class BaseRepository<T> : IBaseRepository<T> where T : BaseEntit
         return result.Entity;
     }
 
-    public void Remove(Guid id)
+    public virtual void Remove(Guid id)
     {
         T? entity = Context.Set<T>().SingleOrDefault(x => x.Id == id);
 
@@ -36,7 +36,7 @@ public abstract class BaseRepository<T> : IBaseRepository<T> where T : BaseEntit
         }
     }
 
-    public void Update(Guid id, T entity)
+    public virtual void Update(Guid id, T entity)
     {
         entity.Id = id;
         Context.Set<T>().Update(entity);

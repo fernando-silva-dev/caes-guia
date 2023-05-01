@@ -4,7 +4,8 @@ public class EventConfiguration : IEntityTypeConfiguration<Event>
 {
     public void Configure(EntityTypeBuilder<Event> builder)
     {
-        // TODO definir tamanho das colunas
+        builder.Property(x => x.Description).HasMaxLength(200);
+        
         builder.HasKey(x => x.Id);
     }
 }
