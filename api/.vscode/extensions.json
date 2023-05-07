@@ -4,6 +4,7 @@
         "formulahendry.dotnet-test-explorer",
         "adrianwilczynski.user-secrets",
         "jmrog.vscode-nuget-package-manager",
-        "ryanluker.vscode-coverage-gutters"
+        "ryanluker.vscode-coverage-gutters",
+        "ms-vscode.test-adapter-converter"
     ]
 }
