@@ -45,22 +45,22 @@ if (builder.Environment.IsDevelopment())
 
 var app = builder.Build();
 
+app.Services.MigrateDatabase();
+
+app.UseHttpsRedirection();
+
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
     app.UseCors("allow-all");
+    app.MapControllers().AllowAnonymous();
 }
 else
 {
     app.UseAuthentication();
     app.UseAuthorization();
+    app.MapControllers();
 }
-
-app.Services.MigrateDatabase();
-
-app.UseHttpsRedirection();
-
-app.MapControllers();
 
 app.Run();

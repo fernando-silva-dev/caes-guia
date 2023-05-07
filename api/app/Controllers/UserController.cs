@@ -1,18 +1,15 @@
-using Microsoft.AspNetCore.Authorization;
 using App.Models;
-using Service.Services;
-using Service.Models;
+using Service.Models.User;
 
 namespace App.Controllers;
 
-[ApiController]
 [Authorize(Roles = "Admin")]
-[Route("[controller]")]
-public class UserController : ControllerBase
+public class UserController : BaseCrudController<UserInsertionModel, UserViewModel>
 {
-    private readonly TokenGenerator TokenHandler;
-    private readonly UserService Service;
-    public UserController(TokenGenerator tokenHandler, UserService service)
+    protected readonly TokenGenerator TokenHandler;
+    protected new readonly IUserService Service;
+    
+    public UserController(TokenGenerator tokenHandler, IUserService service) : base(service)
     {
         TokenHandler = tokenHandler;
         Service = service;
@@ -23,7 +20,7 @@ public class UserController : ControllerBase
     [AllowAnonymous]
     public ActionResult<AuthenticationResult> Authenticate([FromBody] Credentials model)
     {
-        UserModel? user = Service.Login(model.Username, model.Password);
+        UserViewModel? user = Service.Login(model.Username, model.Password);
 
         if (user is null)
             return BadRequest(new { message = "Usuário ou senha inválidos" });
@@ -42,51 +39,10 @@ public class UserController : ControllerBase
     }
 
     [HttpGet]
-    [Route("{id}")]
-    [Authorize]
-    public ActionResult<UserModel> GetUser(Guid id)
-        => Ok(Service.GetUser(id));
-
-    [HttpGet]
     [Route("self")]
     [Authorize]
-    public ActionResult<UserModel> GetSelf()
-        => Ok(Service.GetUser(new Guid(HttpContext.User.Claims.First(c => c.Type == "Id").Value)));
-
-    [HttpGet]
-    public ActionResult<PagedResult<UserModel>> List([FromQuery] int page = 0, [FromQuery] int size = 10)
-    {
-        var query = Service.List().Where(x => x.Role == "Tutor");
-        var data = query.Take(size).Skip(page * size);
-        var totalRecords = query.Count();
-
-        return Ok(new PagedResult<UserModel> { Data = data, TotalRecords = totalRecords });
-    }
-
-    [HttpPost]
-    public CreatedResult AddUser([FromBody] UserInsertionModel model)
-    {
-        var entity = Service.AddUser(model);
-        string uri = $"user/{entity.Id}";
-
-        return Created(uri, entity);
-    }
-
-    [HttpPut]
-    [Route("{id}")]
-    public ActionResult UpdateUser([FromRoute] Guid id, [FromBody] UserInsertionModel model)
-    {
-        Service.UpdateUser(id, model);
-        return NoContent();
-    }
-
-    [HttpDelete]
-    [Route("{id}")]
-    public ActionResult RemoveUser([FromRoute] Guid id)
-    {
-        Service.RemoveUser(id);
-        return NoContent();
-    }
+    public ActionResult<UserViewModel> GetSelf()
+        => Ok(Service.Get(new Guid(HttpContext.User.Claims.First(c => c.Type == "Id").Value)));
 
     [HttpPatch]
     [Route("{id}")]

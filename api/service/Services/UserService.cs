@@ -1,36 +1,18 @@
+using Service.Models.User;
+
 namespace Service.Services;
 
-public class UserService
+public class UserService : BaseService<User, UserInsertionModel, UserViewModel>, IUserService
 {
-    private readonly UserRepository Repository;
-    private readonly IMapper Mapper;
-
-    protected UserService() { }
-
-    public UserService(UserRepository repository, IMapper mapper)
+    protected new IUserRepository Repository;
+    public UserService(IUserRepository repository, IMapper mapper) : base(repository, mapper)
     {
         Repository = repository;
-        Mapper = mapper;
     }
 
-    public virtual UserModel? Login(string? username, string? password)
-        => Mapper.Map<UserModel>(Repository.Login(username, password));
+    public UserViewModel? Login(string? username, string? password)
+        => Mapper.Map<UserViewModel>(Repository.Login(username, password));
 
-    public virtual UserModel GetUser(Guid id)
-        => Mapper.Map<UserModel>(Repository.GetUser(id));
-
-    public virtual IQueryable<UserModel> List()
-        => Mapper.ProjectTo<UserModel>(Repository.List());
-
-    public virtual UserModel AddUser(UserInsertionModel model)
-        => Mapper.Map<UserModel>(Repository.AddUser(Mapper.Map<User>(model)));
-
-    public virtual void UpdateUser(Guid id, UserInsertionModel model)
-        => Repository.UpdateUser(id, Mapper.Map<User>(model));
-
-    public virtual void RemoveUser(Guid id)
-        => Repository.RemoveUser(id);
-
-    public virtual void ResetPassword(Guid id, string oldPassword, string newPassord)
+    public void ResetPassword(Guid id, string oldPassword, string newPassord)
         => Repository.ResetPassword(id, oldPassword, newPassord);
 }

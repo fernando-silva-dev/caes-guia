@@ -1,0 +1,17 @@
+# TODO
+ - Arrumar validação
+ - Verificar "sessão" antes de cobrar login
+ - Verificar role a cada acesso
+ - Popup de confirmação
+ - Toast de feedback
+ - Validação do form de login
+ - OData
+ - Verificar role no router
+ - CRUD de cachorro
+ - Botar pra rodar num docker
+ - Adicionar sln
+ - Verificar add ts(?)
+ - Launch settings para web
+ - husky
+ - Enum de roles
+ - Encriptar a senha

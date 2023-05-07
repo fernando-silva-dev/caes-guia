@@ -20,4 +20,6 @@ public class Context : DbContext
         => optionsBuilder.UseNpgsql(_connectionString);
 
     public virtual DbSet<User> Users { get; set; }
+    public virtual DbSet<Dog> Dogs { get; set; }
+    public virtual DbSet<Responsability> Responsabilities { get; set; }
 }

@@ -12,8 +12,8 @@ public static class DependencyInjectionExtensions
     {
         services.AddDbContext<Context>();
 
-        services.Scan(x => x.FromAssembliesOf(typeof(UserService)).AddClasses(c => c.InExactNamespaceOf<UserService>()).AsSelf().WithScopedLifetime());
-        services.Scan(x => x.FromAssembliesOf(typeof(UserRepository)).AddClasses(c => c.InExactNamespaceOf<UserRepository>()).AsSelf().WithScopedLifetime());
+        services.Scan(x => x.FromAssembliesOf(typeof(UserService)).AddClasses(c => c.InExactNamespaceOf<UserService>()).AsMatchingInterface().WithScopedLifetime());
+        services.Scan(x => x.FromAssembliesOf(typeof(UserRepository)).AddClasses(c => c.InExactNamespaceOf<UserRepository>()).AsMatchingInterface().WithScopedLifetime());
     }
 
     public static void MigrateDatabase(this IServiceProvider services)

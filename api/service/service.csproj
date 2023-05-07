@@ -1,11 +1,12 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <ItemGroup>
-    <ProjectReference Include="..\repository\repository.csproj"/>
-    <ProjectReference Include="..\domain\domain.csproj"/>
+    <ProjectReference Include="..\repository\repository.csproj" />
+    <ProjectReference Include="..\domain\domain.csproj" />
+    <ProjectReference Include="..\common\common.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.27.0"/>
-    <PackageReference Include="AutoMapper" Version="12.0.1"/>
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.27.0" />
+    <PackageReference Include="AutoMapper" Version="12.0.1" />
   </ItemGroup>
   <PropertyGroup>
     <TargetFramework>net7.0</TargetFramework>

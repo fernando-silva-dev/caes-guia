@@ -1,53 +1,15 @@
+using Domain.Interfazes.Repository;
+
 namespace Repository.Repositories;
 
-public class UserRepository
+public sealed class UserRepository : BaseRepository<User>, IUserRepository
 {
+    public UserRepository(Context context) : base(context) { }
 
-    private readonly Context Context;
-
-    protected UserRepository() { }
-
-    public UserRepository(Context context)
-    {
-        Context = context;
-    }
-
-    public virtual User? Login(string? username, string? password)
+    public User? Login(string? username, string? password)
         => Context.Users.SingleOrDefault(x => x.Username == username && x.Password == password);
 
-    public virtual User? GetUser(Guid id)
-        => Context.Users.Include(x => x.Address).SingleOrDefault(x => x.Id == id);
-
-    public virtual IQueryable<User> List()
-        => Context.Users;
-
-    public virtual User AddUser(User user)
-    {
-        var result = Context.Add(user);
-        Context.SaveChanges();
-
-        return result.Entity;
-    }
-
-    public virtual void RemoveUser(Guid id)
-    {
-        User? user = Context.Users.SingleOrDefault(x => x.Id == id);
-
-        if (user is not null)
-        {
-            Context.Users.Remove(user);
-            Context.SaveChanges();
-        }
-    }
-
-    public virtual void UpdateUser(Guid id, User user)
-    {
-        user.SetId(id);
-        Context.Users.Update(user);
-        Context.SaveChanges();
-    }
-
-    public virtual void ResetPassword(Guid id, string oldPassword, string newPassord)
+    public void ResetPassword(Guid id, string oldPassword, string newPassord)
     {
         var user = Context.Users.Single(x => x.Id == id);
 
