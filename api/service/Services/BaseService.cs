@@ -6,6 +6,8 @@ public abstract class BaseService<TEntity, TInsertModel, TViewModel> : IBaseServ
     protected readonly IBaseRepository<TEntity> Repository;
     protected readonly IMapper Mapper;
 
+    protected BaseService() { }
+
     public BaseService(IBaseRepository<TEntity> repository, IMapper mapper)
     {
         Repository = repository;

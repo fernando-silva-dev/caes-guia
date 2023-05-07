@@ -19,7 +19,6 @@ public class MapperProfile : Profile
         CreateMap<UserInsertionModel, User>()
             .ConstructUsing(x => new User(x.Username, x.Password, x.Role, x.Name, x.Cpf, x.Phone, new Address(x.Cep, x.City, x.Street, x.Complement, x.State, x.District, x.Number)));
 
-        // TODO
         CreateMap<Dog, DogViewModel>();
         CreateMap<DogInsertionModel, Dog>()
             .ConstructUsing(x => new Dog(x.Name, x.MotherName, x.FatherName, x.BirthDate, x.Color, x.Status));
