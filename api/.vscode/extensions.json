@@ -3,6 +3,7 @@
         "ms-dotnettools.csharp",
         "formulahendry.dotnet-test-explorer",
         "adrianwilczynski.user-secrets",
-        "jmrog.vscode-nuget-package-manager"
+        "jmrog.vscode-nuget-package-manager",
+        "ryanluker.vscode-coverage-gutters"
     ]
 }

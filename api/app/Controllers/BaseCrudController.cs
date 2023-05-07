@@ -1,6 +1,4 @@
 using App.Models;
-using Microsoft.AspNetCore.Authorization;
-using Service.Interfaces;
 using Service.Models;
 
 namespace App.Controllers;
