@@ -97,4 +97,12 @@ public sealed class BaseServiceTests
 
         RepositoryMock.Verify(x => x.Remove(Id), Times.Once());
     }
+
+    [Fact]
+    public void EmptyConstructor_Should_Construct()
+    {
+        var emptyConstructedService = new Mock<BaseService<TestEntity, TestInsertModel, TestViewModel>>() { CallBase = true }.Object;
+
+        emptyConstructedService.Should().BeAssignableTo<BaseService<TestEntity, TestInsertModel, TestViewModel>>();
+    }
 }

@@ -12,4 +12,5 @@
     },
     "dotnet-test-explorer.testProjectPath": "./test/test.csproj",
     "dotnet-test-explorer.testArguments": "--collect:\"XPlat Code Coverage\"",
+    "dotnet-test-explorer.enableTelemetry": false,
 }
