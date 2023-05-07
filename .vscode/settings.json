@@ -1,0 +1,22 @@
+{
+    "files.exclude": {
+        "**/.git": true,
+        "**/.svn": true,
+        "**/.hg": true,
+        "**/CVS": true,
+        "**/.DS_Store": true
+    },
+    "markdown-pdf.convertOnSave": true,
+    "markdown-pdf.breaks": true,
+    "markdown-pdf.outputDirectory": "../out/",
+    "markdown-pdf.outputDirectoryRelativePathFile": true,
+    "markdown-pdf.convertOnSaveExclude": [
+        "f_*",
+    ],
+    "markdown-pdf.footerTemplate": "<div style=\"font-size: 9px; margin: 0 auto;\"> <span class='pageNumber'></span></div>",
+    "markdown-pdf.headerTemplate": "<div></div>",
+    "markdown-pdf.stylesRelativePathFile": true,
+    "markdown-pdf.styles": [
+        "styles.css"
+    ]
+}
