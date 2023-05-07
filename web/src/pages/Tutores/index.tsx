@@ -4,25 +4,26 @@ import { Plus } from 'react-bootstrap-icons';
 import { useNavigate } from 'react-router-dom';
 
 import api from '../../services/api';
-import CustomTable from '../../components/CustomTable';
+import CustomTable, { CustomTableColumn } from '../../components/CustomTable';
 import Pagination from '../../components/CustomTable/Pagination';
 import './styles.css';
+import { Tutor } from '../../models/Tutor';
 
-const COLUMNS = [
+const COLUMNS: CustomTableColumn[] = [
   {
     key: 'name',
     title: 'Nome',
-    type: 'str',
+    type: 'string',
   },
   {
     key: 'username',
     title: 'E-mail',
-    type: 'str',
+    type: 'string',
   },
   {
     key: 'phone',
     title: 'Celular',
-    type: 'str',
+    type: 'string',
   },
 ];
 
@@ -32,8 +33,8 @@ function Tutores() {
   const [size, setSize] = useState(10);
   const [total, setTotal] = useState(0);
 
-  let [isFetching, setIsFetching] = useState(true);
-  let [tableData, setTableData] = useState([]);
+  const [isFetching, setIsFetching] = useState<boolean>(true);
+  const [tableData, setTableData] = useState<Tutor[]>([]);
 
   const fetchTutores = async () => {
     try {
@@ -43,7 +44,7 @@ function Tutores() {
       setTableData(data);
       setTotal(totalRecords);
     } catch (error) {
-      console.log(error);
+      // TODO: handle error
     } finally {
       setIsFetching(false);
     }
@@ -76,13 +77,12 @@ function Tutores() {
               onRowClick={(id) => {
                 navigate(`/tutores/${id}`);
               }}
-            />
-            <Pagination
               pageSize={size}
-              currentPage={page}
+              pageNumber={page}
               onPageChange={(value) => setPage(value)}
               onSizeChange={(value) => setSize(value)}
               total={total}
+              isFetching={isFetching}
             />
           </Col>
         </Row>

@@ -1,0 +1,16 @@
+export interface Tutor {
+  id?: number;
+  name: string;
+  username: string;
+  password: string;
+  phone: string;
+  cpf: string;
+  cep: string;
+  state: string;
+  city: string;
+  district: string;
+  street: string;
+  number: string;
+  complement: string;
+  role: string;
+}

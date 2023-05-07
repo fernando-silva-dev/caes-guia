@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Button, Form, Image, Container, Row, Col } from 'react-bootstrap';
 import { useDispatch } from 'react-redux';
 import Cookies from 'universal-cookie';
+import { toast } from 'react-toastify';
 
 import { login } from '../../redux/slicers/auth';
 import Api from '../../services/api';
@@ -34,7 +35,8 @@ function Login() {
       }
       cookies.set('token', response.data.token);
     } catch (error) {
-      console.log(error);
+      console.log(error.response.data.message);
+      toast.error(error.response.data.message);
     } finally {
       if (!rememberMe) {
         cookies.remove('username');
@@ -74,7 +76,7 @@ function Login() {
                   type="checkbox"
                   label="Lembrar-me"
                   checked={rememberMe}
-                  onChange={(e) => setRememberMe(e.target.value)}
+                  onChange={(e) => setRememberMe(e.target.checked)}
                 />
               </Form.Group>
 

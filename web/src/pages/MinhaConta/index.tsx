@@ -1,14 +1,35 @@
 import React, { useState, useEffect } from 'react';
-import { Button, Form, Container, Row, Col, Spinner } from 'react-bootstrap';
+import { Button, Form, Container, Row, Col } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 
 import './styles.css';
 import api from '../../services/api';
+import { Tutor } from '../../models/Tutor';
+
+interface UpdatePasswordForm {
+  oldPassword: string;
+  newPassword: string;
+  passwordConfimation: string;
+}
 
 export default function MinhaConta() {
-  const [usuario, setUsuario] = useState({});
+  const [usuario, setUsuario] = useState<Tutor>({
+    role: 'Tutor',
+    name: '',
+    username: '',
+    password: '',
+    phone: '',
+    cpf: '',
+    cep: '',
+    state: '',
+    city: '',
+    district: '',
+    street: '',
+    number: '',
+    complement: '',
+  });
   const [isFetching, setIsFetching] = useState(false);
   const navigate = useNavigate();
   const fetchUser = async () => {
@@ -25,13 +46,12 @@ export default function MinhaConta() {
     fetchUser();
   }, []);
 
-  const submitForm = async (params) => {
+  const submitForm = async (formData: UpdatePasswordForm) => {
     setIsFetching(true);
     try {
-      const response = await api.patch(`user/${usuario.id}`, params);
-      console.log(response.data);
+      const response = await api.patch(`user/${usuario.id}`, formData);
     } catch (error) {
-      console.log(error);
+      // TODO: handle error
     } finally {
       setIsFetching(false);
     }
@@ -211,7 +231,6 @@ export default function MinhaConta() {
               enableReinitialize
               validationSchema={schema}
               onSubmit={(params) => {
-                console.log(params);
                 submitForm(params);
               }}
               initialValues={{
@@ -220,89 +239,84 @@ export default function MinhaConta() {
                 passwordConfimation: '',
               }}
               validate={(values) => {
-                const errors = {};
+                const errors = {} as UpdatePasswordForm;
 
                 if (values.newPassword !== values.passwordConfimation) {
-                  errors.passwordConfimation =
-                    'A nova senha e a confirmação devem ser iguais';
+                  errors.passwordConfimation = 'A nova senha e a confirmação devem ser iguais';
                 }
 
                 return errors;
               }}
             >
-              {({
-                handleSubmit,
-                handleChange,
-                handleBlur,
-                values,
-                touched,
-                isValid,
-                errors,
-              }) => {
-                return (
-                  <Form noValidate onSubmit={handleSubmit}>
-                    <h4 className="d-inline-block">Alterar Senha</h4>
-                    <fieldset disabled={isFetching}>
-                      <Form.Group className="mb-3" controlId="password">
-                        <Form.Label className="fw-bold">Senha Atual</Form.Label>
-                        <Form.Control
-                          type="password"
-                          name="oldPassword"
-                          value={values.oldPassword}
-                          onChange={handleChange}
-                          isValid={touched.oldPassword && !errors.oldPassword}
-                          isInvalid={touched.oldPassword && errors.oldPassword}
-                        />
-                        <Form.Control.Feedback type="invalid">
-                          {errors.oldPassword}
-                        </Form.Control.Feedback>
-                      </Form.Group>
-                      <Form.Group className="mb-3" controlId="newPassword">
-                        <Form.Label className="fw-bold">Nova Senha</Form.Label>
-                        <Form.Control
-                          type="password"
-                          name="newPassword"
-                          value={values.newPassword}
-                          onChange={handleChange}
-                          isValid={touched.newPassword && !errors.newPassword}
-                          isInvalid={touched.newPassword && errors.newPassword}
-                        />
-                        <Form.Control.Feedback type="invalid">
-                          {errors.newPassword}
-                        </Form.Control.Feedback>
-                      </Form.Group>
-                      <Form.Group
-                        className="mb-3"
-                        controlId="passwordConfimation"
-                      >
-                        <Form.Label className="fw-bold">
-                          Confirmação da Nova Senha
-                        </Form.Label>
-                        <Form.Control
-                          type="password"
-                          name="passwordConfimation"
-                          value={values.passwordConfimation}
-                          onChange={handleChange}
-                          isValid={
-                            touched.passwordConfimation &&
-                            !errors.passwordConfimation
-                          }
-                          isInvalid={
-                            touched.passwordConfimation &&
-                            errors.passwordConfimation
-                          }
-                        />
-                        <Form.Control.Feedback type="invalid">
-                          {errors.passwordConfimation}
-                        </Form.Control.Feedback>
-                      </Form.Group>
-                      <Button variant="primary" className="me-3" type="submit">
-                        Alterar Senha
-                      </Button>
-                    </fieldset>
-                  </Form>
-                );
-              }}
+              {({ handleSubmit, handleChange, values, touched, errors }) => (
+                <Form noValidate onSubmit={handleSubmit}>
+                  <h4 className="d-inline-block">Alterar Senha</h4>
+                  <fieldset disabled={isFetching}>
+                    <Form.Group className="mb-3" controlId="password">
+                      <Form.Label className="fw-bold">Senha Atual</Form.Label>
+                      <Form.Control
+                        type="password"
+                        name="oldPassword"
+                        value={values.oldPassword}
+                        onChange={handleChange}
+                        isValid={touched.oldPassword && !errors.oldPassword}
+                        isInvalid={
+                          touched.oldPassword !== undefined &&
+                          errors.oldPassword !== undefined
+                        }
+                      />
+                      <Form.Control.Feedback type="invalid">
+                        {errors.oldPassword}
+                      </Form.Control.Feedback>
+                    </Form.Group>
+                    <Form.Group className="mb-3" controlId="newPassword">
+                      <Form.Label className="fw-bold">Nova Senha</Form.Label>
+                      <Form.Control
+                        type="password"
+                        name="newPassword"
+                        value={values.newPassword}
+                        onChange={handleChange}
+                        isValid={touched.newPassword && !errors.newPassword}
+                        isInvalid={
+                          touched.newPassword !== undefined &&
+                          errors.newPassword !== undefined
+                        }
+                      />
+                      <Form.Control.Feedback type="invalid">
+                        {errors.newPassword}
+                      </Form.Control.Feedback>
+                    </Form.Group>
+                    <Form.Group
+                      className="mb-3"
+                      controlId="passwordConfimation"
+                    >
+                      <Form.Label className="fw-bold">
+                        Confirmação da Nova Senha
+                      </Form.Label>
+                      <Form.Control
+                        type="password"
+                        name="passwordConfimation"
+                        value={values.passwordConfimation}
+                        onChange={handleChange}
+                        isValid={
+                          touched.passwordConfimation &&
+                          !errors.passwordConfimation
+                        }
+                        isInvalid={
+                          touched.passwordConfimation !== undefined &&
+                          errors.passwordConfimation !== undefined
+                        }
+                      />
+                      <Form.Control.Feedback type="invalid">
+                        {errors.passwordConfimation}
+                      </Form.Control.Feedback>
+                    </Form.Group>
+                    <Button variant="primary" className="me-3" type="submit">
+                      Alterar Senha
+                    </Button>
+                  </fieldset>
+                </Form>
+              )}
             </Formik>
           </Col>
         </Row>

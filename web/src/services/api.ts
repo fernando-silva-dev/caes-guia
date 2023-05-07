@@ -1,6 +1,10 @@
 import axios from 'axios';
 import Cookies from 'universal-cookie/es6';
 
+export interface ErrorMessage {
+  message: string;
+}
+
 // TODO usar variáveis de ambiente
 const cookies = new Cookies();
 const api = axios.create({

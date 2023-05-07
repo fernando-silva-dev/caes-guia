@@ -3,22 +3,36 @@ import { Button, Form, Container, Row, Col, Spinner } from 'react-bootstrap';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
+import { toast } from 'react-toastify';
 
 import api from '../../services/api';
 import './styles.css';
+import { Tutor } from '../../models/Tutor';
 
 function TutorForm() {
   const params = useParams();
-  const { id } = params;
+
+  const { id: paramId } = params;
+  const id = paramId ? parseInt(paramId, 10) : undefined;
+
   const [isFetching, setIsFetching] = useState(false);
   const [editable, setEditable] = useState(!id);
-  const [tutor, setTutor] = useState({ role: 'Tutor', cpf: '' });
+  const [tutor, setTutor] = useState<Tutor>({
+    role: 'Tutor',
+    name: '',
+    username: '',
+    password: '',
+    phone: '',
+    cpf: '',
+    cep: '',
+    state: '',
+    city: '',
+    district: '',
+    street: '',
+    number: '',
+    complement: '',
+  });
   const navigate = useNavigate();
-
-  const onChangeHandler = (event) => {
-    const { name, value } = event;
-    setTutor((prev) => ({ ...prev, [name]: value }));
-  };
 
   const fetchTutor = async () => {
     try {
@@ -26,52 +40,55 @@ function TutorForm() {
       const response = await api.get(`user/${id}`);
       setTutor(response.data);
     } catch (error) {
-      console.log(error);
+      toast.error('Erro ao buscar o tutor');
     } finally {
       setIsFetching(false);
     }
   };
 
-  const updateTutor = async (params) => {
+  const updateTutor = async (formData: Tutor) => {
     try {
       setIsFetching(true);
       const data = {
-        ...params,
-        cpf: params.cpf.replace(/\D/g, ''),
+        ...formData,
+        cpf: formData.cpf.replace(/\D/g, ''),
       };
-      const response = await api.put(`user/${id}`, params);
+      const response = await api.put(`user/${id}`, data);
+      toast.success('Tutor atualizado');
       setTutor(response.data);
       setEditable(false);
     } catch (error) {
-      console.log(error);
+      toast.error('Erro ao atualizar tutor');
     } finally {
       setIsFetching(false);
     }
   };
 
-  const createTutor = async (params) => {
+  const createTutor = async (formData: Tutor) => {
     try {
       setIsFetching(true);
       const data = {
-        ...params,
-        cpf: params.cpf.replace(/\D/g, ''),
+        ...formData,
+        cpf: formData.cpf.replace(/\D/g, ''),
       };
-      const response = await api.post(`user`, data);
+      const response = await api.post('user', data);
+      toast.success('Tutor criado');
       navigate('/tutores');
     } catch (error) {
-      console.log(error);
+      toast.error('Erro ao criar tutor');
     } finally {
       setIsFetching(false);
     }
   };
 
-  const deleteTutor = async () => {
+  const deleteTutor = async (tutorId: number) => {
     try {
       setIsFetching(true);
-      const response = await api.delete(`user/${id}`, tutor);
+      const response = await api.delete(`user/${tutorId}`);
+      toast.success('Tutor removido');
       navigate('/tutores');
     } catch (error) {
-      console.log(error);
+      toast.error('Erro ao deletar tutor');
     } finally {
       setIsFetching(false);
     }
@@ -125,22 +142,22 @@ function TutorForm() {
         <Formik
           enableReinitialize
           validationSchema={schema}
-          onSubmit={(params) => {
-            if (id) updateTutor(params);
-            else createTutor(params);
+          onSubmit={(params2) => {
+            if (id) updateTutor(params2);
+            else createTutor(params2);
           }}
           initialValues={tutor}
         >
           {({
             handleSubmit,
             handleChange,
-            handleBlur,
             values,
             touched,
             isValid,
             errors,
           }) => {
-            console.log(errors);
+            console.log(errors, values, touched);
+            // TODO: handle error
             return (
               <Form noValidate onSubmit={handleSubmit}>
                 <fieldset disabled={isFetching}>
@@ -156,7 +173,10 @@ function TutorForm() {
                           plaintext={!editable}
                           value={values.name}
                           isValid={touched.name && !errors.name}
-                          isInvalid={touched.name && errors.name}
+                          isInvalid={
+                            touched.name !== undefined &&
+                            errors.name !== undefined
+                          }
                           onChange={handleChange}
                         />
                         <Form.Control.Feedback type="invalid">
@@ -171,7 +191,10 @@ function TutorForm() {
                           plaintext={!editable}
                           value={values.username}
                           isValid={touched.username && !errors.username}
-                          isInvalid={touched.username && errors.username}
+                          isInvalid={
+                            touched.username !== undefined &&
+                            errors.username !== undefined
+                          }
                           onChange={handleChange}
                         />
                         <Form.Control.Feedback type="invalid">
@@ -188,7 +211,10 @@ function TutorForm() {
                             plaintext={!editable}
                             value={values.password}
                             isValid={touched.password && !errors.password}
-                            isInvalid={touched.password && errors.password}
+                            isInvalid={
+                              touched.password !== undefined &&
+                              errors.password !== undefined
+                            }
                             onChange={handleChange}
                           />
                           <Form.Control.Feedback type="invalid">
@@ -205,7 +231,10 @@ function TutorForm() {
                           value={values.phone}
                           onChange={handleChange}
                           isValid={touched.phone && !errors.phone}
-                          isInvalid={touched.phone && errors.phone}
+                          isInvalid={
+                            touched.phone !== undefined &&
+                            errors.phone !== undefined
+                          }
                         />
                         <Form.Control.Feedback type="invalid">
                           {errors.phone}
@@ -220,7 +249,10 @@ function TutorForm() {
                           value={values.cpf}
                           onChange={handleChange}
                           isValid={touched.cpf && !errors.cpf}
-                          isInvalid={touched.cpf && errors.cpf}
+                          isInvalid={
+                            touched.cpf !== undefined &&
+                            errors.cpf !== undefined
+                          }
                         />
                         <Form.Control.Feedback type="invalid">
                           {errors.cpf}
@@ -239,7 +271,10 @@ function TutorForm() {
                             value={values.cep}
                             onChange={handleChange}
                             isValid={touched.cep && !errors.cep}
-                            isInvalid={touched.cep && errors.cep}
+                            isInvalid={
+                              touched.cep !== undefined &&
+                              errors.cep !== undefined
+                            }
                           />
                           <Form.Control.Feedback type="invalid">
                             {errors.cep}
@@ -254,7 +289,10 @@ function TutorForm() {
                             value={values.state}
                             onChange={handleChange}
                             isValid={touched.state && !errors.state}
-                            isInvalid={touched.state && errors.state}
+                            isInvalid={
+                              touched.state !== undefined &&
+                              errors.state !== undefined
+                            }
                           >
                             <option value="AC">Acre</option>
                             <option value="AL">Alagoas</option>
@@ -300,7 +338,10 @@ function TutorForm() {
                             value={values.city}
                             onChange={handleChange}
                             isValid={touched.city && !errors.city}
-                            isInvalid={touched.city && errors.city}
+                            isInvalid={
+                              touched.city !== undefined &&
+                              errors.city !== undefined
+                            }
                           />
                           <Form.Control.Feedback type="invalid">
                             {errors.city}
@@ -316,7 +357,10 @@ function TutorForm() {
                             value={values.district}
                             onChange={handleChange}
                             isValid={touched.district && !errors.district}
-                            isInvalid={touched.district && errors.district}
+                            isInvalid={
+                              touched.district !== undefined &&
+                              errors.district !== undefined
+                            }
                           />
                           <Form.Control.Feedback type="invalid">
                             {errors.district}
@@ -333,7 +377,10 @@ function TutorForm() {
                           value={values.street}
                           onChange={handleChange}
                           isValid={touched.street && !errors.street}
-                          isInvalid={touched.street && errors.street}
+                          isInvalid={
+                            touched.street !== undefined &&
+                            errors.street !== undefined
+                          }
                         />
                         <Form.Control.Feedback type="invalid">
                           {errors.street}
@@ -348,7 +395,10 @@ function TutorForm() {
                           value={values.number}
                           onChange={handleChange}
                           isValid={touched.number && !errors.number}
-                          isInvalid={touched.number && errors.number}
+                          isInvalid={
+                            touched.number !== undefined &&
+                            errors.number !== undefined
+                          }
                         />
                         <Form.Control.Feedback type="invalid">
                           {errors.number}
@@ -363,7 +413,10 @@ function TutorForm() {
                           value={values.complement}
                           onChange={handleChange}
                           isValid={touched.complement && !errors.complement}
-                          isInvalid={touched.complement && errors.complement}
+                          isInvalid={
+                            touched.complement !== undefined &&
+                            errors.complement !== undefined
+                          }
                         />
                         <Form.Control.Feedback type="invalid">
                           {errors.complement}
@@ -391,7 +444,7 @@ function TutorForm() {
                             className="me-3 mb-3"
                             type="button"
                             onClick={() => {
-                              deleteTutor();
+                              deleteTutor(id);
                             }}
                           >
                             Remover

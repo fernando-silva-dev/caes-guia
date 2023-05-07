@@ -3,9 +3,11 @@ module.exports = {
     browser: true,
     es2021: true,
   },
-  extends: ['plugin:react/recommended', 'airbnb'],
+  extends: ['plugin:react/recommended', 'airbnb', 'airbnb-typescript'],
   overrides: [],
   parserOptions: {
+    project: 'tsconfig.json',
+    tsconfigRootDir: __dirname,
     ecmaVersion: 'latest',
     sourceType: 'module',
   },
@@ -14,5 +16,16 @@ module.exports = {
     'import/no-named-as-default': 0,
     'object-curly-newline': 0,
     'react/prop-types': 0,
+    'react/jsx-filename-extension': [2, { extensions: ['.jsx', '.tsx'] }],
+    'import/extensions': [
+      'error',
+      'ignorePackages',
+      {
+        js: 'never',
+        jsx: 'never',
+        ts: 'never',
+        tsx: 'never',
+      },
+    ],
   },
 };
