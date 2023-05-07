@@ -6,7 +6,7 @@ import { toast } from 'react-toastify';
 
 import api from '../../services/api';
 import CustomTable, { CustomTableColumn } from '../../components/CustomTable';
-import { Tutor } from '../../models/Tutor';
+import { Dog } from '../../models/Dog';
 
 import './styles.css';
 
@@ -17,30 +17,30 @@ const COLUMNS: CustomTableColumn[] = [
     type: 'string',
   },
   {
-    key: 'username',
-    title: 'E-mail',
+    key: 'color',
+    title: 'Cor',
     type: 'string',
   },
   {
-    key: 'phone',
-    title: 'Celular',
+    key: 'status',
+    title: 'Status',
     type: 'string',
   },
 ];
 
-function Tutores() {
+function DogList() {
   const navigate = useNavigate();
   const [page, setPage] = useState(0);
   const [size, setSize] = useState(10);
   const [total, setTotal] = useState(0);
 
   const [isFetching, setIsFetching] = useState<boolean>(true);
-  const [tableData, setTableData] = useState<Tutor[]>([]);
+  const [tableData, setTableData] = useState<Dog[]>([]);
 
-  const fetchTutores = async () => {
+  const fetchDogs = async () => {
     try {
       setIsFetching(true);
-      const response = await api.get('user', { params: { page, size } });
+      const response = await api.get('dog', { params: { page, size } });
       const { data, totalRecords } = response.data;
 
       setTableData(data);
@@ -53,18 +53,18 @@ function Tutores() {
   };
 
   useEffect(() => {
-    fetchTutores();
+    fetchDogs();
   }, [page, size]);
 
   return (
     <div className="dashboard-page">
       <Container>
         <div>
-          <h1 className="d-inline-block">Tutores</h1>
+          <h1 className="d-inline-block">Cães</h1>
           <Button
             className="float-end"
             onClick={() => {
-              navigate('/tutores/novo');
+              navigate('/dogs/new');
             }}
           >
             <Plus />
@@ -77,7 +77,7 @@ function Tutores() {
               columns={COLUMNS}
               data={tableData}
               onRowClick={(id) => {
-                navigate(`/tutores/${id}`);
+                navigate(`/dogs/${id}`);
               }}
               pageSize={size}
               pageNumber={page}
@@ -93,4 +93,4 @@ function Tutores() {
   );
 }
 
-export default Tutores;
+export default DogList;

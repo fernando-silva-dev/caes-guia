@@ -34,6 +34,7 @@ export default function NavigationBar() {
           <Nav className="me-auto">
             <CustomLink to="/">Home</CustomLink>
             <CustomLink to="/tutores">Tutores</CustomLink>
+            <CustomLink to="/dogs">Cães</CustomLink>
           </Nav>
           <CustomLink to="/minha-conta">
             <PersonCircle className="mb-1 me-2" />

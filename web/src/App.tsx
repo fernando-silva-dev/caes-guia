@@ -12,7 +12,7 @@ function App() {
   return (
     <Provider store={store}>
       <Router />
-      <ToastContainer />
+      <ToastContainer position="bottom-right" />
     </Provider>
   );
 }

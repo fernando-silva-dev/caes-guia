@@ -3,6 +3,7 @@ import { Button, Form, Container, Row, Col } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
+import { toast } from 'react-toastify';
 
 import './styles.css';
 import api from '../../services/api';
@@ -38,7 +39,7 @@ export default function MinhaConta() {
       setUsuario(response.data);
       navigate('/minha-conta');
     } catch (error) {
-      // TODO tratamento de erro
+      toast.error(error.response.data.message);
     }
   };
 
@@ -49,9 +50,10 @@ export default function MinhaConta() {
   const submitForm = async (formData: UpdatePasswordForm) => {
     setIsFetching(true);
     try {
-      const response = await api.patch(`user/${usuario.id}`, formData);
+      await api.patch(`user/${usuario.id}`, formData);
+      toast.success('Senha atualizada com sucesso');
     } catch (error) {
-      // TODO: handle error
+      toast.error(error.response.data.message);
     } finally {
       setIsFetching(false);
     }

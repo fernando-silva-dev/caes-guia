@@ -29,19 +29,17 @@ function Login() {
     try {
       const response = await Api.post('user/login', { username, password });
       dispatch(login(response.data));
+      cookies.set('remember-me', rememberMe);
+      cookies.set('token', response.data.token);
       if (rememberMe) {
         cookies.set('username', username);
-        cookies.set('remember-me', true);
-      }
-      cookies.set('token', response.data.token);
-    } catch (error) {
-      console.log(error.response.data.message);
-      toast.error(error.response.data.message);
-    } finally {
-      if (!rememberMe) {
+      } else {
         cookies.remove('username');
-        cookies.set('remember-me', false);
       }
+    } catch (error) {
+      toast.error(error.response.data.message);
+      cookies.remove('remember-me');
+      cookies.remove('username');
     }
   };
 

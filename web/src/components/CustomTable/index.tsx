@@ -32,7 +32,8 @@ export default function CustomTable({
 }: CustomTableProps) {
   const columnIndexKey = (key: string | number) => `th-${key}`;
   const rowIndexKey = (key: string | number) => `tr-${key}`;
-  const cellIndexKey = (id: string | number, key: string | number) => `tr-${id}-${key}`;
+  const cellIndexKey = (id: string | number, key: string | number) =>
+    `tr-${id}-${key}`;
 
   return (
     <>
@@ -45,7 +46,7 @@ export default function CustomTable({
           </tr>
         </thead>
         <tbody>
-          {isFetching ? (
+          {!isFetching ? (
             data.map((row) => (
               <tr
                 key={rowIndexKey(row.id)}

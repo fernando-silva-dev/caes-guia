@@ -18,9 +18,10 @@ export default function Pagination({
   onPageChange,
   total = 10,
 }: PaginationParams) {
-  const startPage = pageSize * pageNumber + 1;
+  const startPageAux = pageSize * pageNumber + 1;
   const endPageAux = pageSize * (pageNumber + 1);
   const endPage = endPageAux > total ? total : endPageAux;
+  const startPage = startPageAux > total ? total : startPageAux;
   const currentShowingDescription = `${startPage}-${endPage} de ${total}`;
 
   const totalPages = Math.floor(total / pageSize);
