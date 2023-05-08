@@ -6,6 +6,8 @@ export interface Dog {
   birthDate: string;
   color: string;
   status: number | string;
+  // TODO corrigir esse tipo, eu fiz na pressa
+  responsibles: { id: string }[];
   responsiblesIds: string[];
   responsibleId?: string;
 }

@@ -24,6 +24,7 @@ function DogForm() {
     birthDate: '',
     color: '',
     status: 0,
+    responsibles: [],
     responsiblesIds: [],
     responsibleId: undefined,
   });
@@ -36,8 +37,9 @@ function DogForm() {
       const response = await api.get(`dog/${id}`);
       const d: Dog = response.data;
       [d.birthDate] = d.birthDate.split('T');
-      if (d.responsiblesIds) {
-        [d.responsibleId] = d.responsiblesIds;
+      if (d.responsibles.length) {
+        // TODO caso deva haver mais que um tutor temos que habilitar multi seleção
+        d.responsibleId = d.responsibles[0].id;
       }
       setDog(d);
     } catch (error) {
@@ -253,7 +255,7 @@ function DogForm() {
                             errors.status !== undefined
                           }
                         >
-                          <option value="0">Trabalhando</option>
+                          <option value="1">Trabalhando</option>
                         </Form.Select>
                         <Form.Control.Feedback type="invalid">
                           {errors.status}
@@ -285,6 +287,7 @@ function DogForm() {
                           name="responsibleId"
                           disabled={!editable}
                           value={values.responsibleId}
+                          defaultValue={dog.responsibleId}
                           onChange={handleChange}
                           isValid={
                             touched.responsibleId && !errors.responsibleId
