@@ -5,6 +5,7 @@
         "adrianwilczynski.user-secrets",
         "jmrog.vscode-nuget-package-manager",
         "ryanluker.vscode-coverage-gutters",
-        "ms-vscode.test-adapter-converter"
+        "ms-vscode.test-adapter-converter",
+        "yzane.markdown-pdf"
     ]
 }

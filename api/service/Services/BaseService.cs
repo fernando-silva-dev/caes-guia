@@ -14,8 +14,11 @@ public abstract class BaseService<TEntity, TInsertModel, TViewModel> : IBaseServ
         Mapper = mapper;
     }
 
-    public TViewModel Get(Guid id)
-        => Mapper.Map<TViewModel>(Repository.Get(id));
+    public TViewModel Get(Guid id){
+        var entity = Repository.Get(id);
+        var model = Mapper.Map<TViewModel>(entity);
+        return model;
+    }
 
     public IQueryable<TViewModel> List()
         => Mapper.ProjectTo<TViewModel>(Repository.List());
