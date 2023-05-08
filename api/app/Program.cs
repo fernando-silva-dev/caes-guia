@@ -40,11 +40,11 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.Configure<Microsoft.AspNetCore.Http.Json.JsonOptions>(options =>
 {
-	options.SerializerOptions.Converters.Add(new System.Text.Json.Serialization.JsonStringEnumConverter());
+    options.SerializerOptions.Converters.Add(new System.Text.Json.Serialization.JsonStringEnumConverter());
 });
 builder.Services.Configure<Microsoft.AspNetCore.Mvc.JsonOptions>(options =>
 {
-	options.JsonSerializerOptions.Converters.Add(new System.Text.Json.Serialization.JsonStringEnumConverter());
+    options.JsonSerializerOptions.Converters.Add(new System.Text.Json.Serialization.JsonStringEnumConverter());
 });
 
 if (builder.Environment.IsDevelopment())
@@ -56,7 +56,6 @@ var app = builder.Build();
 
 app.Services.MigrateDatabase();
 
-
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -67,9 +66,10 @@ if (app.Environment.IsDevelopment())
 else
 {
     app.UseHttpsRedirection();
-    app.UseAuthentication();
-    app.UseAuthorization();
     app.MapControllers();
 }
+
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.Run();
