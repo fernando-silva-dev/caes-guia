@@ -1,4 +1,5 @@
 import React from 'react';
+
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 
@@ -9,6 +10,8 @@ import Tutores from '../pages/Tutores';
 import TutorForm from '../pages/TutorForm';
 import NavigationBar from '../components/NavigationBar';
 import MinhaConta from '../pages/MinhaConta';
+import DogList from '../pages/DogList';
+import DogForm from '../pages/DogForm';
 
 export default function Router() {
   const auth = useSelector(authSelector);
@@ -30,6 +33,9 @@ export default function Router() {
             <Route path="/tutores" element={<Tutores />} />
             <Route path="/tutores/novo" element={<TutorForm />} />
             <Route path="/tutores/:id" element={<TutorForm />} />
+            <Route path="/dogs" element={<DogList />} />
+            <Route path="/dogs/new" element={<DogForm />} />
+            <Route path="/dogs/:id" element={<DogForm />} />
             <Route path="/minha-conta" element={<MinhaConta />} />
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>

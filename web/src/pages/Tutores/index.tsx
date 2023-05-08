@@ -2,27 +2,29 @@ import React, { useState, useEffect } from 'react';
 import { Col, Button, Container, Row } from 'react-bootstrap';
 import { Plus } from 'react-bootstrap-icons';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 import api from '../../services/api';
-import CustomTable from '../../components/CustomTable';
-import Pagination from '../../components/CustomTable/Pagination';
+import CustomTable, { CustomTableColumn } from '../../components/CustomTable';
+import { Tutor } from '../../models/Tutor';
+
 import './styles.css';
 
-const COLUMNS = [
+const COLUMNS: CustomTableColumn[] = [
   {
     key: 'name',
     title: 'Nome',
-    type: 'str',
+    type: 'string',
   },
   {
     key: 'username',
     title: 'E-mail',
-    type: 'str',
+    type: 'string',
   },
   {
     key: 'phone',
     title: 'Celular',
-    type: 'str',
+    type: 'string',
   },
 ];
 
@@ -32,18 +34,19 @@ function Tutores() {
   const [size, setSize] = useState(10);
   const [total, setTotal] = useState(0);
 
-  let [isFetching, setIsFetching] = useState(true);
-  let [tableData, setTableData] = useState([]);
+  const [isFetching, setIsFetching] = useState<boolean>(true);
+  const [tableData, setTableData] = useState<Tutor[]>([]);
 
   const fetchTutores = async () => {
     try {
       setIsFetching(true);
       const response = await api.get('user', { params: { page, size } });
       const { data, totalRecords } = response.data;
+
       setTableData(data);
       setTotal(totalRecords);
     } catch (error) {
-      console.log(error);
+      toast.error(error.response.data.message);
     } finally {
       setIsFetching(false);
     }
@@ -76,13 +79,12 @@ function Tutores() {
               onRowClick={(id) => {
                 navigate(`/tutores/${id}`);
               }}
-            />
-            <Pagination
               pageSize={size}
-              currentPage={page}
+              pageNumber={page}
               onPageChange={(value) => setPage(value)}
               onSizeChange={(value) => setSize(value)}
               total={total}
+              isFetching={isFetching}
             />
           </Col>
         </Row>

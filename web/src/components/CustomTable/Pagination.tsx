@@ -1,25 +1,35 @@
 import React from 'react';
+
 import { Button, Form } from 'react-bootstrap';
 import { CaretRightFill, CaretLeftFill } from 'react-bootstrap-icons';
+
+export interface PaginationParams {
+  pageSize: number;
+  onSizeChange: (size: number) => void;
+  pageNumber: number;
+  onPageChange: (page: number) => void;
+  total: number;
+}
 
 export default function Pagination({
   pageSize = 10,
   onSizeChange,
-  currentPage = 0,
+  pageNumber = 0,
   onPageChange,
   total = 10,
-}) {
-  const startPage = pageSize * currentPage + 1;
-  const _endPage = pageSize * (currentPage + 1);
-  const endPage = _endPage > total ? total : _endPage;
+}: PaginationParams) {
+  const startPageAux = pageSize * pageNumber + 1;
+  const endPageAux = pageSize * (pageNumber + 1);
+  const endPage = endPageAux > total ? total : endPageAux;
+  const startPage = startPageAux > total ? total : startPageAux;
   const currentShowingDescription = `${startPage}-${endPage} de ${total}`;
 
   const totalPages = Math.floor(total / pageSize);
-  const hasNextPage = currentPage < totalPages - 1;
-  const hasPreviousPage = currentPage > 0;
+  const hasNextPage = pageNumber < totalPages - 1;
+  const hasPreviousPage = pageNumber > 0;
 
-  const nextPage = () => onPageChange(currentPage + 1);
-  const previousPage = () => onPageChange(currentPage - 1);
+  const nextPage = () => onPageChange(pageNumber + 1);
+  const previousPage = () => onPageChange(pageNumber - 1);
 
   return (
     <div>

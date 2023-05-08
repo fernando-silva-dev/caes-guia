@@ -7,7 +7,12 @@ import Logo from '../../assets/helen-keller-logo-navbar.png';
 
 import './styles.css';
 
-function CustomLink({ to, children }) {
+interface CustomLinkParam {
+  to: string;
+  children: any;
+}
+
+function CustomLink({ to, children }: CustomLinkParam) {
   return (
     <LinkContainer to={to}>
       <Nav.Link className="border-end border-light px-3 navigation-link">
@@ -29,6 +34,7 @@ export default function NavigationBar() {
           <Nav className="me-auto">
             <CustomLink to="/">Home</CustomLink>
             <CustomLink to="/tutores">Tutores</CustomLink>
+            <CustomLink to="/dogs">Cães</CustomLink>
           </Nav>
           <CustomLink to="/minha-conta">
             <PersonCircle className="mb-1 me-2" />

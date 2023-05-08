@@ -14,4 +14,9 @@ public sealed class DogRepository : BaseRepository<Dog>, IDogRepository
         dog.Responsibles = responsibles;
         return base.Add(dog);
     }
+
+    public override Dog? Get(Guid id)
+    {
+        return Context.Dogs.Include(x => x.Responsibles).Include(x => x.Events).SingleOrDefault(x => x.Id == id);
+    }
 }

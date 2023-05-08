@@ -47,7 +47,6 @@ var app = builder.Build();
 
 app.Services.MigrateDatabase();
 
-app.UseHttpsRedirection();
 
 if (app.Environment.IsDevelopment())
 {
@@ -58,6 +57,7 @@ if (app.Environment.IsDevelopment())
 }
 else
 {
+    app.UseHttpsRedirection();
     app.UseAuthentication();
     app.UseAuthorization();
     app.MapControllers();

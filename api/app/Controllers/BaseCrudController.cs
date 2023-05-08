@@ -16,11 +16,11 @@ public abstract class BaseCrudController<TInsertModel, TViewModel> : ControllerB
     [HttpGet]
     [Route("{id}")]
     [Authorize]
-    public ActionResult<TViewModel> Get(Guid id)
+    public virtual ActionResult<TViewModel> Get(Guid id)
         => Ok(Service.Get(id));
 
     [HttpGet]
-    public ActionResult<PagedResult<TViewModel>> List([FromQuery] int page = 0, [FromQuery] int size = 10)
+    public virtual ActionResult<PagedResult<TViewModel>> List([FromQuery] int page = 0, [FromQuery] int size = 10)
     {
         var query = Service.List();
         var data = query.Take(size).Skip(page * size);
@@ -30,7 +30,7 @@ public abstract class BaseCrudController<TInsertModel, TViewModel> : ControllerB
     }
 
     [HttpPost]
-    public CreatedResult Add([FromBody] TInsertModel model)
+    public virtual CreatedResult Add([FromBody] TInsertModel model)
     {
         var entity = Service.Add(model);
         string uri = $"user/{entity.Id}";
@@ -40,7 +40,7 @@ public abstract class BaseCrudController<TInsertModel, TViewModel> : ControllerB
 
     [HttpPut]
     [Route("{id}")]
-    public ActionResult Update([FromRoute] Guid id, [FromBody] TInsertModel model)
+    public virtual ActionResult Update([FromRoute] Guid id, [FromBody] TInsertModel model)
     {
         Service.Update(id, model);
         return NoContent();
@@ -48,7 +48,7 @@ public abstract class BaseCrudController<TInsertModel, TViewModel> : ControllerB
 
     [HttpDelete]
     [Route("{id}")]
-    public ActionResult Remove([FromRoute] Guid id)
+    public virtual ActionResult Remove([FromRoute] Guid id)
     {
         Service.Remove(id);
         return NoContent();

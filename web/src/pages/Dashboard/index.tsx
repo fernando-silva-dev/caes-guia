@@ -7,7 +7,7 @@ function Dashboard() {
   return (
     <div className="dashboard-page">
       <Container>
-        <Row></Row>
+        <Row />
       </Container>
     </div>
   );

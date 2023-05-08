@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Button, Form, Image, Container, Row, Col } from 'react-bootstrap';
 import { useDispatch } from 'react-redux';
 import Cookies from 'universal-cookie';
+import { toast } from 'react-toastify';
 
 import { login } from '../../redux/slicers/auth';
 import Api from '../../services/api';
@@ -28,18 +29,17 @@ function Login() {
     try {
       const response = await Api.post('user/login', { username, password });
       dispatch(login(response.data));
+      cookies.set('remember-me', rememberMe);
+      cookies.set('token', response.data.token);
       if (rememberMe) {
         cookies.set('username', username);
-        cookies.set('remember-me', true);
-      }
-      cookies.set('token', response.data.token);
-    } catch (error) {
-      console.log(error);
-    } finally {
-      if (!rememberMe) {
+      } else {
         cookies.remove('username');
-        cookies.set('remember-me', false);
       }
+    } catch (error) {
+      toast.error(error.response.data.message);
+      cookies.remove('remember-me');
+      cookies.remove('username');
     }
   };
 
@@ -74,7 +74,7 @@ function Login() {
                   type="checkbox"
                   label="Lembrar-me"
                   checked={rememberMe}
-                  onChange={(e) => setRememberMe(e.target.value)}
+                  onChange={(e) => setRememberMe(e.target.checked)}
                 />
               </Form.Group>
 
