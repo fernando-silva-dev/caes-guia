@@ -83,7 +83,7 @@ function TutorForm() {
   const deleteTutor = async (tutorId: string) => {
     try {
       setIsFetching(true);
-      const response = await api.delete(`user/${tutorId}`);
+      await api.delete(`user/${tutorId}`);
       toast.success('Tutor removido');
       navigate('/tutores');
     } catch (error) {
@@ -101,8 +101,8 @@ function TutorForm() {
 
   const schema = Yup.object().shape({
     name: Yup.string()
-      .min(2, 'Muito curto!')
-      .max(50, 'Muito comprido!')
+      .min(2, 'Nome deve ter ao menos 2 caracteres')
+      .max(50, 'Nome deve ter ao menos 50 caracteres')
       .required('Campo obrigatório'),
     username: Yup.string()
       .email('Email Inválido')
@@ -110,26 +110,33 @@ function TutorForm() {
     password: Yup.string()
       .min(8, 'Senha deve ter ao menos 8 caracteres')
       .required('Campo obrigatório'),
-    phone: Yup.string().min(10, 'Inválido').required('Campo obrigatório'),
-    cpf: Yup.string().length(11, 'Inválido').required('Campo obrigatório'),
-    cep: Yup.string().length(8, 'Inválido').required('Campo obrigatório'),
+    phone: Yup.string()
+      .min(8, 'Telefone deve ter ao menos 8 caracteres')
+      .min(11, 'Telefone deve ter no máximo 11 caracteres')
+      .required('Campo obrigatório'),
+    cpf: Yup.string()
+      .length(11, 'CPF deve ter 11 caracteres')
+      .required('Campo obrigatório'),
+    cep: Yup.string()
+      .length(8, 'CEP deve deve ter 8 caracteres')
+      .required('Campo obrigatório'),
     state: Yup.string()
       .min(2, 'Selecione um estado')
       .required('Campo obrigatório'),
     city: Yup.string()
-      .min(2, 'Campo obrigatório')
+      .min(2, 'Cidade deve ter ao menos 2 caracteres')
       .required('Campo obrigatório'),
     district: Yup.string()
-      .min(2, 'Campo obrigatório')
+      .min(2, 'Bairro deve ter ao menos 2 caracteres')
       .required('Campo obrigatório'),
     street: Yup.string()
-      .min(2, 'Campo obrigatório')
+      .min(2, 'Rua deve ter ao menos 2 caracteres')
       .required('Campo obrigatório'),
     number: Yup.string()
-      .min(2, 'Campo obrigatório')
+      .min(2, 'Número deve ter ao menos 2 caracteres')
       .required('Campo obrigatório'),
     complement: Yup.string()
-      .min(2, 'Campo obrigatório')
+      .min(2, 'Complemento deve ter ao menos 8 caracteres')
       .required('Campo obrigatório'),
   });
 
@@ -163,8 +170,8 @@ function TutorForm() {
                         value={values.name}
                         isValid={touched.name && !errors.name}
                         isInvalid={
-                          touched.name !== undefined &&
-                          errors.name !== undefined
+                          touched.name !== undefined
+                          && errors.name !== undefined
                         }
                         onChange={handleChange}
                       />
@@ -181,8 +188,8 @@ function TutorForm() {
                         value={values.username}
                         isValid={touched.username && !errors.username}
                         isInvalid={
-                          touched.username !== undefined &&
-                          errors.username !== undefined
+                          touched.username !== undefined
+                          && errors.username !== undefined
                         }
                         onChange={handleChange}
                       />
@@ -201,8 +208,8 @@ function TutorForm() {
                           value={values.password}
                           isValid={touched.password && !errors.password}
                           isInvalid={
-                            touched.password !== undefined &&
-                            errors.password !== undefined
+                            touched.password !== undefined
+                            && errors.password !== undefined
                           }
                           onChange={handleChange}
                         />
@@ -221,8 +228,8 @@ function TutorForm() {
                         onChange={handleChange}
                         isValid={touched.phone && !errors.phone}
                         isInvalid={
-                          touched.phone !== undefined &&
-                          errors.phone !== undefined
+                          touched.phone !== undefined
+                          && errors.phone !== undefined
                         }
                       />
                       <Form.Control.Feedback type="invalid">
@@ -260,8 +267,8 @@ function TutorForm() {
                           onChange={handleChange}
                           isValid={touched.cep && !errors.cep}
                           isInvalid={
-                            touched.cep !== undefined &&
-                            errors.cep !== undefined
+                            touched.cep !== undefined
+                            && errors.cep !== undefined
                           }
                         />
                         <Form.Control.Feedback type="invalid">
@@ -278,8 +285,8 @@ function TutorForm() {
                           onChange={handleChange}
                           isValid={touched.state && !errors.state}
                           isInvalid={
-                            touched.state !== undefined &&
-                            errors.state !== undefined
+                            touched.state !== undefined
+                            && errors.state !== undefined
                           }
                         >
                           <option value="AC">Acre</option>
@@ -327,8 +334,8 @@ function TutorForm() {
                           onChange={handleChange}
                           isValid={touched.city && !errors.city}
                           isInvalid={
-                            touched.city !== undefined &&
-                            errors.city !== undefined
+                            touched.city !== undefined
+                            && errors.city !== undefined
                           }
                         />
                         <Form.Control.Feedback type="invalid">
@@ -346,8 +353,8 @@ function TutorForm() {
                           onChange={handleChange}
                           isValid={touched.district && !errors.district}
                           isInvalid={
-                            touched.district !== undefined &&
-                            errors.district !== undefined
+                            touched.district !== undefined
+                            && errors.district !== undefined
                           }
                         />
                         <Form.Control.Feedback type="invalid">
@@ -366,8 +373,8 @@ function TutorForm() {
                         onChange={handleChange}
                         isValid={touched.street && !errors.street}
                         isInvalid={
-                          touched.street !== undefined &&
-                          errors.street !== undefined
+                          touched.street !== undefined
+                          && errors.street !== undefined
                         }
                       />
                       <Form.Control.Feedback type="invalid">
@@ -384,8 +391,8 @@ function TutorForm() {
                         onChange={handleChange}
                         isValid={touched.number && !errors.number}
                         isInvalid={
-                          touched.number !== undefined &&
-                          errors.number !== undefined
+                          touched.number !== undefined
+                          && errors.number !== undefined
                         }
                       />
                       <Form.Control.Feedback type="invalid">
@@ -402,8 +409,8 @@ function TutorForm() {
                         onChange={handleChange}
                         isValid={touched.complement && !errors.complement}
                         isInvalid={
-                          touched.complement !== undefined &&
-                          errors.complement !== undefined
+                          touched.complement !== undefined
+                          && errors.complement !== undefined
                         }
                       />
                       <Form.Control.Feedback type="invalid">

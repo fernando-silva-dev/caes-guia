@@ -1,3 +1,5 @@
+import { Tutor } from './Tutor';
+
 export interface Dog {
   id?: number;
   name: string;
@@ -5,9 +7,8 @@ export interface Dog {
   fatherName: string;
   birthDate: string;
   color: string;
-  status: number | string;
-  // TODO corrigir esse tipo, eu fiz na pressa
-  responsibles: { id: string }[];
+  status: string;
+  responsibles?: Tutor[];
   responsiblesIds: string[];
   responsibleId?: string;
 }

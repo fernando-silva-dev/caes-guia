@@ -14,6 +14,18 @@ public sealed class DogRepository : BaseRepository<Dog>, IDogRepository
         dog.Responsibles = responsibles;
         return base.Add(dog);
     }
+    
+    public override void Update(Guid id, Dog dog)
+    {
+        foreach (var resp in Context.Responsabilities.Where(x => x.DogId == id)) {
+            Context.Responsabilities.Remove(resp);
+        }
+
+        var responsibles = Context.Users.Where(x => dog.ResponsiblesIds.Contains(x.Id)).ToList();
+        dog.Responsibles = responsibles;
+        
+        base.Update(id, dog);
+    }
 
     public override Dog? Get(Guid id)
     {
