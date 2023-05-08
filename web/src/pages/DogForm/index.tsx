@@ -23,7 +23,8 @@ function DogForm() {
     fatherName: '',
     birthDate: '',
     color: '',
-    status: 0,
+    // Começar como indefinido
+    status: 1,
     responsibles: [],
     responsiblesIds: [],
     responsibleId: undefined,
@@ -287,7 +288,7 @@ function DogForm() {
                           name="responsibleId"
                           disabled={!editable}
                           value={values.responsibleId}
-                          defaultValue={dog.responsibleId}
+                          defaultValue={values.responsibleId}
                           onChange={handleChange}
                           isValid={
                             touched.responsibleId && !errors.responsibleId
@@ -298,7 +299,7 @@ function DogForm() {
                           }
                         >
                           {tutores.map(({ id: tutorId, name }) => (
-                            <option value={tutorId}>{name}</option>
+                            <option key={tutorId} value={tutorId}>{name}</option>
                           ))}
                         </Form.Select>
                         <Form.Control.Feedback type="invalid">
