@@ -98,7 +98,7 @@ export default function MinhaConta() {
                     plaintext
                   />
                 </Form.Group>
-                <Form.Group className="mb-5" controlId="phone">
+                <Form.Group className="mb-3" controlId="phone">
                   <Form.Label className="fw-bold">Celular</Form.Label>
                   <Form.Control
                     placeholder="-"
@@ -205,8 +205,8 @@ export default function MinhaConta() {
                     plaintext
                   />
                 </Form.Group>
-                <Form.Group controlId="number">
-                  <Form.Label className="fw-bold">Complemento</Form.Label>
+                <Form.Group className="mb-3" controlId="number">
+                  <Form.Label className="fw-bold">Número</Form.Label>
                   <Form.Control
                     name="number"
                     defaultValue={usuario.number}
@@ -215,7 +215,7 @@ export default function MinhaConta() {
                     plaintext
                   />
                 </Form.Group>
-                <Form.Group controlId="complement">
+                <Form.Group className="mb-5" controlId="complement">
                   <Form.Label className="fw-bold">Complemento</Form.Label>
                   <Form.Control
                     name="complement"
@@ -263,8 +263,8 @@ export default function MinhaConta() {
                         onChange={handleChange}
                         isValid={touched.oldPassword && !errors.oldPassword}
                         isInvalid={
-                          touched.oldPassword !== undefined &&
-                          errors.oldPassword !== undefined
+                          touched.oldPassword !== undefined
+                          && errors.oldPassword !== undefined
                         }
                       />
                       <Form.Control.Feedback type="invalid">
@@ -280,8 +280,8 @@ export default function MinhaConta() {
                         onChange={handleChange}
                         isValid={touched.newPassword && !errors.newPassword}
                         isInvalid={
-                          touched.newPassword !== undefined &&
-                          errors.newPassword !== undefined
+                          touched.newPassword !== undefined
+                          && errors.newPassword !== undefined
                         }
                       />
                       <Form.Control.Feedback type="invalid">
@@ -301,12 +301,12 @@ export default function MinhaConta() {
                         value={values.passwordConfimation}
                         onChange={handleChange}
                         isValid={
-                          touched.passwordConfimation &&
-                          !errors.passwordConfimation
+                          touched.passwordConfimation
+                          && !errors.passwordConfimation
                         }
                         isInvalid={
-                          touched.passwordConfimation !== undefined &&
-                          errors.passwordConfimation !== undefined
+                          touched.passwordConfimation !== undefined
+                          && errors.passwordConfimation !== undefined
                         }
                       />
                       <Form.Control.Feedback type="invalid">

@@ -1,0 +1,6 @@
+select.form-select:disabled {
+  border: none;
+  padding-left: 0px;
+  background-image: unset !important;
+  background-color: white;
+}

@@ -24,10 +24,10 @@ function DogForm() {
     birthDate: '',
     color: '',
     // Começar como indefinido
-    status: 1,
+    status: '',
     responsibles: [],
     responsiblesIds: [],
-    responsibleId: undefined,
+    responsibleId: '',
   });
   const [tutores, setTutores] = useState<Tutor[]>([]);
   const navigate = useNavigate();
@@ -36,13 +36,13 @@ function DogForm() {
     try {
       setIsFetching(true);
       const response = await api.get(`dog/${id}`);
-      const d: Dog = response.data;
-      [d.birthDate] = d.birthDate.split('T');
-      if (d.responsibles.length) {
+      const doggo: Dog = response.data;
+      [doggo.birthDate] = doggo.birthDate.split('T');
+      if (doggo.responsibles && doggo.responsibles.length) {
         // TODO caso deva haver mais que um tutor temos que habilitar multi seleção
-        d.responsibleId = d.responsibles[0].id;
+        doggo.responsibleId = doggo.responsibles[0].id;
       }
-      setDog(d);
+      setDog(doggo);
     } catch (error) {
       toast.error('Erro ao buscar o cães');
       console.error(error);
@@ -69,19 +69,15 @@ function DogForm() {
       setIsFetching(true);
       const data = {
         ...formData,
-        status:
-          typeof formData.status === 'number'
-            ? formData.status
-            : parseInt(formData.status, 10),
         responsiblesIds: [formData.responsibleId],
         birthDate: new Date(formData.birthDate).toISOString(),
       };
-      const response = await api.put(`dog/${id}`, data);
+      await api.put(`dog/${id}`, data);
       toast.success('Cão atualizado');
-      setDog(response.data);
       setEditable(false);
     } catch (error) {
       toast.error('Erro ao atualizar cão');
+      console.error(error);
     } finally {
       setIsFetching(false);
     }
@@ -92,10 +88,6 @@ function DogForm() {
       setIsFetching(true);
       const data = {
         ...formData,
-        status:
-          typeof formData.status === 'number'
-            ? formData.status
-            : parseInt(formData.status, 10),
         responsiblesIds: [formData.responsibleId],
         birthDate: new Date(formData.birthDate).toISOString(),
       };
@@ -160,222 +152,223 @@ function DogForm() {
           }}
           initialValues={dog}
         >
-          {({ handleSubmit, handleChange, values, touched, errors }) => {
-            return (
-              <Form noValidate onSubmit={handleSubmit}>
-                <fieldset disabled={isFetching}>
-                  <Row>
-                    <Col md={6} className="divider">
-                      <h4 className="d-inline-block">Dados pessoais</h4>
+          {({ handleSubmit, handleChange, values, touched, errors }) => (
+            <Form noValidate onSubmit={handleSubmit}>
+              <fieldset disabled={isFetching}>
+                <Row>
+                  <Col md={6} className="divider">
+                    <h4 className="d-inline-block">Dados pessoais</h4>
 
-                      <Form.Group className="mb-3" controlId="name">
-                        <Form.Label className="fw-bold">Nome</Form.Label>
-                        <Form.Control
-                          name="name"
-                          readOnly={!editable}
-                          plaintext={!editable}
-                          value={values.name}
-                          isValid={touched.name && !errors.name}
-                          isInvalid={
-                            touched.name !== undefined &&
-                            errors.name !== undefined
-                          }
-                          onChange={handleChange}
-                        />
-                        <Form.Control.Feedback type="invalid">
-                          {errors.name}
-                        </Form.Control.Feedback>
-                      </Form.Group>
-                      <Form.Group className="mb-3" controlId="motherName">
-                        <Form.Label className="fw-bold">Nome da mãe</Form.Label>
-                        <Form.Control
-                          name="motherName"
-                          readOnly={!editable}
-                          plaintext={!editable}
-                          value={values.motherName}
-                          isValid={touched.motherName && !errors.motherName}
-                          isInvalid={
-                            touched.motherName !== undefined &&
-                            errors.motherName !== undefined
-                          }
-                          onChange={handleChange}
-                        />
-                        <Form.Control.Feedback type="invalid">
-                          {errors.motherName}
-                        </Form.Control.Feedback>
-                      </Form.Group>
-                      <Form.Group className="mb-3" controlId="fatherName">
-                        <Form.Label className="fw-bold">Nome do Pai</Form.Label>
-                        <Form.Control
-                          name="fatherName"
-                          readOnly={!editable}
-                          plaintext={!editable}
-                          value={values.fatherName}
-                          onChange={handleChange}
-                          isValid={touched.fatherName && !errors.fatherName}
-                          isInvalid={
-                            touched.fatherName !== undefined &&
-                            errors.fatherName !== undefined
-                          }
-                        />
-                        <Form.Control.Feedback type="invalid">
-                          {errors.fatherName}
-                        </Form.Control.Feedback>
-                      </Form.Group>
-                      <Form.Group className="mb-3" controlId="birthDate">
-                        <Form.Label className="fw-bold">
-                          Data de Nascimento
-                        </Form.Label>
-                        <Form.Control
-                          name="birthDate"
-                          type="date"
-                          readOnly={!editable}
-                          plaintext={!editable}
-                          value={values.birthDate}
-                          onChange={handleChange}
-                          isValid={touched.birthDate && !errors.birthDate}
-                          isInvalid={
-                            touched.birthDate !== undefined &&
-                            errors.birthDate !== undefined
-                          }
-                        />
-                        <Form.Control.Feedback type="invalid">
-                          {errors.birthDate}
-                        </Form.Control.Feedback>
-                      </Form.Group>
-                      <Form.Group className="mb-3" controlId="status">
-                        <Form.Label className="fw-bold">Status</Form.Label>
-                        <Form.Select
-                          name="state"
-                          disabled={!editable}
-                          value={values.status}
-                          onChange={handleChange}
-                          isValid={touched.status && !errors.status}
-                          isInvalid={
-                            touched.status !== undefined &&
-                            errors.status !== undefined
-                          }
-                        >
-                          <option value="1">Trabalhando</option>
-                        </Form.Select>
-                        <Form.Control.Feedback type="invalid">
-                          {errors.status}
-                        </Form.Control.Feedback>
-                      </Form.Group>
-                      <Form.Group className="mb-3" controlId="color">
-                        <Form.Label className="fw-bold">Cor</Form.Label>
-                        <Form.Control
-                          name="color"
-                          readOnly={!editable}
-                          plaintext={!editable}
-                          value={values.color}
-                          onChange={handleChange}
-                          isValid={touched.color && !errors.color}
-                          isInvalid={
-                            touched.color !== undefined &&
-                            errors.color !== undefined
-                          }
-                        />
-                        <Form.Control.Feedback type="invalid">
-                          {errors.color}
-                        </Form.Control.Feedback>
-                      </Form.Group>
-                      <Form.Group className="mb-5" controlId="responsibleId">
-                        <Form.Label className="fw-bold">
-                          Tutor Responsável
-                        </Form.Label>
-                        <Form.Select
-                          name="responsibleId"
-                          disabled={!editable}
-                          value={values.responsibleId}
-                          defaultValue={values.responsibleId}
-                          onChange={handleChange}
-                          isValid={
-                            touched.responsibleId && !errors.responsibleId
-                          }
-                          isInvalid={
-                            touched.responsibleId !== undefined &&
-                            errors.responsibleId !== undefined
-                          }
-                        >
-                          {tutores.map(({ id: tutorId, name }) => (
-                            <option key={tutorId} value={tutorId}>{name}</option>
-                          ))}
-                        </Form.Select>
-                        <Form.Control.Feedback type="invalid">
-                          {errors.status}
-                        </Form.Control.Feedback>
-                      </Form.Group>
-                    </Col>
-                  </Row>
+                    <Form.Group className="mb-3" controlId="name">
+                      <Form.Label className="fw-bold">Nome</Form.Label>
+                      <Form.Control
+                        name="name"
+                        readOnly={!editable}
+                        plaintext={!editable}
+                        value={values.name}
+                        isValid={touched.name && !errors.name}
+                        isInvalid={
+                          touched.name !== undefined
+                          && errors.name !== undefined
+                        }
+                        onChange={handleChange}
+                      />
+                      <Form.Control.Feedback type="invalid">
+                        {errors.name}
+                      </Form.Control.Feedback>
+                    </Form.Group>
+                    <Form.Group className="mb-3" controlId="motherName">
+                      <Form.Label className="fw-bold">Nome da mãe</Form.Label>
+                      <Form.Control
+                        name="motherName"
+                        readOnly={!editable}
+                        plaintext={!editable}
+                        value={values.motherName}
+                        isValid={touched.motherName && !errors.motherName}
+                        isInvalid={
+                          touched.motherName !== undefined
+                          && errors.motherName !== undefined
+                        }
+                        onChange={handleChange}
+                      />
+                      <Form.Control.Feedback type="invalid">
+                        {errors.motherName}
+                      </Form.Control.Feedback>
+                    </Form.Group>
+                    <Form.Group className="mb-3" controlId="fatherName">
+                      <Form.Label className="fw-bold">Nome do Pai</Form.Label>
+                      <Form.Control
+                        name="fatherName"
+                        readOnly={!editable}
+                        plaintext={!editable}
+                        value={values.fatherName}
+                        onChange={handleChange}
+                        isValid={touched.fatherName && !errors.fatherName}
+                        isInvalid={
+                          touched.fatherName !== undefined
+                          && errors.fatherName !== undefined
+                        }
+                      />
+                      <Form.Control.Feedback type="invalid">
+                        {errors.fatherName}
+                      </Form.Control.Feedback>
+                    </Form.Group>
+                    <Form.Group className="mb-3" controlId="birthDate">
+                      <Form.Label className="fw-bold">
+                        Data de Nascimento
+                      </Form.Label>
+                      <Form.Control
+                        name="birthDate"
+                        type="date"
+                        readOnly={!editable}
+                        plaintext={!editable}
+                        value={values.birthDate}
+                        onChange={handleChange}
+                        isValid={touched.birthDate && !errors.birthDate}
+                        isInvalid={
+                          touched.birthDate !== undefined
+                          && errors.birthDate !== undefined
+                        }
+                      />
+                      <Form.Control.Feedback type="invalid">
+                        {errors.birthDate}
+                      </Form.Control.Feedback>
+                    </Form.Group>
+                    <Form.Group className="mb-3" controlId="status">
+                      <Form.Label className="fw-bold">Status</Form.Label>
+                      <Form.Select
+                        name="status"
+                        disabled={!editable}
+                        value={values.status}
+                        onChange={handleChange}
+                        isValid={touched.status && !errors.status}
+                        isInvalid={
+                          touched.status !== undefined
+                          && errors.status !== undefined
+                        }
+                      >
+                        <option value="">Selecione</option>
+                        <option value="Treinando">Treinando</option>
+                        <option value="Trabalhando">Trabalhando</option>
+                      </Form.Select>
+                      <Form.Control.Feedback type="invalid">
+                        {errors.status}
+                      </Form.Control.Feedback>
+                    </Form.Group>
+                    <Form.Group className="mb-3" controlId="color">
+                      <Form.Label className="fw-bold">Cor</Form.Label>
+                      <Form.Control
+                        name="color"
+                        readOnly={!editable}
+                        plaintext={!editable}
+                        value={values.color}
+                        onChange={handleChange}
+                        isValid={touched.color && !errors.color}
+                        isInvalid={
+                          touched.color !== undefined
+                          && errors.color !== undefined
+                        }
+                      />
+                      <Form.Control.Feedback type="invalid">
+                        {errors.color}
+                      </Form.Control.Feedback>
+                    </Form.Group>
+                    <Form.Group className="mb-5" controlId="responsibleId">
+                      <Form.Label className="fw-bold">
+                        Tutor Responsável
+                      </Form.Label>
+                      <Form.Select
+                        name="responsibleId"
+                        disabled={!editable}
+                        value={values.responsibleId}
+                        defaultValue={values.responsibleId}
+                        onChange={handleChange}
+                        isValid={touched.responsibleId && !errors.responsibleId}
+                        isInvalid={
+                          touched.responsibleId !== undefined
+                          && errors.responsibleId !== undefined
+                        }
+                      >
+                        <option value="">Selecione</option>
+                        {tutores.map(({ id: tutorId, name }) => (
+                          <option key={tutorId} value={tutorId}>
+                            {name}
+                          </option>
+                        ))}
+                      </Form.Select>
+                      <Form.Control.Feedback type="invalid">
+                        {errors.status}
+                      </Form.Control.Feedback>
+                    </Form.Group>
+                  </Col>
+                </Row>
 
-                  <Row>
-                    <Col>
-                      {!editable && id ? (
-                        <>
-                          <Button
-                            variant="warning"
-                            className="me-3 mb-3"
-                            type="button"
-                            onClick={() => {
-                              setEditable(true);
-                            }}
-                          >
-                            Editar
-                          </Button>
-                          <Button
-                            variant="danger"
-                            className="me-3 mb-3"
-                            type="button"
-                            onClick={() => {
-                              deleteDog(id);
-                            }}
-                          >
-                            Remover
-                          </Button>
-                          <Button
-                            variant="secondary"
-                            className="me-3 mb-3"
-                            type="button"
-                            onClick={() => {
+                <Row>
+                  <Col>
+                    {!editable && id ? (
+                      <>
+                        <Button
+                          variant="warning"
+                          className="me-3 mb-3"
+                          type="button"
+                          onClick={() => {
+                            setEditable(true);
+                          }}
+                        >
+                          Editar
+                        </Button>
+                        <Button
+                          variant="danger"
+                          className="me-3 mb-3"
+                          type="button"
+                          onClick={() => {
+                            deleteDog(id);
+                          }}
+                        >
+                          Remover
+                        </Button>
+                        <Button
+                          variant="secondary"
+                          className="me-3 mb-3"
+                          type="button"
+                          onClick={() => {
+                            navigate('/dogs');
+                          }}
+                        >
+                          Voltar
+                        </Button>
+                      </>
+                    ) : null}
+                    {editable ? (
+                      <>
+                        <Button
+                          variant="primary"
+                          className="me-3 mb-3"
+                          type="submit"
+                        >
+                          Salvar
+                        </Button>
+                        <Button
+                          variant="secondary"
+                          className="me-3 mb-3"
+                          type="button"
+                          onClick={() => {
+                            if (id) {
+                              setEditable(false);
+                            } else {
                               navigate('/dogs');
-                            }}
-                          >
-                            Voltar
-                          </Button>
-                        </>
-                      ) : null}
-                      {editable ? (
-                        <>
-                          <Button
-                            variant="primary"
-                            className="me-3 mb-3"
-                            type="submit"
-                          >
-                            Salvar
-                          </Button>
-                          <Button
-                            variant="secondary"
-                            className="me-3 mb-3"
-                            type="button"
-                            onClick={() => {
-                              if (id) {
-                                setEditable(false);
-                              } else {
-                                navigate('/dogs');
-                              }
-                            }}
-                          >
-                            Cancelar
-                          </Button>
-                        </>
-                      ) : null}
-                    </Col>
-                  </Row>
-                </fieldset>
-              </Form>
-            );
-          }}
+                            }
+                          }}
+                        >
+                          Cancelar
+                        </Button>
+                      </>
+                    ) : null}
+                  </Col>
+                </Row>
+              </fieldset>
+            </Form>
+          )}
         </Formik>
       </Container>
     </div>
