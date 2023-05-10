@@ -25,11 +25,11 @@ public class User : BaseEntity
 
     public string Username { get; protected set; }
     public string Name { get; protected set; }
-    public string? Phone { get; protected set; }
-    public string? CPF { get; protected set; }
+    public string Phone { get; protected set; }
+    public string CPF { get; protected set; }
     public string Password { get; protected set; }
     public string Role { get; protected set; }
-    public Address? Address { get; protected set; }
+    public Address Address { get; protected set; }
 
     public void SetPassword(string password)
     {

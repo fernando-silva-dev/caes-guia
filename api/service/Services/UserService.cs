@@ -10,7 +10,7 @@ public class UserService : BaseService<User, UserInsertionModel, UserViewModel>,
         Repository = repository;
     }
 
-    public UserViewModel? Login(string? username, string? password)
+    public UserViewModel Login(string username, string password)
         => Mapper.Map<UserViewModel>(Repository.Login(username, password));
 
     public void ResetPassword(Guid id, string oldPassword, string newPassord)

@@ -20,7 +20,7 @@ public class UserController : BaseCrudController<UserInsertionModel, UserViewMod
     [AllowAnonymous]
     public ActionResult<AuthenticationResult> Authenticate([FromBody] Credentials model)
     {
-        UserViewModel? user = Service.Login(model.Username, model.Password);
+        UserViewModel user = Service.Login(model.Username, model.Password);
 
         if (user is null)
             return BadRequest(new { message = "Usuário ou senha inválidos" });

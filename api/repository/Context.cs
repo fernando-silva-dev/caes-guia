@@ -4,7 +4,7 @@ namespace Repository;
 
 public class Context : DbContext
 {
-    private readonly string? _connectionString;
+    private readonly string _connectionString;
 
     protected Context() { }
 
