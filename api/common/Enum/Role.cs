@@ -2,7 +2,7 @@ namespace Common.Enum;
 
 public enum Role
 {
-    Admin,
+    Admin = 1,
     Tutor,
     Operador
 }
