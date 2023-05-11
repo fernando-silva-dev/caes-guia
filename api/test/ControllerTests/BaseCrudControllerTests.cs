@@ -22,7 +22,7 @@ public sealed class BaseCrudControllerTests
         TestInserModel = new DummyInsertModel() { MyProperty = 1 };
         TestEntity = new DummyEntity() { MyProperty = 1, Id = Id };
 
-        TestViewModels = Enumerable.Range(1, 5).Select(x => new DummyViewModel { MyProperty = x, Id = Guid.NewGuid() }).AsQueryable();
+        TestViewModels = Enumerable.Range(1, 5).Select(x => new DummyViewModel { MyProperty = x, Id = Guid.NewGuid() }).ToList().AsQueryable();
 
         MockService.Setup(x => x.List()).Returns(TestViewModels).Verifiable();
         MockService.Setup(x => x.Get(It.IsAny<Guid>())).Returns(TestViewModel).Verifiable();
@@ -39,8 +39,7 @@ public sealed class BaseCrudControllerTests
         MockService.Verify(x => x.List(), Times.Once);
         var page = result.Value as PagedResult<DummyViewModel>;
         page.TotalRecords.Should().Be(TestViewModels.Count());
-        // TODO melhorar asserção e verificar paginação
-        // page.Data.Should().BeEquivalentTo(TestViewModels);
+        page.Data.Should().BeEquivalentTo(TestViewModels);
     }
 
     [Fact]
