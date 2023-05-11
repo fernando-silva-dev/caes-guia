@@ -1,3 +1,4 @@
+using App.Models;
 using Microsoft.AspNetCore.Mvc;
 using Service.Interfaces;
 using Test.Dummies;
@@ -9,7 +10,7 @@ public sealed class BaseCrudControllerTests
     private BaseCrudController<DummyInsertModel, DummyViewModel> Controller;
     private Mock<IBaseService<DummyInsertModel, DummyViewModel>> MockService = new();
     private Guid Id = Guid.NewGuid();
-    private IQueryable<DummyViewModel> TestViewModels = Enumerable.Range(1, 5).Select(x => new DummyViewModel { MyProperty = x, Id = Guid.NewGuid() }).AsQueryable();
+    private IQueryable<DummyViewModel> TestViewModels;
 
     private DummyViewModel TestViewModel;
     private DummyEntity TestEntity;
@@ -21,7 +22,10 @@ public sealed class BaseCrudControllerTests
         TestInserModel = new DummyInsertModel() { MyProperty = 1 };
         TestEntity = new DummyEntity() { MyProperty = 1, Id = Id };
 
+        TestViewModels = Enumerable.Range(1, 5).Select(x => new DummyViewModel { MyProperty = x, Id = Guid.NewGuid() }).AsQueryable();
+
         MockService.Setup(x => x.List()).Returns(TestViewModels).Verifiable();
+        MockService.Setup(x => x.Get(It.IsAny<Guid>())).Returns(TestViewModel).Verifiable();
         MockService.Setup(x => x.Add(It.IsAny<DummyInsertModel>())).Returns(TestViewModel).Verifiable();
 
         Controller = new Mock<BaseCrudController<DummyInsertModel, DummyViewModel>>(MockBehavior.Default, MockService.Object) { CallBase = true }.Object;
@@ -30,19 +34,23 @@ public sealed class BaseCrudControllerTests
     [Fact]
     public void List_Should_Return()
     {
-        var result = Controller.List();
+        var result = Controller.List().Result as OkObjectResult;
 
         MockService.Verify(x => x.List(), Times.Once);
-        result.Should().BeOfType<ActionResult<App.Models.PagedResult<DummyViewModel>>>();
+        var page = result.Value as PagedResult<DummyViewModel>;
+        page.TotalRecords.Should().Be(TestViewModels.Count());
+        // TODO melhorar asserção e verificar paginação
+        // page.Data.Should().BeEquivalentTo(TestViewModels);
     }
 
     [Fact]
     public void Get_Should_Return()
     {
-        var result = Controller.Get(Id);
+        var result = Controller.Get(Id).Result as OkObjectResult;
 
         MockService.Verify(x => x.Get(Id), Times.Once);
-        result.Should().BeOfType<ActionResult<DummyViewModel>>();
+        var model = result.Value as DummyViewModel;
+        model.Should().Be(TestViewModel);
     }
 
     [Fact]
@@ -52,6 +60,9 @@ public sealed class BaseCrudControllerTests
 
         MockService.Verify(x => x.Add(TestInserModel), Times.Once);
         result.Should().BeOfType<CreatedResult>();
+        var insertedModel = result.Value as DummyViewModel;
+        insertedModel.Should().Be(TestViewModel);
+        result.Location.Should().Be("basecrud/" + Id.ToString());
     }
 
     [Fact]
