@@ -8,7 +8,8 @@ public class UserValidator : AbstractValidator<User> {
         RuleFor(x => x.Name).MaximumLength(1000);
         RuleFor(x => x.Phone).MinimumLength(8).MaximumLength(11);
         RuleFor(x => x.CPF).Length(11);
+        RuleFor(x => x.Role).IsInEnum();
 
-        RuleFor(x => x.Address).SetValidator(new AddressValidator());
+        RuleFor(x => x.Address).NotNull().SetValidator(new AddressValidator());
     }
 }

@@ -2,7 +2,7 @@
 
 public class User : BaseEntity
 {
-    public User(string userName, string password, string role, string name, string cpf, string phone, Address address)
+    public User(string userName, string password, Role role, string name, string cpf, string phone, Address address)
     {
         Id = Guid.NewGuid();
         Username = userName;
@@ -16,11 +16,6 @@ public class User : BaseEntity
         new UserValidator().ValidateAndThrow(this);
     }
 
-    public User(Guid id)
-    {
-        Id = id;
-    }
-
     protected User() { }
 
     public string Username { get; protected set; }
@@ -28,7 +23,7 @@ public class User : BaseEntity
     public string Phone { get; protected set; }
     public string CPF { get; protected set; }
     public string Password { get; protected set; }
-    public string Role { get; protected set; }
+    public Role Role { get; protected set; }
     public Address Address { get; protected set; }
 
     public void SetPassword(string password)

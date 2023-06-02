@@ -1,5 +1,3 @@
-using Common.Enum;
-
 namespace Domain.Entities;
 
 public class Dog : BaseEntity
