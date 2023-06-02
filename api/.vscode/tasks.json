@@ -13,6 +13,62 @@
             "problemMatcher": "$msCompile"
         },
         {
+            "label": "test",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "test",
+                "--collect:\"XPlat Code Coverage\""
+            ],
+            "problemMatcher": "$msCompile",
+            "group": {
+                "kind": "test",
+                "isDefault": true
+            }
+        },
+        {
+            "label": "clear test results",
+            "command": "if(Test-Path -Path test/TestResults){Remove-Item test/TestResults -Recurse}",
+            "type": "shell",
+            "problemMatcher": [],
+        },
+        {
+            "label": "clear coverage report",
+            "command": "if(Test-Path -Path CoverageResult){Remove-Item CoverageResult -Recurse}",
+            "dependsOn": "clear coverage",
+            "type": "shell",
+            "problemMatcher": [],
+        },
+        {
+            "label": "clear quality reports",
+            "dependsOn": ["clear coverage report", "clear test results"],
+            "type": "shell",
+            "problemMatcher": [],
+        },
+        {
+            "label": "generate quality reports",
+            "command": "dotnet",
+            "type": "process",
+            "dependsOrder": "sequence",
+            "dependsOn": [
+                "rclear quality eports",
+                "test"
+            ],
+            "args": [
+                "reportgenerator",
+                "-reports:test/TestResults/*/coverage.cobertura.xml",
+                "-targetdir:CoverageResult"
+            ],
+            "problemMatcher": "$msCompile",
+        },
+        {
+            "label": "open quality report",
+            "command": "start firefox (Get-Item .\\CoverageResult\\index.html).FullName",
+            "dependsOn": "generate quality reports",
+            "type": "shell",
+            "problemMatcher": [],
+        },
+        {
             "label": "publish",
             "command": "dotnet",
             "type": "process",
