@@ -51,7 +51,7 @@
             "type": "process",
             "dependsOrder": "sequence",
             "dependsOn": [
-                "rclear quality eports",
+                "clear quality reports",
                 "test"
             ],
             "args": [
