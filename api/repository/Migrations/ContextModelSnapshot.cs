@@ -44,7 +44,6 @@ namespace repository.Migrations
                         .HasColumnType("character varying(50)");
 
                     b.Property<string>("Name")
-                        .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("character varying(50)");
 
@@ -66,7 +65,6 @@ namespace repository.Migrations
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Description")
-                        .IsRequired()
                         .HasMaxLength(200)
                         .HasColumnType("character varying(200)");
 
@@ -105,24 +103,20 @@ namespace repository.Migrations
                         .HasColumnType("text");
 
                     b.Property<string>("Name")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<string>("Password")
-                        .IsRequired()
                         .HasMaxLength(200)
                         .HasColumnType("character varying(200)");
 
                     b.Property<string>("Phone")
                         .HasColumnType("text");
 
-                    b.Property<string>("Role")
-                        .IsRequired()
+                    b.Property<int>("Role")
                         .HasMaxLength(10)
-                        .HasColumnType("character varying(10)");
+                        .HasColumnType("integer");
 
                     b.Property<string>("Username")
-                        .IsRequired()
                         .HasMaxLength(20)
                         .HasColumnType("character varying(20)");
 
@@ -163,31 +157,24 @@ namespace repository.Migrations
                                 .HasColumnType("uuid");
 
                             b1.Property<string>("Cep")
-                                .IsRequired()
                                 .HasColumnType("text");
 
                             b1.Property<string>("City")
-                                .IsRequired()
                                 .HasColumnType("text");
 
                             b1.Property<string>("Complement")
-                                .IsRequired()
                                 .HasColumnType("text");
 
                             b1.Property<string>("District")
-                                .IsRequired()
                                 .HasColumnType("text");
 
                             b1.Property<string>("Number")
-                                .IsRequired()
                                 .HasColumnType("text");
 
                             b1.Property<string>("State")
-                                .IsRequired()
                                 .HasColumnType("text");
 
                             b1.Property<string>("Street")
-                                .IsRequired()
                                 .HasColumnType("text");
 
                             b1.HasKey("UserId");
