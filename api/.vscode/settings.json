@@ -12,6 +12,6 @@
         "**/TestResults": true,
         "CoverageResult/": true,
     },
-    "dotnet-test-explorer.testArguments": "--collect:\"XPlat Code Coverage\"",
+    "dotnet-test-explorer.testArguments": "--settings coverlet.runsettings",
     "dotnet-test-explorer.enableTelemetry": false,
 }

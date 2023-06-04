@@ -1,9 +1,11 @@
+using Common.Enum;
+
 namespace Service.Models.User;
 
 public class UserViewModel : BaseViewModel
 {
     public string Username { get; set; }
-    public string Role { get; set; }
+    public Role Role { get; set; }
     public string Name { get; set; }
     public string Cpf { get; set; }
     public string Phone { get; set; }

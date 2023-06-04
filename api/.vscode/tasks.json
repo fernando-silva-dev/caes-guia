@@ -18,7 +18,7 @@
             "type": "process",
             "args": [
                 "test",
-                "--collect:\"XPlat Code Coverage\""
+                "--settings:coverlet.runsettings"
             ],
             "problemMatcher": "$msCompile",
             "group": {
@@ -31,6 +31,7 @@
             "command": "if(Test-Path -Path test/TestResults){Remove-Item test/TestResults -Recurse}",
             "type": "shell",
             "problemMatcher": [],
+            "hide": true
         },
         {
             "label": "clear coverage report",
@@ -38,6 +39,7 @@
             "dependsOn": "clear coverage",
             "type": "shell",
             "problemMatcher": [],
+            "hide": true
         },
         {
             "label": "clear quality reports",
@@ -60,13 +62,6 @@
                 "-targetdir:CoverageResult"
             ],
             "problemMatcher": "$msCompile",
-        },
-        {
-            "label": "open quality report",
-            "command": "start firefox (Get-Item .\\CoverageResult\\index.html).FullName",
-            "dependsOn": "generate quality reports",
-            "type": "shell",
-            "problemMatcher": [],
         },
         {
             "label": "publish",

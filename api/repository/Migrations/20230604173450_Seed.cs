@@ -12,7 +12,7 @@ namespace repository.Migrations
         {
             migrationBuilder.InsertData("Users", new String[] 
             { "Username", "Password", "Role", "Id", "Name" }, new Object[] 
-            { "Admin", "Admin", "Admin", Guid.NewGuid(), "Administrador" });
+            { "Admin", "Admin", 1, Guid.NewGuid(), "Administrador" });
         }
 
         /// <inheritdoc />

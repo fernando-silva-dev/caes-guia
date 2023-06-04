@@ -32,7 +32,7 @@ public class UserController : BaseCrudController<UserInsertionModel, UserViewMod
             {
                 Name = user.Name,
                 Username = user.Name,
-                Role = user.Role
+                Role = user.Role.ToString()
             },
             Token = token
         });
@@ -60,7 +60,7 @@ public class UserController : BaseCrudController<UserInsertionModel, UserViewMod
     [HttpGet]
     public override ActionResult<PagedResult<UserViewModel>> List([FromQuery] int page = 0, [FromQuery] int size = 10)
     {
-        var query = Service.List().Where(x => x.Role != "Admin");
+        var query = Service.List().Where(x => x.Role != Common.Enum.Role.Admin);
         var data = query.Take(size).Skip(page * size);
         var totalRecords = query.Count();
 
