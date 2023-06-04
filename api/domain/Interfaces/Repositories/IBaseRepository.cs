@@ -2,7 +2,7 @@ namespace Domain.Interfazes.Repository;
 
 public interface IBaseRepository<T> where T : BaseEntity
 {
-    public T? Get(Guid id);
+    public T Get(Guid id);
 
     public IQueryable<T> List();
 

@@ -6,7 +6,7 @@ public sealed class UserRepository : BaseRepository<User>, IUserRepository
 {
     public UserRepository(Context context) : base(context) { }
 
-    public User? Login(string? username, string? password)
+    public User Login(string username, string password)
         => Context.Users.SingleOrDefault(x => x.Username == username && x.Password == password);
 
     public void ResetPassword(Guid id, string oldPassword, string newPassord)

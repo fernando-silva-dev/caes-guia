@@ -1,37 +1,19 @@
 using Domain.Interfazes.Repository;
+using Test.Dummies;
 
 namespace Test.ServiceTests;
 
-
-#region Test types
-public class TestEntity : BaseEntity
-{
-    public int MyProperty { get; set; }
-}
-
-public class TestInsertModel
-{
-    public int MyProperty { get; set; }
-}
-
-public class TestViewModel : BaseViewModel
-{
-    public int MyProperty { get; set; }
-}
-
-#endregion
-
 public sealed class BaseServiceTests
 {
-    private readonly Mock<IBaseRepository<TestEntity>> RepositoryMock = new();
+    private readonly Mock<IBaseRepository<DummyEntity>> RepositoryMock = new();
     private readonly Mock<IMapper> MapperMock = new();
-    private readonly BaseService<TestEntity, TestInsertModel, TestViewModel> Service;
-    private IQueryable<TestEntity> TestEntities = Enumerable.Range(1, 5).Select(x => new TestEntity { MyProperty = x }).AsQueryable();
-    private TestEntity TestEntity;
-    private TestViewModel TestViewModel;
-    private TestInsertModel TestInsertModel = new TestInsertModel() { MyProperty = new Random().Next() };
+    private readonly BaseService<DummyEntity, DummyInsertModel, DummyViewModel> Service;
+    private IQueryable<DummyEntity> TestEntities = Enumerable.Range(1, 5).Select(x => new DummyEntity { MyProperty = x }).AsQueryable();
+    private DummyEntity TestEntity;
+    private DummyViewModel TestViewModel;
+    private DummyInsertModel TestInsertModel = new DummyInsertModel() { MyProperty = new Random().Next() };
     private Guid Id = Guid.NewGuid();
-    private IQueryable<TestViewModel> TestViewModels = Enumerable.Range(1, 5).Select(x => new TestViewModel { MyProperty = x, Id = Guid.NewGuid() }).AsQueryable();
+    private IQueryable<DummyViewModel> TestViewModels = Enumerable.Range(1, 5).Select(x => new DummyViewModel { MyProperty = x, Id = Guid.NewGuid() }).AsQueryable();
 
 
     public BaseServiceTests()
@@ -40,14 +22,14 @@ public sealed class BaseServiceTests
         TestViewModel = TestViewModels.First();
 
         RepositoryMock.Setup(x => x.List()).Returns(TestEntities).Verifiable();
-        RepositoryMock.Setup(x => x.Add(It.IsAny<TestEntity>())).Returns(TestEntity).Verifiable();
+        RepositoryMock.Setup(x => x.Add(It.IsAny<DummyEntity>())).Returns(TestEntity).Verifiable();
         RepositoryMock.Setup(x => x.Get(It.IsAny<Guid>())).Returns(TestEntity).Verifiable();
 
-        MapperMock.Setup(x => x.ProjectTo<TestViewModel>(It.IsAny<IQueryable<TestEntity>>(), It.IsAny<object>())).Returns(TestViewModels).Verifiable();
-        MapperMock.Setup(x => x.Map<TestEntity>(It.IsAny<TestInsertModel>())).Returns(TestEntity).Verifiable();
-        MapperMock.Setup(x => x.Map<TestViewModel>(It.IsAny<TestEntity>())).Returns(TestViewModel).Verifiable();
+        MapperMock.Setup(x => x.ProjectTo<DummyViewModel>(It.IsAny<IQueryable<DummyEntity>>(), It.IsAny<object>())).Returns(TestViewModels).Verifiable();
+        MapperMock.Setup(x => x.Map<DummyEntity>(It.IsAny<DummyInsertModel>())).Returns(TestEntity).Verifiable();
+        MapperMock.Setup(x => x.Map<DummyViewModel>(It.IsAny<DummyEntity>())).Returns(TestViewModel).Verifiable();
 
-        Service = new Mock<BaseService<TestEntity, TestInsertModel, TestViewModel>>(MockBehavior.Default, RepositoryMock.Object, MapperMock.Object) { CallBase = true }.Object;
+        Service = new Mock<BaseService<DummyEntity, DummyInsertModel, DummyViewModel>>(MockBehavior.Default, RepositoryMock.Object, MapperMock.Object) { CallBase = true }.Object;
     }
 
 
@@ -57,7 +39,7 @@ public sealed class BaseServiceTests
         var result = Service.List();
 
         RepositoryMock.Verify(x => x.List(), Times.Once());
-        MapperMock.Verify(x => x.ProjectTo<TestViewModel>(TestEntities, It.IsAny<object>()), Times.Once());
+        MapperMock.Verify(x => x.ProjectTo<DummyViewModel>(TestEntities, It.IsAny<object>()), Times.Once());
         result.Should().BeEquivalentTo(TestViewModels);
     }
 
@@ -66,8 +48,8 @@ public sealed class BaseServiceTests
     {
         var result = Service.Add(TestInsertModel);
 
-        MapperMock.Verify(x => x.Map<TestEntity>(TestInsertModel), Times.Once());
-        MapperMock.Verify(x => x.Map<TestViewModel>(It.IsAny<TestEntity>()), Times.Once());
+        MapperMock.Verify(x => x.Map<DummyEntity>(TestInsertModel), Times.Once());
+        MapperMock.Verify(x => x.Map<DummyViewModel>(It.IsAny<DummyEntity>()), Times.Once());
         result.Should().Be(TestViewModel);
     }
 
@@ -77,7 +59,7 @@ public sealed class BaseServiceTests
         var result = Service.Get(Id);
 
         RepositoryMock.Verify(x => x.Get(Id), Times.Once());
-        MapperMock.Verify(x => x.Map<TestViewModel>(TestEntity), Times.Once());
+        MapperMock.Verify(x => x.Map<DummyViewModel>(TestEntity), Times.Once());
         result.Should().BeEquivalentTo(TestViewModel);
     }
 
@@ -86,7 +68,7 @@ public sealed class BaseServiceTests
     {
         Service.Update(Id, TestInsertModel);
 
-        MapperMock.Verify(x => x.Map<TestEntity>(TestInsertModel), Times.Once());
+        MapperMock.Verify(x => x.Map<DummyEntity>(TestInsertModel), Times.Once());
         RepositoryMock.Verify(x => x.Update(Id, TestEntity), Times.Once());
     }
 
@@ -101,8 +83,8 @@ public sealed class BaseServiceTests
     [Fact]
     public void EmptyConstructor_Should_Construct()
     {
-        var emptyConstructedService = new Mock<BaseService<TestEntity, TestInsertModel, TestViewModel>>() { CallBase = true }.Object;
+        var emptyConstructedService = new Mock<BaseService<DummyEntity, DummyInsertModel, DummyViewModel>>() { CallBase = true }.Object;
 
-        emptyConstructedService.Should().BeAssignableTo<BaseService<TestEntity, TestInsertModel, TestViewModel>>();
+        emptyConstructedService.Should().BeAssignableTo<BaseService<DummyEntity, DummyInsertModel, DummyViewModel>>();
     }
 }

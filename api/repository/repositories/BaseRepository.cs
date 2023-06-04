@@ -11,7 +11,7 @@ public abstract class BaseRepository<T> : IBaseRepository<T> where T : BaseEntit
         Context = context;
     }
 
-    public virtual T? Get(Guid id)
+    public virtual T Get(Guid id)
         => Context.Set<T>().SingleOrDefault(x => x.Id == id);
 
     public virtual IQueryable<T> List()
@@ -27,7 +27,7 @@ public abstract class BaseRepository<T> : IBaseRepository<T> where T : BaseEntit
 
     public virtual void Remove(Guid id)
     {
-        T? entity = Context.Set<T>().SingleOrDefault(x => x.Id == id);
+        T entity = Context.Set<T>().SingleOrDefault(x => x.Id == id);
 
         if (entity is not null)
         {

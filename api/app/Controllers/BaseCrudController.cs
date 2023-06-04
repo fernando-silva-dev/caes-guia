@@ -32,8 +32,10 @@ public abstract class BaseCrudController<TInsertModel, TViewModel> : ControllerB
     [HttpPost]
     public virtual CreatedResult Add([FromBody] TInsertModel model)
     {
+        var controllerName = this.GetType().Name;
+        var collectionName = controllerName.Split("Controller").First();
         var entity = Service.Add(model);
-        string uri = $"user/{entity.Id}";
+        string uri = $"{collectionName.ToLower()}/{entity.Id}";
 
         return Created(uri, entity);
     }

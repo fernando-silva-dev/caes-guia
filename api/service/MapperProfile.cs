@@ -1,3 +1,4 @@
+using Common.Enum;
 using Service.Models.Dog;
 using Service.Models.Event;
 using Service.Models.User;
@@ -17,7 +18,7 @@ public class MapperProfile : Profile
             .ForMember(x => x.Complement, y => y.MapFrom(x => x.Address.Complement))
             .ForMember(x => x.District, y => y.MapFrom(x => x.Address.District));
         CreateMap<UserInsertionModel, User>()
-            .ConstructUsing(x => new User(x.Username, x.Password, x.Role, x.Name, x.Cpf, x.Phone, new Address(x.Cep, x.City, x.Street, x.Complement, x.State, x.District, x.Number)));
+            .ConstructUsing(x => new User(x.Username, x.Password, Enum.Parse<Role>(x.Role), x.Name, x.Cpf, x.Phone, new Address(x.Cep, x.City, x.Street, x.Complement, x.State, x.District, x.Number)));
 
         CreateMap<Dog, DogViewModel>();
         CreateMap<DogInsertionModel, Dog>()

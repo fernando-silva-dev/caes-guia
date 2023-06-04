@@ -9,6 +9,8 @@
         "*/bin/": true,
         "*/obj/": true,
         ".gitignore": true,
+        "**/TestResults": true,
+        "CoverageResult/": true,
     },
     "dotnet-test-explorer.testArguments": "--collect:\"XPlat Code Coverage\"",
     "dotnet-test-explorer.enableTelemetry": false,
