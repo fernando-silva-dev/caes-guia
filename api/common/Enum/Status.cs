@@ -2,6 +2,6 @@ namespace Common.Enum;
 
 public enum Status
 {
-    Treinando = 0,
-    Trabalhando = 1
+    Trabalhando =1,
+    Treinando,
 }
