@@ -25,7 +25,8 @@ function Login() {
   }, []);
   const dispatch = useDispatch();
 
-  const submitForm = async () => {
+  const submitForm = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
     try {
       const response = await Api.post('user/login', { username, password });
       dispatch(login(response.data));
@@ -48,7 +49,12 @@ function Login() {
       <Container>
         <Row className="justify-content-md-center vertical-center">
           <Col md={4}>
-            <Form className="shadow p-3 rounded bg-white">
+            <Form
+              className="shadow p-3 rounded bg-white"
+              onSubmit={(e) => {
+                submitForm(e);
+              }}
+            >
               <Image className="d-block mx-auto mb-4" src={Logo} />
               <Form.Group className="mb-3" controlId="username">
                 <Form.Label>Nome de usuário</Form.Label>
@@ -78,12 +84,7 @@ function Login() {
                 />
               </Form.Group>
 
-              <Button
-                variant="primary"
-                className="w-100 mb-3"
-                type="button"
-                onClick={submitForm}
-              >
+              <Button variant="primary" className="w-100 mb-3" type="submit">
                 Acessar
               </Button>
 

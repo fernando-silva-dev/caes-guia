@@ -12,6 +12,8 @@ import NavigationBar from '../components/NavigationBar';
 import MinhaConta from '../pages/MinhaConta';
 import DogList from '../pages/DogList';
 import DogForm from '../pages/DogForm';
+import EventList from '../pages/EventList';
+import EventForm from '../pages/EventForm';
 
 export default function Router() {
   const auth = useSelector(authSelector);
@@ -35,9 +37,12 @@ export default function Router() {
             <Route path="/tutores/:id" element={<TutorForm />} />
             <Route path="/dogs" element={<DogList />} />
             <Route path="/dogs/new" element={<DogForm />} />
-            <Route path="/dogs/:id" element={<DogForm />} />
+            <Route path="/dogs/:dogId" element={<DogForm />} />
+            <Route path="/dogs/:dogId/events" element={<EventList />} />
+            <Route path="/dogs/:dogId/events/new" element={<EventForm />} />
+            <Route path="/dogs/:dogId/events/:eventId" element={<EventForm />} />
             <Route path="/minha-conta" element={<MinhaConta />} />
-            <Route path="*" element={<Navigate to="/" replace />} />
+            {/* <Route path="*" element={<Navigate to="/" replace />} /> */}
           </Routes>
         </>
       ) : null}

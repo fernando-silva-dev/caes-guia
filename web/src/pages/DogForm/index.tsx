@@ -9,14 +9,15 @@ import { Dog } from '../../models/Dog';
 import api from '../../services/api';
 import './styles.css';
 import { Tutor } from '../../models/Tutor';
+import EventList from '../EventList';
 
 function DogForm() {
   const params = useParams();
 
-  const { id } = params;
+  const { dogId } = params;
 
   const [isFetching, setIsFetching] = useState(false);
-  const [editable, setEditable] = useState(!id);
+  const [editable, setEditable] = useState(!dogId);
   const [dog, setDog] = useState<Dog>({
     name: '',
     motherName: '',
@@ -35,7 +36,7 @@ function DogForm() {
   const fetchDog = async () => {
     try {
       setIsFetching(true);
-      const response = await api.get(`dog/${id}`);
+      const response = await api.get(`dog/${dogId}`);
       const doggo: Dog = response.data;
       [doggo.birthDate] = doggo.birthDate.split('T');
       if (doggo.responsibles && doggo.responsibles.length) {
@@ -72,7 +73,7 @@ function DogForm() {
         responsiblesIds: [formData.responsibleId],
         birthDate: new Date(formData.birthDate).toISOString(),
       };
-      await api.put(`dog/${id}`, data);
+      await api.put(`dog/${dogId}`, data);
       toast.success('Cão atualizado');
       setEditable(false);
     } catch (error) {
@@ -102,10 +103,10 @@ function DogForm() {
     }
   };
 
-  const deleteDog = async (dogId: string) => {
+  const deleteDog = async (id: string) => {
     try {
       setIsFetching(true);
-      await api.delete(`dog/${dogId}`);
+      await api.delete(`dog/${id}`);
       toast.success('Cão removido');
       navigate('/dogs');
     } catch (error) {
@@ -117,7 +118,7 @@ function DogForm() {
   };
 
   useEffect(() => {
-    if (id) {
+    if (dogId) {
       fetchDog();
     }
     fetchTutores();
@@ -135,31 +136,80 @@ function DogForm() {
       .max(25, 'Máximo de 25 caracteres')
       .required('Campo obrigatório'),
     status: Yup.string().required('Campo obrigatório'),
-    responsibleId: Yup.string().required('Campo obrigatório'),
+    responsibleId: Yup.string()
+      .min(1, 'Campo obrigatório')
+      .required('Campo obrigatório'),
   });
 
   return (
     <div className="dog-form-page">
       <Container>
-        {isFetching ? <Spinner animation="border" className="me-2" /> : null}
-        <h1 className="d-inline-block">Cão</h1>
+        <Row>
+          <Col>
+            {isFetching ? (
+              <Spinner animation="border" className="me-2" />
+            ) : null}
+            <h1 className="d-inline-block">Cão</h1>
+          </Col>
+          <Col
+            style={{
+              display: 'flex',
+              flexDirection: 'row-reverse',
+              alignItems: 'center',
+            }}
+          >
+            {!editable && dogId ? (
+              <>
+                <Button
+                  variant="warning"
+                  className="me-3 mb-2"
+                  type="button"
+                  onClick={() => {
+                    setEditable(true);
+                  }}
+                >
+                  Editar
+                </Button>
+                <Button
+                  variant="danger"
+                  className="me-3 mb-2"
+                  type="button"
+                  onClick={() => {
+                    deleteDog(dogId);
+                  }}
+                >
+                  Remover
+                </Button>
+                <Button
+                  variant="secondary"
+                  className="me-3 mb-2"
+                  type="button"
+                  onClick={() => {
+                    navigate('/dogs');
+                  }}
+                >
+                  Voltar
+                </Button>
+              </>
+            ) : null}
+          </Col>
+        </Row>
+
         <Formik
           enableReinitialize
           validationSchema={schema}
           onSubmit={(newValues) => {
-            if (id) updateDog(newValues);
+            if (dogId) updateDog(newValues);
             else createDog(newValues);
           }}
           initialValues={dog}
         >
           {({ handleSubmit, handleChange, values, touched, errors }) => (
-            <Form noValidate onSubmit={handleSubmit}>
+            <Form noValidate onSubmit={handleSubmit} className="mb-5">
               <fieldset disabled={isFetching}>
                 <Row>
                   <Col md={6} className="divider">
-                    <h4 className="d-inline-block">Dados pessoais</h4>
-
-                    <Form.Group className="mb-3" controlId="name">
+                    <Form.Group className="mb-2" controlId="name">
                       <Form.Label className="fw-bold">Nome</Form.Label>
                       <Form.Control
                         name="name"
@@ -168,8 +218,8 @@ function DogForm() {
                         value={values.name}
                         isValid={touched.name && !errors.name}
                         isInvalid={
-                          touched.name !== undefined
-                          && errors.name !== undefined
+                          touched.name !== undefined &&
+                          errors.name !== undefined
                         }
                         onChange={handleChange}
                       />
@@ -177,7 +227,7 @@ function DogForm() {
                         {errors.name}
                       </Form.Control.Feedback>
                     </Form.Group>
-                    <Form.Group className="mb-3" controlId="motherName">
+                    <Form.Group className="mb-2" controlId="motherName">
                       <Form.Label className="fw-bold">Nome da mãe</Form.Label>
                       <Form.Control
                         name="motherName"
@@ -186,8 +236,8 @@ function DogForm() {
                         value={values.motherName}
                         isValid={touched.motherName && !errors.motherName}
                         isInvalid={
-                          touched.motherName !== undefined
-                          && errors.motherName !== undefined
+                          touched.motherName !== undefined &&
+                          errors.motherName !== undefined
                         }
                         onChange={handleChange}
                       />
@@ -195,7 +245,7 @@ function DogForm() {
                         {errors.motherName}
                       </Form.Control.Feedback>
                     </Form.Group>
-                    <Form.Group className="mb-3" controlId="fatherName">
+                    <Form.Group className="mb-2" controlId="fatherName">
                       <Form.Label className="fw-bold">Nome do Pai</Form.Label>
                       <Form.Control
                         name="fatherName"
@@ -205,15 +255,15 @@ function DogForm() {
                         onChange={handleChange}
                         isValid={touched.fatherName && !errors.fatherName}
                         isInvalid={
-                          touched.fatherName !== undefined
-                          && errors.fatherName !== undefined
+                          touched.fatherName !== undefined &&
+                          errors.fatherName !== undefined
                         }
                       />
                       <Form.Control.Feedback type="invalid">
                         {errors.fatherName}
                       </Form.Control.Feedback>
                     </Form.Group>
-                    <Form.Group className="mb-3" controlId="birthDate">
+                    <Form.Group className="mb-2" controlId="birthDate">
                       <Form.Label className="fw-bold">
                         Data de Nascimento
                       </Form.Label>
@@ -226,15 +276,17 @@ function DogForm() {
                         onChange={handleChange}
                         isValid={touched.birthDate && !errors.birthDate}
                         isInvalid={
-                          touched.birthDate !== undefined
-                          && errors.birthDate !== undefined
+                          touched.birthDate !== undefined &&
+                          errors.birthDate !== undefined
                         }
                       />
                       <Form.Control.Feedback type="invalid">
                         {errors.birthDate}
                       </Form.Control.Feedback>
                     </Form.Group>
-                    <Form.Group className="mb-3" controlId="status">
+                  </Col>
+                  <Col md={6} className="divider">
+                    <Form.Group className="mb-2" controlId="status">
                       <Form.Label className="fw-bold">Status</Form.Label>
                       <Form.Select
                         name="status"
@@ -243,8 +295,8 @@ function DogForm() {
                         onChange={handleChange}
                         isValid={touched.status && !errors.status}
                         isInvalid={
-                          touched.status !== undefined
-                          && errors.status !== undefined
+                          touched.status !== undefined &&
+                          errors.status !== undefined
                         }
                       >
                         <option value="">Selecione</option>
@@ -255,7 +307,7 @@ function DogForm() {
                         {errors.status}
                       </Form.Control.Feedback>
                     </Form.Group>
-                    <Form.Group className="mb-3" controlId="color">
+                    <Form.Group className="mb-2" controlId="color">
                       <Form.Label className="fw-bold">Cor</Form.Label>
                       <Form.Control
                         name="color"
@@ -265,8 +317,8 @@ function DogForm() {
                         onChange={handleChange}
                         isValid={touched.color && !errors.color}
                         isInvalid={
-                          touched.color !== undefined
-                          && errors.color !== undefined
+                          touched.color !== undefined &&
+                          errors.color !== undefined
                         }
                       />
                       <Form.Control.Feedback type="invalid">
@@ -285,8 +337,8 @@ function DogForm() {
                         onChange={handleChange}
                         isValid={touched.responsibleId && !errors.responsibleId}
                         isInvalid={
-                          touched.responsibleId !== undefined
-                          && errors.responsibleId !== undefined
+                          touched.responsibleId !== undefined &&
+                          errors.responsibleId !== undefined
                         }
                       >
                         <option value="">Selecione</option>
@@ -302,74 +354,45 @@ function DogForm() {
                     </Form.Group>
                   </Col>
                 </Row>
-
-                <Row>
-                  <Col>
-                    {!editable && id ? (
-                      <>
-                        <Button
-                          variant="warning"
-                          className="me-3 mb-3"
-                          type="button"
-                          onClick={() => {
-                            setEditable(true);
-                          }}
-                        >
-                          Editar
-                        </Button>
-                        <Button
-                          variant="danger"
-                          className="me-3 mb-3"
-                          type="button"
-                          onClick={() => {
-                            deleteDog(id);
-                          }}
-                        >
-                          Remover
-                        </Button>
-                        <Button
-                          variant="secondary"
-                          className="me-3 mb-3"
-                          type="button"
-                          onClick={() => {
-                            navigate('/dogs');
-                          }}
-                        >
-                          Voltar
-                        </Button>
-                      </>
-                    ) : null}
-                    {editable ? (
-                      <>
-                        <Button
-                          variant="primary"
-                          className="me-3 mb-3"
-                          type="submit"
-                        >
-                          Salvar
-                        </Button>
-                        <Button
-                          variant="secondary"
-                          className="me-3 mb-3"
-                          type="button"
-                          onClick={() => {
-                            if (id) {
-                              setEditable(false);
-                            } else {
-                              navigate('/dogs');
-                            }
-                          }}
-                        >
-                          Cancelar
-                        </Button>
-                      </>
-                    ) : null}
-                  </Col>
-                </Row>
               </fieldset>
+              <Row className="mt-3">
+                <Col>
+                  {editable ? (
+                    <>
+                      <Button
+                        variant="primary"
+                        className="me-3 mb-2"
+                        type="submit"
+                      >
+                        Salvar
+                      </Button>
+                      <Button
+                        variant="secondary"
+                        className="me-3 mb-2"
+                        type="button"
+                        onClick={() => {
+                          if (dogId) {
+                            setEditable(false);
+                          } else {
+                            navigate('/dogs');
+                          }
+                        }}
+                      >
+                        Cancelar
+                      </Button>
+                    </>
+                  ) : null}
+                </Col>
+              </Row>
             </Form>
           )}
         </Formik>
+
+        {dogId && !editable ? (
+          <Row>
+            <EventList />
+          </Row>
+        ) : null}
       </Container>
     </div>
   );
