@@ -4,3 +4,7 @@ select.form-select:disabled {
   background-image: unset !important;
   background-color: white;
 }
+
+label.form-label {
+  margin-bottom: 0.25rem;
+}

@@ -34,6 +34,16 @@ export default function CustomTable({
   const rowIndexKey = (key: string | number) => `tr-${key}`;
   const cellIndexKey = (id: string | number, key: string | number) => `tr-${id}-${key}`;
 
+  const parseValue = (value: string, type: string): string => {
+    switch (type) {
+      case 'date':
+        return new Date(value).toLocaleDateString('pt-BR');
+      case 'string':
+      default:
+        return value;
+    }
+  };
+
   return (
     <>
       <Table hover className="custom-table">
@@ -51,8 +61,10 @@ export default function CustomTable({
                 key={rowIndexKey(row.id)}
                 onClick={onRowClick ? () => onRowClick(row.id) : undefined}
               >
-                {columns.map(({ key }) => (
-                  <td key={cellIndexKey(row.id, key)}>{row[key]}</td>
+                {columns.map(({ key, type }) => (
+                  <td key={cellIndexKey(row.id, key)}>
+                    {parseValue(row[key], type)}
+                  </td>
                 ))}
               </tr>
             ))

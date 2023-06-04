@@ -135,9 +135,7 @@ function TutorForm() {
     number: Yup.string()
       .min(2, 'Número deve ter ao menos 2 caracteres')
       .required('Campo obrigatório'),
-    complement: Yup.string()
-      .min(2, 'Complemento deve ter ao menos 8 caracteres')
-      .required('Campo obrigatório'),
+    complement: Yup.string(),
   });
 
   return (
@@ -161,7 +159,7 @@ function TutorForm() {
                   <Col md={6} className="divider">
                     <h4 className="d-inline-block">Dados pessoais</h4>
 
-                    <Form.Group className="mb-3" controlId="name">
+                    <Form.Group className="mb-2" controlId="name">
                       <Form.Label className="fw-bold">Nome</Form.Label>
                       <Form.Control
                         name="name"
@@ -179,7 +177,7 @@ function TutorForm() {
                         {errors.name}
                       </Form.Control.Feedback>
                     </Form.Group>
-                    <Form.Group className="mb-3" controlId="username">
+                    <Form.Group className="mb-2" controlId="username">
                       <Form.Label className="fw-bold">E-mail</Form.Label>
                       <Form.Control
                         name="username"
@@ -198,7 +196,7 @@ function TutorForm() {
                       </Form.Control.Feedback>
                     </Form.Group>
                     {editable ? (
-                      <Form.Group className="mb-3" controlId="password">
+                      <Form.Group className="mb-2" controlId="password">
                         <Form.Label className="fw-bold">Senha</Form.Label>
                         <Form.Control
                           name="password"
@@ -218,7 +216,7 @@ function TutorForm() {
                         </Form.Control.Feedback>
                       </Form.Group>
                     ) : null}
-                    <Form.Group className="mb-3" controlId="phone">
+                    <Form.Group className="mb-2" controlId="phone">
                       <Form.Label className="fw-bold">Celular</Form.Label>
                       <Form.Control
                         name="phone"
@@ -256,7 +254,7 @@ function TutorForm() {
                   </Col>
                   <Col md={6}>
                     <h4 className="d-inline-block">Endereço</h4>
-                    <Row className="mb-3">
+                    <Row className="mb-2">
                       <Form.Group as={Col} controlId="cep">
                         <Form.Label className="fw-bold">CEP</Form.Label>
                         <Form.Control
@@ -323,7 +321,7 @@ function TutorForm() {
                       </Form.Group>
                     </Row>
 
-                    <Row className="mb-3">
+                    <Row className="mb-2">
                       <Form.Group as={Col} controlId="city">
                         <Form.Label className="fw-bold">Cidade</Form.Label>
                         <Form.Control
@@ -363,7 +361,7 @@ function TutorForm() {
                       </Form.Group>
                     </Row>
 
-                    <Form.Group className="mb-3" controlId="street">
+                    <Form.Group className="mb-2" controlId="street">
                       <Form.Label className="fw-bold">Rua</Form.Label>
                       <Form.Control
                         name="street"
@@ -381,7 +379,7 @@ function TutorForm() {
                         {errors.street}
                       </Form.Control.Feedback>
                     </Form.Group>
-                    <Form.Group className="mb-3" controlId="number">
+                    <Form.Group className="mb-2" controlId="number">
                       <Form.Label className="fw-bold">Número</Form.Label>
                       <Form.Control
                         name="number"
@@ -426,7 +424,7 @@ function TutorForm() {
                       <>
                         <Button
                           variant="warning"
-                          className="me-3 mb-3"
+                          className="me-3 mb-2"
                           type="button"
                           onClick={() => {
                             setEditable(true);
@@ -436,7 +434,7 @@ function TutorForm() {
                         </Button>
                         <Button
                           variant="danger"
-                          className="me-3 mb-3"
+                          className="me-3 mb-2"
                           type="button"
                           onClick={() => {
                             deleteTutor(id);
@@ -446,7 +444,7 @@ function TutorForm() {
                         </Button>
                         <Button
                           variant="secondary"
-                          className="me-3 mb-3"
+                          className="me-3 mb-2"
                           type="button"
                           onClick={() => {
                             navigate('/tutores');
@@ -460,14 +458,14 @@ function TutorForm() {
                       <>
                         <Button
                           variant="primary"
-                          className="me-3 mb-3"
+                          className="me-3 mb-2"
                           type="submit"
                         >
                           Salvar
                         </Button>
                         <Button
                           variant="secondary"
-                          className="me-3 mb-3"
+                          className="me-3 mb-2"
                           type="button"
                           onClick={() => {
                             if (id) {

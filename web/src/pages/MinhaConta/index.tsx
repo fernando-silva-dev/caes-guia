@@ -72,13 +72,13 @@ export default function MinhaConta() {
   return (
     <div className="minha-conta-page">
       <Container>
-        <h1 className="d-inline-block mb-3">Minha Conta</h1>
+        <h1 className="d-inline-block mb-2">Minha Conta</h1>
         <Row>
           <Col md={6} className="divider">
             <Form>
               <fieldset>
                 <h4 className="d-inline-block">Dados pessoais</h4>
-                <Form.Group className="mb-3" controlId="name">
+                <Form.Group className="mb-2" controlId="name">
                   <Form.Label className="fw-bold">Nome</Form.Label>
                   <Form.Control
                     placeholder="-"
@@ -88,7 +88,7 @@ export default function MinhaConta() {
                     plaintext
                   />
                 </Form.Group>
-                <Form.Group className="mb-3" controlId="username">
+                <Form.Group className="mb-2" controlId="username">
                   <Form.Label className="fw-bold">Nome de usuário</Form.Label>
                   <Form.Control
                     placeholder="-"
@@ -98,7 +98,7 @@ export default function MinhaConta() {
                     plaintext
                   />
                 </Form.Group>
-                <Form.Group className="mb-3" controlId="phone">
+                <Form.Group className="mb-2" controlId="phone">
                   <Form.Label className="fw-bold">Celular</Form.Label>
                   <Form.Control
                     placeholder="-"
@@ -120,7 +120,7 @@ export default function MinhaConta() {
                 </Form.Group>
 
                 <h4 className="d-inline-block">Endereço</h4>
-                <Row className="mb-3">
+                <Row className="mb-2">
                   <Form.Group as={Col} controlId="cep">
                     <Form.Label className="fw-bold">CEP</Form.Label>
                     <Form.Control
@@ -171,7 +171,7 @@ export default function MinhaConta() {
                   </Form.Group>
                 </Row>
 
-                <Row className="mb-3">
+                <Row className="mb-2">
                   <Form.Group as={Col} controlId="city">
                     <Form.Label className="fw-bold">Cidade</Form.Label>
                     <Form.Control
@@ -195,7 +195,7 @@ export default function MinhaConta() {
                   </Form.Group>
                 </Row>
 
-                <Form.Group className="mb-3" controlId="street">
+                <Form.Group className="mb-2" controlId="street">
                   <Form.Label className="fw-bold">Rua</Form.Label>
                   <Form.Control
                     name="street"
@@ -205,7 +205,7 @@ export default function MinhaConta() {
                     plaintext
                   />
                 </Form.Group>
-                <Form.Group className="mb-3" controlId="number">
+                <Form.Group className="mb-2" controlId="number">
                   <Form.Label className="fw-bold">Número</Form.Label>
                   <Form.Control
                     name="number"
@@ -254,7 +254,7 @@ export default function MinhaConta() {
                 <Form noValidate onSubmit={handleSubmit}>
                   <h4 className="d-inline-block">Alterar Senha</h4>
                   <fieldset disabled={isFetching}>
-                    <Form.Group className="mb-3" controlId="password">
+                    <Form.Group className="mb-2" controlId="password">
                       <Form.Label className="fw-bold">Senha Atual</Form.Label>
                       <Form.Control
                         type="password"
@@ -271,7 +271,7 @@ export default function MinhaConta() {
                         {errors.oldPassword}
                       </Form.Control.Feedback>
                     </Form.Group>
-                    <Form.Group className="mb-3" controlId="newPassword">
+                    <Form.Group className="mb-2" controlId="newPassword">
                       <Form.Label className="fw-bold">Nova Senha</Form.Label>
                       <Form.Control
                         type="password"
@@ -289,7 +289,7 @@ export default function MinhaConta() {
                       </Form.Control.Feedback>
                     </Form.Group>
                     <Form.Group
-                      className="mb-3"
+                      className="mb-2"
                       controlId="passwordConfimation"
                     >
                       <Form.Label className="fw-bold">
