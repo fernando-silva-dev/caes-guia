@@ -1,76 +1,83 @@
 using System.Text;
 using System.Text.Json.Serialization;
-using App;
 using Crosscutting;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Service;
 
-var builder = WebApplication.CreateBuilder(args);
-var key = builder.Configuration.GetValue<string>("TOKEN_KEY") ?? throw new ArgumentNullException("TOKEN_KEY");
-var keyBytes = Encoding.ASCII.GetBytes(key);
+namespace App;
 
-builder.Services.AddAuthentication(x =>
+public class Program
 {
-    x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-    x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-}).AddJwtBearer(x =>
+    public static void Main(string[] args)
     {
-        x.RequireHttpsMetadata = false;
-        x.SaveToken = true;
-        x.TokenValidationParameters = new TokenValidationParameters
+        var builder = WebApplication.CreateBuilder(args);
+        var key = builder.Configuration.GetValue<string>("TOKEN_KEY");
+        var keyBytes = Encoding.ASCII.GetBytes(key);
+
+        builder.Services.AddAuthentication(x =>
         {
-            ValidateIssuerSigningKey = true,
-            IssuerSigningKey = new SymmetricSecurityKey(keyBytes),
-            ValidateIssuer = false,
-            ValidateAudience = false
-        };
-    });
+            x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+            x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+        }).AddJwtBearer(x =>
+            {
+                x.RequireHttpsMetadata = false;
+                x.SaveToken = true;
+                x.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(keyBytes),
+                    ValidateIssuer = false,
+                    ValidateAudience = false
+                };
+            });
 
-builder.Services.AddScoped<TokenGenerator>();
+        builder.Services.AddScoped<TokenGenerator>();
 
-// Add services to the container.
-builder.Services.AddControllers();
-builder.Services.InjectDependencies();
+        // Add services to the container.
+        builder.Services.AddControllers();
+        builder.Services.InjectDependencies();
 
-builder.Services.AddAutoMapper(typeof(MapperProfile));
+        builder.Services.AddAutoMapper(typeof(MapperProfile));
 
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+        // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+        builder.Services.AddEndpointsApiExplorer();
+        builder.Services.AddSwaggerGen();
 
-builder.Services.Configure<Microsoft.AspNetCore.Http.Json.JsonOptions>(options =>
-{
-    options.SerializerOptions.Converters.Add(new JsonStringEnumConverter());
-});
-builder.Services.Configure<Microsoft.AspNetCore.Mvc.JsonOptions>(options =>
-{
-    options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
-});
+        builder.Services.Configure<Microsoft.AspNetCore.Http.Json.JsonOptions>(options =>
+        {
+            options.SerializerOptions.Converters.Add(new JsonStringEnumConverter());
+        });
+        builder.Services.Configure<Microsoft.AspNetCore.Mvc.JsonOptions>(options =>
+        {
+            options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+        });
 
-if (builder.Environment.IsDevelopment())
-{
-    builder.Services.AddCors(config => config.AddPolicy("allow-all", p => p.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod()));
+        if (builder.Environment.IsDevelopment())
+        {
+            builder.Services.AddCors(config => config.AddPolicy("allow-all", p => p.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod()));
+        }
+
+        var app = builder.Build();
+
+        app.Services.MigrateDatabase();
+
+        if (app.Environment.IsDevelopment())
+        {
+            app.UseSwagger();
+            app.UseSwaggerUI();
+            app.UseCors("allow-all");
+            app.MapControllers().AllowAnonymous();
+        }
+        else
+        {
+            app.UseHttpsRedirection();
+            app.MapControllers();
+        }
+
+        app.UseAuthentication();
+        app.UseAuthorization();
+
+        app.Run();
+    }
 }
-
-var app = builder.Build();
-
-app.Services.MigrateDatabase();
-
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-    app.UseCors("allow-all");
-    app.MapControllers().AllowAnonymous();
-}
-else
-{
-    app.UseHttpsRedirection();
-    app.MapControllers();
-}
-
-app.UseAuthentication();
-app.UseAuthorization();
-
-app.Run();

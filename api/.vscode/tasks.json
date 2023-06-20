@@ -58,7 +58,7 @@
             ],
             "args": [
                 "reportgenerator",
-                "-reports:test/TestResults/*/coverage.cobertura.xml",
+                "-reports:test/TestResults/*/coverage.cobertura.xml;test.integration/TestResults/*/coverage.cobertura.xml",
                 "-targetdir:CoverageResult"
             ],
             "problemMatcher": "$msCompile",
