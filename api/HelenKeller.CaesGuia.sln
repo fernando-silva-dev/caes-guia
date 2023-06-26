@@ -15,7 +15,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "repository", "repository\re
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "service", "service\service.csproj", "{87B5906F-174D-4F05-ABF1-7D649127C3AC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "test", "test\test.csproj", "{A4CC3706-E039-40F8-9F32-4E3F55A54EED}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "test.unit", "test.unit\test.unit.csproj", "{A4CC3706-E039-40F8-9F32-4E3F55A54EED}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "test.integration", "test.integration\test.integration.csproj", "{FCBBFAA9-17FC-42B0-A7C4-6B52C19BF9DF}"
 EndProject

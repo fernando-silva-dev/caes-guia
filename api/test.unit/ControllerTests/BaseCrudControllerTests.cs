@@ -1,9 +1,9 @@
 using App.Models;
 using Microsoft.AspNetCore.Mvc;
 using Service.Interfaces;
-using Test.Dummies;
+using Test.Unit.Dummies;
 
-namespace Test.ContollerTests;
+namespace Test.Unit.ContollerTests;
 
 public sealed class BaseCrudControllerTests
 {

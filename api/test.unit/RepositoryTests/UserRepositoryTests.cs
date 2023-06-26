@@ -1,4 +1,4 @@
-namespace Test.RepositoryTests;
+namespace Test.Unit.RepositoryTests;
 
 public class UserRepositoryTests
 {

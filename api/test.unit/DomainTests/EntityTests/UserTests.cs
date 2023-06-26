@@ -1,6 +1,6 @@
 using Common.Enum;
 
-namespace Test.DomainTests.EntityTests;
+namespace Test.Unit.DomainTests.EntityTests;
 
 public class UserTests
 {

@@ -1,4 +1,4 @@
-namespace Test.ContollerTests;
+namespace Test.Unit.ContollerTests;
 
 public class UserControllerTests
 {
