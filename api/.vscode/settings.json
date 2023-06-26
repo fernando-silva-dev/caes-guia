@@ -12,7 +12,9 @@
         "**/TestResults": true,
         "CoverageResult/": true,
     },
-    "dotnet-test-explorer.testArguments": "--settings coverlet.runsettings",
+    "dotnet-test-explorer.testArguments": "--settings ../coverlet.runsettings",
     "dotnet-test-explorer.enableTelemetry": false,
     "dotnet-test-explorer.treeMode": "full",
+    "dotnet-test-explorer.testProjectPath": "**/test.*.csproj",
+    "dotnet-test-explorer.autoExpandTree": true,
 }

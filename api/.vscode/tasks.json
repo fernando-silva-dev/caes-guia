@@ -28,7 +28,7 @@
         },
         {
             "label": "clear test results",
-            "command": "if(Test-Path -Path test/TestResults){Remove-Item test/TestResults -Recurse}",
+            "command": "if(Test-Path -Path test.unit/TestResults){Remove-Item test.unit/TestResults -Recurse};if(Test-Path -Path test.integration/TestResults){Remove-Item test.integration/TestResults -Recurse}",
             "type": "shell",
             "problemMatcher": [],
             "hide": true
@@ -36,14 +36,16 @@
         {
             "label": "clear coverage report",
             "command": "if(Test-Path -Path CoverageResult){Remove-Item CoverageResult -Recurse}",
-            "dependsOn": "clear coverage",
             "type": "shell",
             "problemMatcher": [],
             "hide": true
         },
         {
             "label": "clear quality reports",
-            "dependsOn": ["clear coverage report", "clear test results"],
+            "dependsOn": [
+                "clear coverage report",
+                "clear test results"
+            ],
             "type": "shell",
             "problemMatcher": [],
         },
@@ -58,7 +60,7 @@
             ],
             "args": [
                 "reportgenerator",
-                "-reports:test/TestResults/*/coverage.cobertura.xml;test.integration/TestResults/*/coverage.cobertura.xml",
+                "-reports:test.unit/TestResults/*/coverage.cobertura.xml;test.integration/TestResults/*/coverage.cobertura.xml",
                 "-targetdir:CoverageResult"
             ],
             "problemMatcher": "$msCompile",
