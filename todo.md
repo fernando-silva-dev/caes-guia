@@ -1,13 +1,10 @@
 # TODO
- - Arrumar validação
+ - Encriptar a senha
  - Verificar "sessão" antes de cobrar login
  - Verificar role a cada acesso
  - Popup de confirmação
- - Toast de feedback
- - Validação do form de login
  - OData
  - Verificar role no router
  - Botar pra rodar num docker
  - Launch settings para web
  - husky
- - Encriptar a senha
