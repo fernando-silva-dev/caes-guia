@@ -30,16 +30,26 @@ public static class HttpClientExtensions
         return await client.PutAsync(url, content);
     }
 
-    public static async Task<HttpResponseMessage> PostAsAsync<T>(this HttpClient client, string url, T payload)
+    public static async Task<TResponse> PostAsAsync<T, TResponse>(this HttpClient client, string url, T payload)
     {
+        var jsonOptions = new JsonSerializerOptions()
+        {
+            PropertyNameCaseInsensitive = true,
+            Converters = {
+                new JsonStringEnumConverter()
+            }
+        };
+
         var json = JsonSerializer.Serialize(payload);
         var content = new StringContent(json, Encoding.UTF8, "application/json");
-
-        return await client.PostAsync(url, content);
+        var response = await client.PostAsync(url, content);
+        var jsonResponse = await response.Content.ReadAsStringAsync();
+        
+        return JsonSerializer.Deserialize<TResponse>(jsonResponse, jsonOptions);
     }
 
-    public static async Task<HttpResponseMessage> DeleteAsync<T>(this HttpClient client, string url)
+    public static async Task DeleteAsync<T>(this HttpClient client, string url)
     {
-        return await client.DeleteAsync(url);
+        _ = await client.DeleteAsync(url);
     }
 }

@@ -14,25 +14,27 @@ public sealed class UserControllerTests : BaseTests
     private readonly Address Address;
     private readonly User User;
     private readonly UserInsertionModel UserInsertionModel;
-    private readonly UserViewModel UserViewModel;
 
     public UserControllerTests()
     {
         Address = new Address("99999999", "cidade teste", "rua", null, "SC", "bairro", "SN");
         User = new User("test user", "test password", Common.Enum.Role.Admin, "test name", "99999999999", "99999999999", Address);
-        // TODO popular dados
-        UserViewModel = new UserViewModel()
+        
+        UserInsertionModel = new UserInsertionModel()
         {
-            Name = "test user view",
+            Name = "test user insert",
             Number = "88888888888",
             Cpf = "88888888888",
             Cep = "88888888",
             City = "city 2",
-        };
-
-        UserInsertionModel = new UserInsertionModel()
-        {
-            Name = "test",
+            Complement = "complement 2",
+            District = "district 2",
+            Password = "password 2",
+            Phone = "88888888888",
+            Role = Common.Enum.Role.Operador,
+            State = "SP",
+            Street = "street 2",
+            Username = "username 2",
         };
 
         var context = Context;
@@ -61,18 +63,16 @@ public sealed class UserControllerTests : BaseTests
     [Fact]
     public async Task Post_Should_Add()
     {
-        var response = await TestContext.Client.PostAsAsync("user", UserInsertionModel);        
-        // TODO verificar created result
-        response.EnsureSuccessStatusCode();
-        Context.Users.Find(Id).Should().BeEquivalentTo(UserInsertionModel, x => x.ExcludingMissingMembers());
+        var savedUser = await TestContext.Client.PostAsAsync<UserInsertionModel, UserViewModel>("user", UserInsertionModel);
+        
+        savedUser.Should().BeEquivalentTo(UserInsertionModel, x => x.ExcludingMissingMembers());
+        Context.Users.Find(savedUser.Id).Should().BeEquivalentTo(UserInsertionModel, x => x.ExcludingMissingMembers());
     }
 
     [Fact]
     public async Task Delete_Should_Remove()
     {
-        var response = await TestContext.Client.DeleteAsync<UserInsertionModel>($"user/{Id}");
-
-        response.EnsureSuccessStatusCode();
+        await TestContext.Client.DeleteAsync<UserInsertionModel>($"user/{Id}");
 
         Context.Users.Find(Id).Should().BeNull();
     }
