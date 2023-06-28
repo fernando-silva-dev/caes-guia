@@ -26,6 +26,7 @@
   <ItemGroup>
     <ProjectReference Include="..\repository\repository.csproj" />
     <ProjectReference Include="..\app\app.csproj" />
+    <ProjectReference Include="..\common\common.csproj" />
   </ItemGroup>
 
 </Project>

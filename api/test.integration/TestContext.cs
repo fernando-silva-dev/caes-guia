@@ -9,7 +9,6 @@ public class TestContext
 {
     public HttpClient Client;
     public IServiceProvider Provider;
-    public Context DbContext;
 
     public TestContext()
     {
@@ -21,7 +20,9 @@ public class TestContext
                                     .UseSetting("testing", "true"));
 
         Client = app.CreateClient();
-        Provider = app.Services.CreateScope().ServiceProvider;
-        DbContext = Provider.GetRequiredService<Context>();
+        Provider = app.Services;
     }
+
+    public Context DbContext
+        => Provider.CreateScope().ServiceProvider.GetRequiredService<Context>();
 }

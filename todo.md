@@ -8,3 +8,5 @@
  - Botar pra rodar num docker
  - Launch settings para web
  - husky
+ - actions
+ 
