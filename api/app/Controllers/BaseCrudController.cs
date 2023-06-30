@@ -33,8 +33,8 @@ public abstract class BaseCrudController<TInsertModel, TViewModel> : ControllerB
     public virtual CreatedResult Add([FromBody] TInsertModel model)
     {
         var entity = Service.Add(model);
-
-        return Created($"{Request.Path.Value}/{entity.Id}", entity);
+        // TODO find a way to mock request.path.value
+        return Created($"{Request?.Path.Value}/{entity.Id}", entity);
     }
 
     [HttpPut]
