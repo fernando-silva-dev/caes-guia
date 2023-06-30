@@ -1,7 +1,6 @@
 using App;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.DependencyInjection;
-using Repository;
 
 namespace Test.Integration;
 

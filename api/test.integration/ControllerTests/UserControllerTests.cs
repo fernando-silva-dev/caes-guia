@@ -1,9 +1,3 @@
-using Domain.Entities;
-using FluentAssertions;
-using Repository;
-using Service.Models.User;
-using Common.Extensions;
-
 namespace Test.Integration.ControllerTests;
 
 public sealed class UserControllerTests : BaseTests
@@ -42,6 +36,8 @@ public sealed class UserControllerTests : BaseTests
         Id = context.Add(User).Entity.Id;
         context.SaveChanges();
     }
+    
+    // List should list
 
     [Fact]
     public async Task Get_Should_ReturnUserModel()

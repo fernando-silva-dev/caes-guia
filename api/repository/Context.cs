@@ -21,7 +21,7 @@ public class Context : DbContext
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         if (_testing ?? false)
-            optionsBuilder.UseSqlite(_connectionString);        
+            optionsBuilder.UseSqlite(_connectionString);
         else
             optionsBuilder.UseNpgsql(_connectionString);
     }
@@ -29,4 +29,5 @@ public class Context : DbContext
     public virtual DbSet<User> Users { get; set; }
     public virtual DbSet<Dog> Dogs { get; set; }
     public virtual DbSet<Responsability> Responsabilities { get; set; }
+    public virtual DbSet<Event> Events { get; set; }
 }
