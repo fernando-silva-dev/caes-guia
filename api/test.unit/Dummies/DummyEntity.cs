@@ -1,4 +1,4 @@
-namespace Test.Dummies;
+namespace Test.Unit.Dummies;
 
 public class DummyEntity : BaseEntity
 {

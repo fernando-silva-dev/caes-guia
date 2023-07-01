@@ -27,7 +27,7 @@ public abstract class BaseRepository<T> : IBaseRepository<T> where T : BaseEntit
 
     public virtual void Remove(Guid id)
     {
-        T entity = Context.Set<T>().SingleOrDefault(x => x.Id == id);
+        T entity = Context.Set<T>().Find(id);
 
         if (entity is not null)
         {

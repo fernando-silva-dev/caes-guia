@@ -1,7 +1,7 @@
 using Domain.Interfazes.Repository;
-using Test.Dummies;
+using Test.Unit.Dummies;
 
-namespace Test.ServiceTests;
+namespace Test.Unit.ServiceTests;
 
 public sealed class BaseServiceTests
 {

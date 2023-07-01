@@ -4,3 +4,6 @@
 :[sumario](./fragments/f_sumario.md)
 
 :[Introdução](./fragments/f_introducao.md)
+
+:[Acesso](./fragments/f_acesso.md)
+
