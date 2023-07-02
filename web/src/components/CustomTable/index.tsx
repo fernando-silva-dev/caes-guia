@@ -1,7 +1,8 @@
 import React from 'react';
 import Table from 'react-bootstrap/Table';
-import Loader from '../Loader';
+import { Download } from 'react-bootstrap-icons';
 
+import Loader from '../Loader';
 import Pagination, { PaginationParams } from './Pagination';
 
 import './styles.css';
@@ -19,6 +20,21 @@ export interface CustomTableProps extends PaginationParams {
   isFetching: boolean;
 }
 
+function DownloadColumn({ data }: { data: string }) {
+  const onClick = (e: any) => {
+    e.stopPropagation();
+    const downloadLink = document.createElement('a');
+    // eslint-disable-next-line react/destructuring-assignment
+    const [metadata] = data.split(';');
+    const [, extension] = metadata.split('/');
+
+    downloadLink.href = data;
+    downloadLink.download = `attachment.${extension}`;
+    downloadLink.click();
+  };
+  return data ? <Download onClick={onClick} className="button-column" /> : null;
+}
+
 export default function CustomTable({
   columns = [],
   data = [],
@@ -34,10 +50,12 @@ export default function CustomTable({
   const rowIndexKey = (key: string | number) => `tr-${key}`;
   const cellIndexKey = (id: string | number, key: string | number) => `tr-${id}-${key}`;
 
-  const parseValue = (value: string, type: string): string => {
+  const parseValue = (value: string, type: string): JSX.Element | string => {
     switch (type) {
       case 'date':
         return new Date(value).toLocaleDateString('pt-BR');
+      case 'download':
+        return <DownloadColumn data={value} />;
       case 'string':
       default:
         return value;
