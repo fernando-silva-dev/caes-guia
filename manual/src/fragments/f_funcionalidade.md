@@ -1,7 +1,10 @@
 # Funcionalidades
 
-## Gestão de usuário
+## Gestão de conta
+### Mudança de senha
 
-## Gestão de cão
+## Gestão de usuários
 
-## Gestão de evento
+## Gestão de cães
+
+## Gestão de eventos

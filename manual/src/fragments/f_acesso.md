@@ -6,4 +6,4 @@
 
 ## Acesso
 
-## Função esqueci minha senha
+## Função recuperar conta
