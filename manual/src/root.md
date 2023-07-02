@@ -7,3 +7,5 @@
 :[Introdução](./fragments/f_introducao.md)
 
 :[Acesso](./fragments/f_acesso.md)
+
+:[Funcionalidades](./fragments/f_funcionalidade.md)
