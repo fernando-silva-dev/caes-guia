@@ -24,7 +24,7 @@ export default function Pagination({
   const startPage = startPageAux > total ? total : startPageAux;
   const currentShowingDescription = `${startPage}-${endPage} de ${total}`;
 
-  const totalPages = Math.floor(total / pageSize);
+  const totalPages = Math.ceil(total / pageSize);
   const hasNextPage = pageNumber < totalPages - 1;
   const hasPreviousPage = pageNumber > 0;
 

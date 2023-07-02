@@ -36,7 +36,9 @@ export default function EventList() {
   const fetchEvents = async () => {
     try {
       setIsFetching(true);
-      const response = await api.get('event', { params: { page, size } });
+      const response = await api.get(`event/dog/${dogId}`, {
+        params: { page, size },
+      });
       const { data, totalRecords } = response.data;
 
       setTableData(data);

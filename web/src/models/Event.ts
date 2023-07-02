@@ -6,4 +6,6 @@ export interface Event {
   date: string;
   dogId?: string;
   dog?: Dog;
+  base64file?: string;
+  attachmentFile?: File;
 }
