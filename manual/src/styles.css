@@ -1,3 +1,29 @@
-li > a {
+li>a {
     color: black;
+}
+
+h1{
+	border-bottom-style: none;
+}
+
+.title-page {
+    text-align: center;
+}
+
+.title-page>h1 {
+    text-decoration: none;
+}
+
+.title-page>h2 {
+}
+
+.title-page>h3 {
+}
+
+.title-page>h4 {
+    position: absolute;
+    bottom: 0;
+    right: 40%;
+    left: 40%;
+    font-weight: normal;
 }

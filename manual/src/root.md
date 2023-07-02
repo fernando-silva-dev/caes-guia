@@ -1,9 +1,9 @@
-:[title](./fragments/f_title.md)
+:[Título](./fragments/f_title.md)
 <div style="page-break-after: always;"></div>
 
-:[sumario](./fragments/f_sumario.md)
+:[Sumário](./fragments/f_sumario.md)
+<div style="page-break-after: always;"></div>
 
 :[Introdução](./fragments/f_introducao.md)
 
 :[Acesso](./fragments/f_acesso.md)
-
