@@ -255,8 +255,8 @@ function DogForm() {
                         onChange={handleChange}
                         isValid={touched.fatherName && !errors.fatherName}
                         isInvalid={
-                          touched.fatherName !== undefined &&
-                          errors.fatherName !== undefined
+                          touched.fatherName !== undefined
+                          && errors.fatherName !== undefined
                         }
                       />
                       <Form.Control.Feedback type="invalid">
@@ -276,8 +276,8 @@ function DogForm() {
                         onChange={handleChange}
                         isValid={touched.birthDate && !errors.birthDate}
                         isInvalid={
-                          touched.birthDate !== undefined &&
-                          errors.birthDate !== undefined
+                          touched.birthDate !== undefined
+                          && errors.birthDate !== undefined
                         }
                       />
                       <Form.Control.Feedback type="invalid">
@@ -337,8 +337,8 @@ function DogForm() {
                         onChange={handleChange}
                         isValid={touched.responsibleId && !errors.responsibleId}
                         isInvalid={
-                          touched.responsibleId !== undefined &&
-                          errors.responsibleId !== undefined
+                          touched.responsibleId !== undefined
+                          && errors.responsibleId !== undefined
                         }
                       >
                         <option value="">Selecione</option>

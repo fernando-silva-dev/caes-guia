@@ -7,6 +7,7 @@ import { toast } from 'react-toastify';
 
 import api from '../../services/api';
 import { Event } from '../../models/Event';
+import DownloadButton from '../../components/DownloadButton';
 
 function readFileAsync(file: File): Promise<string> {
   return new Promise((resolve, reject) => {
@@ -61,7 +62,7 @@ function EventForm() {
         dogId,
       };
       if (formData.attachmentFile) {
-        data.base64file = await readFileAsync(formData.attachmentFile);
+        data.base64File = await readFileAsync(formData.attachmentFile);
         delete data.attachmentFile;
       }
       await api.put(`event/${eventId}`, data);
@@ -85,7 +86,7 @@ function EventForm() {
       };
 
       if (formData.attachmentFile) {
-        data.base64file = await readFileAsync(formData.attachmentFile);
+        data.base64File = await readFileAsync(formData.attachmentFile);
         delete data.attachmentFile;
       }
       await api.post('event', data);
@@ -198,32 +199,51 @@ function EventForm() {
                         {errors.date}
                       </Form.Control.Feedback>
                     </Form.Group>
-                    <Form.Group className="mb-2" controlId="attachmentFile">
-                      <Form.Label className="fw-bold">Anexo</Form.Label>
-                      <Form.Control
-                        name="attachmentFile"
-                        type="file"
-                        readOnly={!editable}
-                        plaintext={!editable}
-                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                          const value = e.target?.files?.length
-                            ? e.target.files[0]
-                            : undefined;
+                    {editable ? (
+                      <Form.Group className="mb-2" controlId="attachmentFile">
+                        <Form.Label className="fw-bold">Anexo</Form.Label>
+                        <Form.Control
+                          name="attachmentFile"
+                          type="file"
+                          readOnly={!editable}
+                          plaintext={!editable}
+                          onChange={(
+                            e: React.ChangeEvent<HTMLInputElement>,
+                          ) => {
+                            const value = e.target?.files?.length
+                              ? e.target.files[0]
+                              : undefined;
 
-                          setFieldValue('attachmentFile', value);
-                        }}
-                        isValid={
-                          touched.attachmentFile && !errors.attachmentFile
-                        }
-                        isInvalid={
-                          touched.attachmentFile !== undefined
-                          && errors.attachmentFile !== undefined
-                        }
-                      />
-                      <Form.Control.Feedback type="invalid">
-                        {errors.attachmentFile}
-                      </Form.Control.Feedback>
-                    </Form.Group>
+                            setFieldValue('attachmentFile', value);
+                          }}
+                          isValid={
+                            touched.attachmentFile && !errors.attachmentFile
+                          }
+                          isInvalid={
+                            touched.attachmentFile !== undefined
+                            && errors.attachmentFile !== undefined
+                          }
+                        />
+                        <Form.Control.Feedback type="invalid">
+                          {errors.attachmentFile}
+                        </Form.Control.Feedback>
+                      </Form.Group>
+                    ) : null}
+                    {!editable && eventId ? (
+                      <Form.Group className="mb-2">
+                        <Form.Label className="fw-bold">Anexo</Form.Label>
+                        {event.base64File ? (
+                          <DownloadButton data={event.base64File} />
+                        ) : (
+                          <Form.Control
+                            type="text"
+                            readOnly
+                            plaintext
+                            placeholder="-"
+                          />
+                        )}
+                      </Form.Group>
+                    ) : null}
                   </Col>
                 </Row>
                 <Row>
