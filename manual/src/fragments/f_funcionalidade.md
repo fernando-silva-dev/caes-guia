@@ -1,6 +1,6 @@
 # Funcionalidades
 
-## Gestão de usuário(?)
+## Gestão de usuário
 
 ## Gestão de cão
 

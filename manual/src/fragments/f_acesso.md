@@ -1,9 +1,9 @@
-# Acesso
+# Instruções de acesso
 
 ## Credenciamento
 
 ## Primeiro acesso
 
-## Login
+## Acesso
 
 ## Função esqueci minha senha
