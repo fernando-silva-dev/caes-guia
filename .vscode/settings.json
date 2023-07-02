@@ -13,7 +13,7 @@
     "markdown-pdf.convertOnSaveExclude": [
         "f_*",
     ],
-    "markdown-pdf.footerTemplate": "<div style=\"font-size: 9px; margin: 0 auto;\"> <span class='pageNumber'></span></div>",
+    "markdown-pdf.footerTemplate": "<div style=\"font-size: 9px; margin: 0 0 0 auto; padding-right: 40px\"> <span class='pageNumber'></span></div>",
     "markdown-pdf.headerTemplate": "<div></div>",
     "markdown-pdf.stylesRelativePathFile": true,
     "markdown-pdf.styles": [

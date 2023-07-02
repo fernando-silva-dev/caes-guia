@@ -1,6 +1,7 @@
 ::: title-page
-
 ### INSTITUTO FEDERAL DE SANTA CATARINA - IFSC
+
+<br/> <br/> <br/> <br/> <br/> <br/> <br/> <br/> <br/> <br/> <br/> <br/> <br/> <br/> <br/> <br/> <br/>
 
 # MANUAL DO USUÁRIO
 
