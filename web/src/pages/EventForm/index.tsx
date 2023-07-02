@@ -161,7 +161,7 @@ function EventForm() {
             <Form noValidate onSubmit={handleSubmit}>
               <fieldset disabled={isFetching}>
                 <Row>
-                  <Col md={6} className="divider">
+                  <Col md={6} className="divider mb-4">
                     <Form.Group className="mb-2" controlId="description">
                       <Form.Label className="fw-bold">Descrição</Form.Label>
                       <Form.Control
