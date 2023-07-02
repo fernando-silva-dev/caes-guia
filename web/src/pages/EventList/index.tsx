@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
-import { Button, Col, Container, Row } from 'react-bootstrap';
+import { Button, Container } from 'react-bootstrap';
 import { Plus } from 'react-bootstrap-icons';
 import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
@@ -17,6 +17,11 @@ const COLUMNS: CustomTableColumn[] = [
     key: 'description',
     title: 'Descrição',
     type: 'string',
+  },
+  {
+    key: 'base64File',
+    title: 'Anexo',
+    type: 'download',
   },
 ];
 
