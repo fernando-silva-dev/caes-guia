@@ -16,4 +16,5 @@ public class Event : BaseEntity
     public string Description { get; protected set; }
     public DateTime Date { get; protected set; }
     public Guid DogId { get; protected set; }
+    public string Base64File { get; set; }
 }

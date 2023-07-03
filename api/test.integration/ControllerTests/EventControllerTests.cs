@@ -20,7 +20,8 @@ public class EventControllerTests : BaseTests
         InsertionModel = new EventInsertModel() {
             Date = DateTime.Today,
             Description = "description 2",
-            DogId = dogId
+            DogId = dogId,
+            Base64File = "base 64"
          };
 
         Id = context.Add(Event).Entity.Id;

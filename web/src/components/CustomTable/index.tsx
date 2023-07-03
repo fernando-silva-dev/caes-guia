@@ -1,10 +1,11 @@
 import React from 'react';
 import Table from 'react-bootstrap/Table';
-import Loader from '../Loader';
 
+import Loader from '../Loader';
 import Pagination, { PaginationParams } from './Pagination';
 
 import './styles.css';
+import DownloadButton from '../DownloadButton';
 
 export interface CustomTableColumn {
   key: string;
@@ -34,10 +35,15 @@ export default function CustomTable({
   const rowIndexKey = (key: string | number) => `tr-${key}`;
   const cellIndexKey = (id: string | number, key: string | number) => `tr-${id}-${key}`;
 
-  const parseValue = (value: string, type: string): string => {
+  const parseValue = (
+    value: string,
+    type: string,
+  ): JSX.Element | string | null => {
     switch (type) {
       case 'date':
         return new Date(value).toLocaleDateString('pt-BR');
+      case 'download':
+        return value ? <DownloadButton data={value} /> : null;
       case 'string':
       default:
         return value;

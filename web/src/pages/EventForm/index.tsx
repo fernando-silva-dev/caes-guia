@@ -7,6 +7,22 @@ import { toast } from 'react-toastify';
 
 import api from '../../services/api';
 import { Event } from '../../models/Event';
+import DownloadButton from '../../components/DownloadButton';
+
+function readFileAsync(file: File): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      if (typeof reader.result === 'string') {
+        resolve(reader.result);
+      } else reject(Error('wrong type'));
+    };
+    reader.onerror = (err) => {
+      reject(err);
+    };
+    reader.readAsDataURL(file);
+  });
+}
 
 function EventForm() {
   const params = useParams();
@@ -45,6 +61,10 @@ function EventForm() {
         date: new Date(formData.date).toISOString(),
         dogId,
       };
+      if (formData.attachmentFile) {
+        data.base64File = await readFileAsync(formData.attachmentFile);
+        delete data.attachmentFile;
+      }
       await api.put(`event/${eventId}`, data);
       toast.success('Evento atualizado');
       setEditable(false);
@@ -64,6 +84,11 @@ function EventForm() {
         date: new Date(formData.date).toISOString(),
         dogId,
       };
+
+      if (formData.attachmentFile) {
+        data.base64File = await readFileAsync(formData.attachmentFile);
+        delete data.attachmentFile;
+      }
       await api.post('event', data);
       toast.success('Evento cadastrado');
       navigate(`/dogs/${dogId}`);
@@ -101,6 +126,14 @@ function EventForm() {
       .max(50, 'Muito comprido')
       .required('Campo obrigatório'),
     date: Yup.date().required('Campo obrigatório'),
+    attachmentFile: Yup.mixed<File>().test(
+      'fileSize',
+      'Arquivo muito grande',
+      (value) => {
+        if (value === undefined) return true; // attachment is optional
+        return value.size <= 4 * 1024 * 1024;
+      },
+    ),
   });
 
   return (
@@ -117,11 +150,18 @@ function EventForm() {
           }}
           initialValues={event}
         >
-          {({ handleSubmit, handleChange, values, touched, errors }) => (
+          {({
+            handleSubmit,
+            handleChange,
+            values,
+            touched,
+            errors,
+            setFieldValue,
+          }) => (
             <Form noValidate onSubmit={handleSubmit}>
               <fieldset disabled={isFetching}>
                 <Row>
-                  <Col md={6} className="divider">
+                  <Col md={6} className="divider mb-4">
                     <Form.Group className="mb-2" controlId="description">
                       <Form.Label className="fw-bold">Descrição</Form.Label>
                       <Form.Control
@@ -131,8 +171,8 @@ function EventForm() {
                         value={values.description}
                         isValid={touched.description && !errors.description}
                         isInvalid={
-                          touched.description !== undefined &&
-                          errors.description !== undefined
+                          touched.description !== undefined
+                          && errors.description !== undefined
                         }
                         onChange={handleChange}
                       />
@@ -151,14 +191,59 @@ function EventForm() {
                         onChange={handleChange}
                         isValid={touched.date && !errors.date}
                         isInvalid={
-                          touched.date !== undefined &&
-                          errors.date !== undefined
+                          touched.date !== undefined
+                          && errors.date !== undefined
                         }
                       />
                       <Form.Control.Feedback type="invalid">
                         {errors.date}
                       </Form.Control.Feedback>
                     </Form.Group>
+                    {editable ? (
+                      <Form.Group className="mb-2" controlId="attachmentFile">
+                        <Form.Label className="fw-bold">Anexo</Form.Label>
+                        <Form.Control
+                          name="attachmentFile"
+                          type="file"
+                          readOnly={!editable}
+                          plaintext={!editable}
+                          onChange={(
+                            e: React.ChangeEvent<HTMLInputElement>,
+                          ) => {
+                            const value = e.target?.files?.length
+                              ? e.target.files[0]
+                              : undefined;
+
+                            setFieldValue('attachmentFile', value);
+                          }}
+                          isValid={
+                            touched.attachmentFile && !errors.attachmentFile
+                          }
+                          isInvalid={
+                            touched.attachmentFile !== undefined
+                            && errors.attachmentFile !== undefined
+                          }
+                        />
+                        <Form.Control.Feedback type="invalid">
+                          {errors.attachmentFile}
+                        </Form.Control.Feedback>
+                      </Form.Group>
+                    ) : null}
+                    {!editable && eventId ? (
+                      <Form.Group className="mb-2">
+                        <Form.Label className="fw-bold">Anexo</Form.Label>
+                        {event.base64File ? (
+                          <DownloadButton data={event.base64File} />
+                        ) : (
+                          <Form.Control
+                            type="text"
+                            readOnly
+                            plaintext
+                            placeholder="-"
+                          />
+                        )}
+                      </Form.Group>
+                    ) : null}
                   </Col>
                 </Row>
                 <Row>
