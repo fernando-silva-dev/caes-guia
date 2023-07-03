@@ -27,4 +27,4 @@
     - [Registrar evento](#registrar-evento)
     - [Editar registro de evento](#editar-registro-de-evento)
     - [Remover registro de evento](#remover-registro-de-evento)
-    - [Baixor anexo de evento](#baixar-anexo-de-evento)
+    - [Baixar anexo de evento](#baixar-anexo-de-evento)

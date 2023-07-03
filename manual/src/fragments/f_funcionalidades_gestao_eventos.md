@@ -30,6 +30,6 @@
 
 1. Na página de consulta dos dados do eventos desejado, clique em "Excluir".
 
-### Baixar anexo do evento
+### Baixar anexo de evento
 
 1. Na página de consulta dos dados do cão, clique no ícone de baixar, na coluna "Anexo".
