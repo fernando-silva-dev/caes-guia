@@ -1,10 +1,9 @@
 # Funcionalidades
 
-## Gestão de conta
-### Mudança de senha
+:[Gestão conta](./f_funcionalidades_gestao_conta.md)
 
-## Gestão de usuários
+:[Gestão tutor](./f_funcionalidades_gestao_tutores.md)
 
-## Gestão de cães
+:[Gestão cão](./f_funcionalidades_gestao_caes.md)
 
-## Gestão de eventos
+:[Gestão evento](./f_funcionalidades_gestao_eventos.md)

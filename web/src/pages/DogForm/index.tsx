@@ -218,8 +218,8 @@ function DogForm() {
                         value={values.name}
                         isValid={touched.name && !errors.name}
                         isInvalid={
-                          touched.name !== undefined &&
-                          errors.name !== undefined
+                          touched.name !== undefined
+                          && errors.name !== undefined
                         }
                         onChange={handleChange}
                       />
@@ -236,8 +236,8 @@ function DogForm() {
                         value={values.motherName}
                         isValid={touched.motherName && !errors.motherName}
                         isInvalid={
-                          touched.motherName !== undefined &&
-                          errors.motherName !== undefined
+                          touched.motherName !== undefined
+                          && errors.motherName !== undefined
                         }
                         onChange={handleChange}
                       />
@@ -295,11 +295,12 @@ function DogForm() {
                         onChange={handleChange}
                         isValid={touched.status && !errors.status}
                         isInvalid={
-                          touched.status !== undefined &&
-                          errors.status !== undefined
+                          touched.status !== undefined
+                          && errors.status !== undefined
                         }
                       >
                         <option value="">Selecione</option>
+                        <option value="Socializando">Socializando</option>
                         <option value="Treinando">Treinando</option>
                         <option value="Trabalhando">Trabalhando</option>
                       </Form.Select>
@@ -317,8 +318,8 @@ function DogForm() {
                         onChange={handleChange}
                         isValid={touched.color && !errors.color}
                         isInvalid={
-                          touched.color !== undefined &&
-                          errors.color !== undefined
+                          touched.color !== undefined
+                          && errors.color !== undefined
                         }
                       />
                       <Form.Control.Feedback type="invalid">
