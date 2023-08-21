@@ -5,18 +5,18 @@ import { Formik } from 'formik';
 import * as Yup from 'yup';
 import { toast } from 'react-toastify';
 
+import api from '~/services/api';
+import { Tutor } from '~/models/Tutor';
 import './styles.css';
-import api from '../../services/api';
-import { Tutor } from '../../models/Tutor';
 
 interface UpdatePasswordForm {
   oldPassword: string;
   newPassword: string;
-  passwordConfimation: string;
+  passwordConfirmation: string;
 }
 
-export default function MinhaConta() {
-  const [usuario, setUsuario] = useState<Tutor>({
+export default function MyAccount() {
+  const [user, setUser] = useState<Tutor>({
     role: 'Tutor',
     name: '',
     username: '',
@@ -36,8 +36,8 @@ export default function MinhaConta() {
   const fetchUser = async () => {
     try {
       const response = await api.get('user/self');
-      setUsuario(response.data);
-      navigate('/minha-conta');
+      setUser(response.data);
+      navigate('/my-account');
     } catch (error) {
       toast.error(error.response.data.message);
     }
@@ -50,7 +50,7 @@ export default function MinhaConta() {
   const submitForm = async (formData: UpdatePasswordForm) => {
     setIsFetching(true);
     try {
-      await api.patch(`user/${usuario.id}`, formData);
+      await api.patch(`user/${user.id}`, formData);
       toast.success('Senha atualizada com sucesso');
     } catch (error) {
       toast.error(error.response.data.message);
@@ -64,13 +64,13 @@ export default function MinhaConta() {
     newPassword: Yup.string()
       .min(8, 'Senha deve ter ao menos 8 caracteres')
       .required('Campo obrigatório'),
-    passwordConfimation: Yup.string()
+    passwordConfirmation: Yup.string()
       .min(8, 'Senha deve ter ao menos 8 caracteres')
       .required('Campo obrigatório'),
   });
 
   return (
-    <div className="minha-conta-page">
+    <div className="my-account-page">
       <Container>
         <h1 className="d-inline-block mb-2">Minha Conta</h1>
         <Row>
@@ -83,7 +83,7 @@ export default function MinhaConta() {
                   <Form.Control
                     placeholder="-"
                     name="name"
-                    defaultValue={usuario.name}
+                    defaultValue={user.name}
                     readOnly
                     plaintext
                   />
@@ -93,7 +93,7 @@ export default function MinhaConta() {
                   <Form.Control
                     placeholder="-"
                     name="username"
-                    defaultValue={usuario.username}
+                    defaultValue={user.username}
                     readOnly
                     plaintext
                   />
@@ -103,7 +103,7 @@ export default function MinhaConta() {
                   <Form.Control
                     placeholder="-"
                     name="phone"
-                    defaultValue={usuario.phone}
+                    defaultValue={user.phone}
                     readOnly
                     plaintext
                   />
@@ -113,7 +113,7 @@ export default function MinhaConta() {
                   <Form.Control
                     placeholder="-"
                     name="cpf"
-                    defaultValue={usuario.cpf}
+                    defaultValue={user.cpf}
                     readOnly
                     plaintext
                   />
@@ -126,7 +126,7 @@ export default function MinhaConta() {
                     <Form.Control
                       placeholder="-"
                       name="cep"
-                      defaultValue={usuario.cep}
+                      defaultValue={user.cep}
                       readOnly
                       plaintext
                     />
@@ -137,7 +137,7 @@ export default function MinhaConta() {
                     <Form.Select
                       name="state"
                       placeholder="-"
-                      defaultValue={usuario.state}
+                      defaultValue={user.state}
                       disabled
                     >
                       <option value="AC">Acre</option>
@@ -176,7 +176,7 @@ export default function MinhaConta() {
                     <Form.Label className="fw-bold">Cidade</Form.Label>
                     <Form.Control
                       name="city"
-                      defaultValue={usuario.city}
+                      defaultValue={user.city}
                       placeholder="-"
                       readOnly
                       plaintext
@@ -187,7 +187,7 @@ export default function MinhaConta() {
                     <Form.Label className="fw-bold">Bairro</Form.Label>
                     <Form.Control
                       name="district"
-                      defaultValue={usuario.district}
+                      defaultValue={user.district}
                       placeholder="-"
                       readOnly
                       plaintext
@@ -199,7 +199,7 @@ export default function MinhaConta() {
                   <Form.Label className="fw-bold">Rua</Form.Label>
                   <Form.Control
                     name="street"
-                    defaultValue={usuario.street}
+                    defaultValue={user.street}
                     placeholder="-"
                     readOnly
                     plaintext
@@ -209,7 +209,7 @@ export default function MinhaConta() {
                   <Form.Label className="fw-bold">Número</Form.Label>
                   <Form.Control
                     name="number"
-                    defaultValue={usuario.number}
+                    defaultValue={user.number}
                     placeholder="-"
                     readOnly
                     plaintext
@@ -219,7 +219,7 @@ export default function MinhaConta() {
                   <Form.Label className="fw-bold">Complemento</Form.Label>
                   <Form.Control
                     name="complement"
-                    defaultValue={usuario.complement}
+                    defaultValue={user.complement}
                     placeholder="-"
                     readOnly
                     plaintext
@@ -238,13 +238,12 @@ export default function MinhaConta() {
               initialValues={{
                 oldPassword: '',
                 newPassword: '',
-                passwordConfimation: '',
+                passwordConfirmation: '',
               }}
               validate={(values) => {
                 const errors = {} as UpdatePasswordForm;
-
-                if (values.newPassword !== values.passwordConfimation) {
-                  errors.passwordConfimation = 'A nova senha e a confirmação devem ser iguais';
+                if (values.newPassword !== values.passwordConfirmation) {
+                  errors.passwordConfirmation = 'A nova senha e a confirmação devem ser iguais';
                 }
 
                 return errors;
@@ -290,27 +289,27 @@ export default function MinhaConta() {
                     </Form.Group>
                     <Form.Group
                       className="mb-2"
-                      controlId="passwordConfimation"
+                      controlId="passwordConfirmation"
                     >
                       <Form.Label className="fw-bold">
                         Confirmação da Nova Senha
                       </Form.Label>
                       <Form.Control
                         type="password"
-                        name="passwordConfimation"
-                        value={values.passwordConfimation}
+                        name="passwordConfirmation"
+                        value={values.passwordConfirmation}
                         onChange={handleChange}
                         isValid={
-                          touched.passwordConfimation
-                          && !errors.passwordConfimation
+                          touched.passwordConfirmation
+                          && !errors.passwordConfirmation
                         }
                         isInvalid={
-                          touched.passwordConfimation !== undefined
-                          && errors.passwordConfimation !== undefined
+                          touched.passwordConfirmation !== undefined
+                          && errors.passwordConfirmation !== undefined
                         }
                       />
                       <Form.Control.Feedback type="invalid">
-                        {errors.passwordConfimation}
+                        {errors.passwordConfirmation}
                       </Form.Control.Feedback>
                     </Form.Group>
                     <Button variant="primary" className="me-3" type="submit">

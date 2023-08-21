@@ -1,11 +1,11 @@
 import React from 'react';
 import Table from 'react-bootstrap/Table';
 
-import Loader from '../Loader';
-import Pagination, { PaginationParams } from './Pagination';
+import Loader from '~/components/Loader';
+import DownloadButton from '~/components/DownloadButton';
 
+import Pagination, { PaginationParams } from './Pagination';
 import './styles.css';
-import DownloadButton from '../DownloadButton';
 
 export interface CustomTableColumn {
   key: string;

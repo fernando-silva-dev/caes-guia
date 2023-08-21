@@ -4,8 +4,8 @@ import { Button, Container } from 'react-bootstrap';
 import { Plus } from 'react-bootstrap-icons';
 import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import CustomTable, { CustomTableColumn } from '../../components/CustomTable';
-import api from '../../services/api';
+import CustomTable, { CustomTableColumn } from '~/components/CustomTable';
+import api from '~/services/api';
 
 const COLUMNS: CustomTableColumn[] = [
   {

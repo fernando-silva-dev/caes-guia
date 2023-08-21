@@ -3,7 +3,7 @@ import { Container, Nav, Navbar, Image } from 'react-bootstrap';
 import { PersonCircle } from 'react-bootstrap-icons';
 import { LinkContainer } from 'react-router-bootstrap';
 
-import Logo from '../../assets/helen-keller-logo-navbar.png';
+import Logo from '~/assets/helen-keller-logo-navbar.png';
 
 import './styles.css';
 
@@ -36,7 +36,7 @@ export default function NavigationBar() {
             <CustomLink to="/tutores">Tutores</CustomLink>
             <CustomLink to="/dogs">Cães</CustomLink>
           </Nav>
-          <CustomLink to="/minha-conta">
+          <CustomLink to="/my-account">
             <PersonCircle className="mb-1 me-2" />
             Minha conta
           </CustomLink>

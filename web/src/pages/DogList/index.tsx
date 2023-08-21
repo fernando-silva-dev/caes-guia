@@ -4,9 +4,9 @@ import { Plus } from 'react-bootstrap-icons';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
-import api from '../../services/api';
-import CustomTable, { CustomTableColumn } from '../../components/CustomTable';
-import { Dog } from '../../models/Dog';
+import api from '~/services/api';
+import CustomTable, { CustomTableColumn } from '~/components/CustomTable';
+import { Dog } from '~/models/Dog';
 
 import './styles.css';
 

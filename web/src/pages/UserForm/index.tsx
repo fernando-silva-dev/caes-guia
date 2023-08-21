@@ -5,18 +5,19 @@ import { Formik } from 'formik';
 import * as Yup from 'yup';
 import { toast } from 'react-toastify';
 
-import api from '../../services/api';
-import './styles.css';
-import { Tutor } from '../../models/Tutor';
+import { Tutor } from '~/models/Tutor';
+import api from '~/services/api';
 
-function TutorForm() {
+import './styles.css';
+
+function UserForm() {
   const params = useParams();
 
   const { id } = params;
 
   const [isFetching, setIsFetching] = useState(false);
   const [editable, setEditable] = useState(!id);
-  const [tutor, setTutor] = useState<Tutor>({
+  const [tutor, setUser] = useState<Tutor>({
     role: 'Tutor',
     name: '',
     username: '',
@@ -37,7 +38,7 @@ function TutorForm() {
     try {
       setIsFetching(true);
       const response = await api.get(`user/${id}`);
-      setTutor(response.data);
+      setUser(response.data);
     } catch (error) {
       toast.error('Erro ao buscar o tutor');
     } finally {
@@ -54,7 +55,7 @@ function TutorForm() {
       };
       const response = await api.put(`user/${id}`, data);
       toast.success('Tutor atualizado');
-      setTutor(response.data);
+      setUser(response.data);
       setEditable(false);
     } catch (error) {
       toast.error('Erro ao atualizar tutor');
@@ -490,4 +491,4 @@ function TutorForm() {
   );
 }
 
-export default TutorForm;
+export default UserForm;

@@ -5,11 +5,12 @@ import { Formik } from 'formik';
 import * as Yup from 'yup';
 import { toast } from 'react-toastify';
 
-import { Dog } from '../../models/Dog';
-import api from '../../services/api';
+import { Dog } from '~/models/Dog';
+import { Tutor } from '~/models/Tutor';
+import EventList from '~/pages/EventList';
+import api from '~/services/api';
+
 import './styles.css';
-import { Tutor } from '../../models/Tutor';
-import EventList from '../EventList';
 
 function DogForm() {
   const params = useParams();

@@ -4,10 +4,10 @@ import { useDispatch } from 'react-redux';
 import Cookies from 'universal-cookie';
 import { toast } from 'react-toastify';
 
-import { login } from '../../redux/slicers/auth';
-import Api from '../../services/api';
+import { login } from '~/redux/slicers/auth';
+import Api from '~/services/api';
 
-import Logo from '../../assets/helen-keller-logo.png';
+import Logo from '~/assets/helen-keller-logo.png';
 
 import './styles.css';
 

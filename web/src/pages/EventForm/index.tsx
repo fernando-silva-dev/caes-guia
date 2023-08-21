@@ -5,9 +5,9 @@ import { Formik } from 'formik';
 import * as Yup from 'yup';
 import { toast } from 'react-toastify';
 
-import api from '../../services/api';
-import { Event } from '../../models/Event';
-import DownloadButton from '../../components/DownloadButton';
+import api from '~/services/api';
+import { Event } from '~/models/Event';
+import DownloadButton from '~/components/DownloadButton';
 
 function readFileAsync(file: File): Promise<string> {
   return new Promise((resolve, reject) => {
