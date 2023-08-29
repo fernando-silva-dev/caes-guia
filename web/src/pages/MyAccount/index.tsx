@@ -6,7 +6,7 @@ import * as Yup from 'yup';
 import { toast } from 'react-toastify';
 
 import api from '~/services/api';
-import { Tutor } from '~/models/Tutor';
+import { User } from '~/models/User';
 import './styles.css';
 
 interface UpdatePasswordForm {
@@ -16,7 +16,7 @@ interface UpdatePasswordForm {
 }
 
 export default function MyAccount() {
-  const [user, setUser] = useState<Tutor>({
+  const [user, setUser] = useState<User>({
     role: 'Tutor',
     name: '',
     username: '',

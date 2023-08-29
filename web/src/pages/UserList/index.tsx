@@ -6,7 +6,7 @@ import { toast } from 'react-toastify';
 
 import api from '~/services/api';
 import CustomTable, { CustomTableColumn } from '~/components/CustomTable';
-import { Tutor } from '~/models/Tutor';
+import { User } from '~/models/User';
 
 import './styles.css';
 
@@ -37,7 +37,7 @@ function UserList() {
   const [total, setTotal] = useState(0);
 
   const [isFetching, setIsFetching] = useState<boolean>(true);
-  const [tableData, setTableData] = useState<Tutor[]>([]);
+  const [tableData, setTableData] = useState<User[]>([]);
 
   // função de busca para usuários
   const fetchUsers = async () => {
@@ -67,7 +67,7 @@ function UserList() {
           <Button
             className="float-end"
             onClick={() => {
-              navigate('/tutores/novo');
+              navigate('/user/new');
             }}
           >
             <Plus />
@@ -80,7 +80,7 @@ function UserList() {
               columns={COLUMNS}
               data={tableData}
               onRowClick={(id) => {
-                navigate(`/tutores/${id}`);
+                navigate(`/user/${id}`);
               }}
               pageSize={size}
               pageNumber={page}

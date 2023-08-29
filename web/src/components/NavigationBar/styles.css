@@ -10,3 +10,20 @@
 .navigation-bar .nav-link.active {
   color: #8dc63f;
 }
+
+.react-toggle--checked .react-toggle-track {
+  background-color: inherit !important;
+  border: 1px gray solid !important;
+}
+
+.react-toggle--checked .react-toggle-thumb {
+  border-color: gray !important;
+}
+
+.react-toggle--checked .react-toggle-track-check {
+  color: gray !important;
+}
+
+.react-toggle-track-x {
+  color: white !important;
+}

@@ -5,19 +5,21 @@ import { Formik } from 'formik';
 import * as Yup from 'yup';
 import { toast } from 'react-toastify';
 
-import { Tutor } from '~/models/Tutor';
+import { User } from '~/models/User';
 import api from '~/services/api';
 
 import './styles.css';
+import DeleteDialog from '~/components/DeleteDialog';
 
 function UserForm() {
   const params = useParams();
 
   const { id } = params;
 
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [isFetching, setIsFetching] = useState(false);
   const [editable, setEditable] = useState(!id);
-  const [tutor, setUser] = useState<Tutor>({
+  const [tutor, setUser] = useState<User>({
     role: 'Tutor',
     name: '',
     username: '',
@@ -46,7 +48,7 @@ function UserForm() {
     }
   };
 
-  const updateTutor = async (formData: Tutor) => {
+  const updateTutor = async (formData: User) => {
     try {
       setIsFetching(true);
       const data = {
@@ -64,7 +66,7 @@ function UserForm() {
     }
   };
 
-  const createTutor = async (formData: Tutor) => {
+  const createTutor = async (formData: User) => {
     try {
       setIsFetching(true);
       const data = {
@@ -73,7 +75,7 @@ function UserForm() {
       };
       await api.post('user', data);
       toast.success('Tutor cadastrado com succeso');
-      navigate('/tutores');
+      navigate('/user');
     } catch (error) {
       toast.error('Erro ao cadastrar tutor');
     } finally {
@@ -86,7 +88,7 @@ function UserForm() {
       setIsFetching(true);
       await api.delete(`user/${tutorId}`);
       toast.success('Tutor removido');
-      navigate('/tutores');
+      navigate('/user');
     } catch (error) {
       toast.error('Erro ao deletar tutor');
     } finally {
@@ -141,6 +143,12 @@ function UserForm() {
 
   return (
     <div className="tutor-form-page">
+
+      <DeleteDialog
+        show={showDeleteDialog}
+        handleConfirm={() => (id ? deleteTutor(id) : null)}
+        handleCancel={() => setShowDeleteDialog(false)}
+      />
       <Container>
         {isFetching ? <Spinner animation="border" className="me-2" /> : null}
         <h1 className="d-inline-block">Tutor</h1>
@@ -438,7 +446,7 @@ function UserForm() {
                           className="me-3 mb-2"
                           type="button"
                           onClick={() => {
-                            deleteTutor(id);
+                            setShowDeleteDialog(true);
                           }}
                         >
                           Remover
@@ -448,7 +456,7 @@ function UserForm() {
                           className="me-3 mb-2"
                           type="button"
                           onClick={() => {
-                            navigate('/tutores');
+                            navigate('/user');
                           }}
                         >
                           Voltar
@@ -472,7 +480,7 @@ function UserForm() {
                             if (id) {
                               setEditable(false);
                             } else {
-                              navigate('/tutores');
+                              navigate('/user');
                             }
                           }}
                         >

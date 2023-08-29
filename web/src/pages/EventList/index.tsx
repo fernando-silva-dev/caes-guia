@@ -66,7 +66,7 @@ export default function EventList() {
         <Button
           className="float-end"
           onClick={() => {
-            navigate(`/dogs/${dogId}/events/new`);
+            navigate(`/dog/${dogId}/event/new`);
           }}
         >
           <Plus />
@@ -77,7 +77,7 @@ export default function EventList() {
         columns={COLUMNS}
         data={tableData}
         onRowClick={(eventId) => {
-          navigate(`/dogs/${dogId}/events/${eventId}`);
+          navigate(`/dog/${dogId}/event/${eventId}`);
         }}
         pageSize={size}
         pageNumber={page}

@@ -17,6 +17,7 @@ module.exports = {
     'object-curly-newline': 0,
     'react/prop-types': 0,
     'react/jsx-filename-extension': [2, { extensions: ['.jsx', '.tsx'] }],
+    'react/require-default-props': 0,
     'import/extensions': [
       0,
       'ignorePackages',

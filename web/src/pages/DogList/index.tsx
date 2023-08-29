@@ -64,7 +64,7 @@ function DogList() {
           <Button
             className="float-end"
             onClick={() => {
-              navigate('/dogs/new');
+              navigate('/dog/new');
             }}
           >
             <Plus />
@@ -77,7 +77,7 @@ function DogList() {
               columns={COLUMNS}
               data={tableData}
               onRowClick={(id) => {
-                navigate(`/dogs/${id}`);
+                navigate(`/dog/${id}`);
               }}
               pageSize={size}
               pageNumber={page}
