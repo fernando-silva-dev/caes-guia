@@ -1,4 +1,4 @@
-using Common.Enum;
+using Service.Models.Attachment;
 using Service.Models.Dog;
 using Service.Models.Event;
 using Service.Models.User;
@@ -27,5 +27,9 @@ public class MapperProfile : Profile
         CreateMap<Event, EventViewModel>();
         CreateMap<EventInsertModel, Event>()
             .ConstructUsing(x => new Event(x.Description, x.Date, x.DogId));
+
+        CreateMap<Attachment, AttachmentViewModel>();
+        CreateMap<AttachmentInsertionModel, Attachment>()
+            .ConstructUsing(x => new Attachment(x.Name, x.Content, x.ContentType));
     }
 }

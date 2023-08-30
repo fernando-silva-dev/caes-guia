@@ -1,3 +1,3 @@
-namespace Domain.Interfazes.Repository;
+namespace Domain.Interfaces.Repository;
 
 public interface IDogRepository : IBaseRepository<Dog> { }

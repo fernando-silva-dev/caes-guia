@@ -9,4 +9,7 @@
  - Launch settings para web
  - husky
  - actions
+ - popup de confirmação de exclusão
+ - padding no fundo das páginas
+ - bloquear item default nos selects
  
