@@ -1,14 +1,18 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Provider } from 'react-redux';
 import { ToastContainer } from 'react-toastify';
 
-import Router from './router/Router';
+import Router from '~/router/Router';
+import store from '~/redux/store';
+import { fetchSession } from '~/redux/slicers/auth';
 
-import store from './redux/store';
-
-import './App.css';
+import '~/App.css';
 
 function App() {
+  useEffect(() => {
+    store.dispatch(fetchSession());
+  });
+
   return (
     <Provider store={store}>
       <Router />

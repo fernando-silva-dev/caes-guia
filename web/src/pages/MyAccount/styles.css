@@ -1,0 +1,9 @@
+.my-account-page .divider {
+  border-right: 1px lightgray solid;
+}
+
+.my-account-page .readonly input:disabled,
+.my-account-page .readonly select:disabled {
+  background: inherit;
+  border: none;
+}

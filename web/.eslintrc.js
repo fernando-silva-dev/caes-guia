@@ -6,7 +6,7 @@ module.exports = {
   extends: ['plugin:react/recommended', 'airbnb', 'airbnb-typescript'],
   overrides: [],
   parserOptions: {
-    project: 'tsconfig.json',
+    project: './tsconfig.json',
     tsconfigRootDir: __dirname,
     ecmaVersion: 'latest',
     sourceType: 'module',
@@ -17,8 +17,9 @@ module.exports = {
     'object-curly-newline': 0,
     'react/prop-types': 0,
     'react/jsx-filename-extension': [2, { extensions: ['.jsx', '.tsx'] }],
+    'react/require-default-props': 0,
     'import/extensions': [
-      'error',
+      0,
       'ignorePackages',
       {
         js: 'never',

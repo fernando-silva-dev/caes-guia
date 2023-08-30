@@ -4,12 +4,13 @@ import { Plus } from 'react-bootstrap-icons';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
-import api from '../../services/api';
-import CustomTable, { CustomTableColumn } from '../../components/CustomTable';
-import { Tutor } from '../../models/Tutor';
+import api from '~/services/api';
+import CustomTable, { CustomTableColumn } from '~/components/CustomTable';
+import { User } from '~/models/User';
 
 import './styles.css';
 
+// definição das colunas da tabela
 const COLUMNS: CustomTableColumn[] = [
   {
     key: 'name',
@@ -28,16 +29,18 @@ const COLUMNS: CustomTableColumn[] = [
   },
 ];
 
-function Tutores() {
+function UserList() {
   const navigate = useNavigate();
+  // controles de paginação
   const [page, setPage] = useState(0);
   const [size, setSize] = useState(10);
   const [total, setTotal] = useState(0);
 
   const [isFetching, setIsFetching] = useState<boolean>(true);
-  const [tableData, setTableData] = useState<Tutor[]>([]);
+  const [tableData, setTableData] = useState<User[]>([]);
 
-  const fetchTutores = async () => {
+  // função de busca para usuários
+  const fetchUsers = async () => {
     try {
       setIsFetching(true);
       const response = await api.get('user', { params: { page, size } });
@@ -53,18 +56,18 @@ function Tutores() {
   };
 
   useEffect(() => {
-    fetchTutores();
+    fetchUsers();
   }, [page, size]);
 
   return (
-    <div className="dashboard-page">
+    <div className="user-list-page">
       <Container>
         <div>
           <h1 className="d-inline-block">Tutores</h1>
           <Button
             className="float-end"
             onClick={() => {
-              navigate('/tutores/novo');
+              navigate('/user/new');
             }}
           >
             <Plus />
@@ -77,7 +80,7 @@ function Tutores() {
               columns={COLUMNS}
               data={tableData}
               onRowClick={(id) => {
-                navigate(`/tutores/${id}`);
+                navigate(`/user/${id}`);
               }}
               pageSize={size}
               pageNumber={page}
@@ -93,4 +96,4 @@ function Tutores() {
   );
 }
 
-export default Tutores;
+export default UserList;

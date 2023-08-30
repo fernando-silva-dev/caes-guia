@@ -5,9 +5,10 @@ import { Formik } from 'formik';
 import * as Yup from 'yup';
 import { toast } from 'react-toastify';
 
-import api from '../../services/api';
-import { Event } from '../../models/Event';
-import DownloadButton from '../../components/DownloadButton';
+import api from '~/services/api';
+import { Event } from '~/models/Event';
+import DownloadButton from '~/components/DownloadButton';
+import DeleteDialog from '~/components/DeleteDialog';
 
 function readFileAsync(file: File): Promise<string> {
   return new Promise((resolve, reject) => {
@@ -25,10 +26,12 @@ function readFileAsync(file: File): Promise<string> {
 }
 
 function EventForm() {
+  // get page path params
   const params = useParams();
-
   const { dogId, eventId } = params;
 
+  // create state vars
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [isFetching, setIsFetching] = useState(false);
   const [editable, setEditable] = useState(!eventId);
   const [event, setEvent] = useState<Event>({
@@ -36,6 +39,8 @@ function EventForm() {
     date: '',
     dogId,
   });
+
+  // instantiate navigation controller
   const navigate = useNavigate();
 
   const fetchEvent = async () => {
@@ -91,7 +96,7 @@ function EventForm() {
       }
       await api.post('event', data);
       toast.success('Evento cadastrado');
-      navigate(`/dogs/${dogId}`);
+      navigate(`/dog/${dogId}`);
     } catch (error) {
       toast.error('Erro ao cadastar evento');
       console.error(error);
@@ -105,7 +110,7 @@ function EventForm() {
       setIsFetching(true);
       await api.delete(`event/${id}`);
       toast.success('Evento removido');
-      navigate(`/dogs/${dogId}`);
+      navigate(`/dog/${dogId}`);
     } catch (error) {
       toast.error('Erro ao remove cão');
       console.error(error);
@@ -137,7 +142,12 @@ function EventForm() {
   });
 
   return (
-    <div className="dog-form-page">
+    <div className="event-form-page">
+      <DeleteDialog
+        show={showDeleteDialog}
+        handleConfirm={() => (eventId ? deleteEvent(eventId) : null)}
+        handleCancel={() => setShowDeleteDialog(false)}
+      />
       <Container>
         {isFetching ? <Spinner animation="border" className="me-2" /> : null}
         <h1 className="d-inline-block">Evento</h1>
@@ -265,7 +275,7 @@ function EventForm() {
                           className="me-3 mb-2"
                           type="button"
                           onClick={() => {
-                            deleteEvent(eventId);
+                            setShowDeleteDialog(false);
                           }}
                         >
                           Remover
@@ -275,7 +285,7 @@ function EventForm() {
                           className="me-3 mb-2"
                           type="button"
                           onClick={() => {
-                            navigate(`/dogs/${dogId}`);
+                            navigate(`/dog/${dogId}`);
                           }}
                         >
                           Voltar
@@ -299,7 +309,7 @@ function EventForm() {
                             if (eventId) {
                               setEditable(false);
                             } else {
-                              navigate(`/dogs/${dogId}`);
+                              navigate(`/dog/${dogId}`);
                             }
                           }}
                         >

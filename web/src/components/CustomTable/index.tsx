@@ -1,11 +1,11 @@
 import React from 'react';
 import Table from 'react-bootstrap/Table';
 
-import Loader from '../Loader';
-import Pagination, { PaginationParams } from './Pagination';
+import Loader from '~/components/Loader';
+import DownloadButton from '~/components/DownloadButton';
 
+import Pagination, { PaginationParams } from './Pagination';
 import './styles.css';
-import DownloadButton from '../DownloadButton';
 
 export interface CustomTableColumn {
   key: string;
@@ -61,7 +61,7 @@ export default function CustomTable({
           </tr>
         </thead>
         <tbody>
-          {!isFetching ? (
+          {!isFetching && data.length > 0 ? (
             data.map((row) => (
               <tr
                 key={rowIndexKey(row.id)}
@@ -74,13 +74,21 @@ export default function CustomTable({
                 ))}
               </tr>
             ))
-          ) : (
+          ) : null }
+
+          {!isFetching && data.length === 0 ? (
+            <td className="text-center p-4 border-bottom" colSpan={columns.length}>
+              Sem registros
+            </td>
+          ) : null}
+
+          {isFetching ? (
             <tr>
               <td colSpan={columns.length}>
                 <Loader />
               </td>
             </tr>
-          )}
+          ) : null}
         </tbody>
       </Table>
       <Pagination

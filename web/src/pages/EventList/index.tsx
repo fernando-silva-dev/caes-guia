@@ -4,8 +4,8 @@ import { Button, Container } from 'react-bootstrap';
 import { Plus } from 'react-bootstrap-icons';
 import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import CustomTable, { CustomTableColumn } from '../../components/CustomTable';
-import api from '../../services/api';
+import CustomTable, { CustomTableColumn } from '~/components/CustomTable';
+import api from '~/services/api';
 
 const COLUMNS: CustomTableColumn[] = [
   {
@@ -66,7 +66,7 @@ export default function EventList() {
         <Button
           className="float-end"
           onClick={() => {
-            navigate(`/dogs/${dogId}/events/new`);
+            navigate(`/dog/${dogId}/event/new`);
           }}
         >
           <Plus />
@@ -77,7 +77,7 @@ export default function EventList() {
         columns={COLUMNS}
         data={tableData}
         onRowClick={(eventId) => {
-          navigate(`/dogs/${dogId}/events/${eventId}`);
+          navigate(`/dog/${dogId}/event/${eventId}`);
         }}
         pageSize={size}
         pageNumber={page}

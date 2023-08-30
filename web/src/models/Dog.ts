@@ -1,4 +1,4 @@
-import { Tutor } from './Tutor';
+import { User } from './User';
 
 export interface Dog {
   id?: number;
@@ -8,7 +8,7 @@ export interface Dog {
   birthDate: string;
   color: string;
   status: string;
-  responsibles?: Tutor[];
+  responsibles?: User[];
   responsiblesIds: string[];
   responsibleId?: string;
 }

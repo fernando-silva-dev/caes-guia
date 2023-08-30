@@ -1,9 +1,0 @@
-.minha-conta-page .divider {
-  border-right: 1px lightgray solid;
-}
-
-.minha-conta-page .readonly input:disabled,
-.minha-conta-page .readonly select:disabled {
-  background: inherit;
-  border: none;
-}

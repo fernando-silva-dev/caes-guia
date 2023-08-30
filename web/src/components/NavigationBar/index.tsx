@@ -1,20 +1,24 @@
-import React from 'react';
-import { Container, Nav, Navbar, Image } from 'react-bootstrap';
-import { PersonCircle } from 'react-bootstrap-icons';
+import React, { useEffect, useState } from 'react';
+import { Container, Nav, Navbar, Image, NavDropdown } from 'react-bootstrap';
+import { useDispatch, useSelector } from 'react-redux';
+import { BoxArrowLeft, MoonStarsFill, PersonCircle, SunFill } from 'react-bootstrap-icons';
 import { LinkContainer } from 'react-router-bootstrap';
+import Toggle from 'react-toggle';
 
-import Logo from '../../assets/helen-keller-logo-navbar.png';
+import Logo from '~/assets/helen-keller-logo-navbar.png';
+import { authSelector, logout, State } from '~/redux/slicers/auth';
 
 import './styles.css';
 
 interface CustomLinkParam {
   to: string;
   children: any;
+  className?: string;
 }
 
-function CustomLink({ to, children }: CustomLinkParam) {
+function CustomLink({ to, children, className = '' }: CustomLinkParam) {
   return (
-    <LinkContainer to={to}>
+    <LinkContainer to={to} className={className}>
       <Nav.Link className="border-end border-light px-3 navigation-link">
         {children}
       </Nav.Link>
@@ -23,24 +27,71 @@ function CustomLink({ to, children }: CustomLinkParam) {
 }
 
 export default function NavigationBar() {
+  const [darkMode, setDarkMode] = useState(true);
+  const auth: State = useSelector(authSelector);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    const theme = document.querySelector('html')?.getAttribute('data-bs-theme');
+    setDarkMode(theme !== 'dark');
+  });
+
+  const onDarkModeToggle = () => {
+    document.querySelector('html')?.setAttribute('data-bs-theme', darkMode ? 'dark' : 'light');
+    setDarkMode(!darkMode);
+  };
+
   return (
     <Navbar bg="white" expand="lg" className="navigation-bar shadow mb-5">
       <Container>
-        <LinkContainer to="/service">
-          <Image className="d-block" height={50} src={Logo} />
-        </LinkContainer>
+        <Navbar.Brand>
+          <LinkContainer to="/service">
+            <Image className="d-block" height={50} src={Logo} />
+          </LinkContainer>
+        </Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
-          <Nav className="me-auto">
+          <Nav className="d-contents me-auto">
             <CustomLink to="/">Home</CustomLink>
-            <CustomLink to="/tutores">Tutores</CustomLink>
-            <CustomLink to="/dogs">Cães</CustomLink>
+            <CustomLink to="/user">Usuários</CustomLink>
+            <CustomLink to="/dog">Cães</CustomLink>
+            <Toggle
+              className="ms-auto"
+              defaultChecked={darkMode}
+              icons={{
+                checked: <SunFill width="10" height="10" />,
+                unchecked: <MoonStarsFill width="10" height="10" />,
+              }}
+              onChange={onDarkModeToggle}
+            />
+            <NavDropdown
+              id="basic-nav-dropdown"
+              className="ms-5"
+              title={(
+                <div className="d-inline-block">
+                  <PersonCircle className="mb-1 me-2" />
+                  {auth.user?.name}
+                </div>
+              )}
+            >
+              <LinkContainer to="/my-account">
+                <NavDropdown.Item>Minha Conta</NavDropdown.Item>
+              </LinkContainer>
+              <LinkContainer to="/change-password">
+                <NavDropdown.Item>Alterar Senha</NavDropdown.Item>
+              </LinkContainer>
+              <NavDropdown.Divider />
+              <NavDropdown.Item
+                className="text-danger"
+                onClick={() => dispatch(logout())}
+              >
+                <BoxArrowLeft className="me-1 mb-1" />
+                Sair
+              </NavDropdown.Item>
+            </NavDropdown>
           </Nav>
-          <CustomLink to="/minha-conta">
-            <PersonCircle className="mb-1 me-2" />
-            Minha conta
-          </CustomLink>
         </Navbar.Collapse>
+
       </Container>
     </Navbar>
   );

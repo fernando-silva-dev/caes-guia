@@ -5,11 +5,13 @@ import { Formik } from 'formik';
 import * as Yup from 'yup';
 import { toast } from 'react-toastify';
 
-import { Dog } from '../../models/Dog';
-import api from '../../services/api';
+import { Dog } from '~/models/Dog';
+import { User } from '~/models/User';
+import EventList from '~/pages/EventList';
+import api from '~/services/api';
+
 import './styles.css';
-import { Tutor } from '../../models/Tutor';
-import EventList from '../EventList';
+import DeleteDialog from '~/components/DeleteDialog';
 
 function DogForm() {
   const params = useParams();
@@ -18,6 +20,8 @@ function DogForm() {
 
   const [isFetching, setIsFetching] = useState(false);
   const [editable, setEditable] = useState(!dogId);
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+
   const [dog, setDog] = useState<Dog>({
     name: '',
     motherName: '',
@@ -30,7 +34,7 @@ function DogForm() {
     responsiblesIds: [],
     responsibleId: '',
   });
-  const [tutores, setTutores] = useState<Tutor[]>([]);
+  const [tutores, setTutores] = useState<User[]>([]);
   const navigate = useNavigate();
 
   const fetchDog = async () => {
@@ -94,7 +98,7 @@ function DogForm() {
       };
       await api.post('dog', data);
       toast.success('Cão cadastrado');
-      navigate('/dogs');
+      navigate('/dog');
     } catch (error) {
       toast.error('Erro ao cadastar cão');
       console.error(error);
@@ -108,7 +112,7 @@ function DogForm() {
       setIsFetching(true);
       await api.delete(`dog/${id}`);
       toast.success('Cão removido');
-      navigate('/dogs');
+      navigate('/dog');
     } catch (error) {
       toast.error('Erro ao remove cão');
       console.error(error);
@@ -143,6 +147,11 @@ function DogForm() {
 
   return (
     <div className="dog-form-page">
+      <DeleteDialog
+        show={showDeleteDialog}
+        handleConfirm={() => (dogId ? deleteDog(dogId) : null)}
+        handleCancel={() => setShowDeleteDialog(false)}
+      />
       <Container>
         <Row>
           <Col>
@@ -175,7 +184,7 @@ function DogForm() {
                   className="me-3 mb-2"
                   type="button"
                   onClick={() => {
-                    deleteDog(dogId);
+                    setShowDeleteDialog(true);
                   }}
                 >
                   Remover
@@ -185,7 +194,7 @@ function DogForm() {
                   className="me-3 mb-2"
                   type="button"
                   onClick={() => {
-                    navigate('/dogs');
+                    navigate('/dog');
                   }}
                 >
                   Voltar
@@ -350,7 +359,7 @@ function DogForm() {
                         ))}
                       </Form.Select>
                       <Form.Control.Feedback type="invalid">
-                        {errors.status}
+                        {errors.responsibleId}
                       </Form.Control.Feedback>
                     </Form.Group>
                   </Col>
@@ -375,7 +384,7 @@ function DogForm() {
                           if (dogId) {
                             setEditable(false);
                           } else {
-                            navigate('/dogs');
+                            navigate('/dog');
                           }
                         }}
                       >
