@@ -30,4 +30,5 @@ public class Context : DbContext
     public virtual DbSet<Dog> Dogs { get; set; }
     public virtual DbSet<Responsability> Responsabilities { get; set; }
     public virtual DbSet<Event> Events { get; set; }
+    public virtual DbSet<Attachment> Attachments { get; set; }
 }

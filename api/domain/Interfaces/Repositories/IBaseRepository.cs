@@ -1,4 +1,4 @@
-namespace Domain.Interfazes.Repository;
+namespace Domain.Interfaces.Repository;
 
 public interface IBaseRepository<T> where T : BaseEntity
 {

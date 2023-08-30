@@ -1,4 +1,4 @@
-using Domain.Interfazes.Repository;
+using Domain.Interfaces.Repository;
 using Test.Unit.Dummies;
 
 namespace Test.Unit.ServiceTests;
