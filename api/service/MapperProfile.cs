@@ -31,5 +31,7 @@ public class MapperProfile : Profile
         CreateMap<Attachment, AttachmentViewModel>();
         CreateMap<AttachmentInsertionModel, Attachment>()
             .ConstructUsing(x => new Attachment(x.Name, x.Content, x.ContentType));
+
+        CreateMap<Attachment, AttachmentModel>();
     }
 }

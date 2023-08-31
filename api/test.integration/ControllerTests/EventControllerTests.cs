@@ -17,12 +17,12 @@ public class EventControllerTests : BaseTests
         var dogId = context.Add(dog).Entity.Id;
 
         Event = new("description 1", DateTime.MaxValue, dogId);
-        InsertionModel = new EventInsertModel() {
+        InsertionModel = new EventInsertModel()
+        {
             Date = DateTime.Today,
             Description = "description 2",
             DogId = dogId,
-            Base64File = "base 64"
-         };
+        };
 
         Id = context.Add(Event).Entity.Id;
         context.SaveChanges();
