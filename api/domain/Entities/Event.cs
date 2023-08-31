@@ -9,6 +9,7 @@ public class Event : BaseEntity
         Description = description;
         Date = date;
         DogId = dogId;
+        Attachments = new List<Attachment>();
 
         new EventValidator().Validate(this);
     }
@@ -16,5 +17,5 @@ public class Event : BaseEntity
     public string Description { get; protected set; }
     public DateTime Date { get; protected set; }
     public Guid DogId { get; protected set; }
-    public string Base64File { get; set; }
+    public virtual IList<Attachment> Attachments { get; set; }
 }
