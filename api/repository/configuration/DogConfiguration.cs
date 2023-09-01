@@ -11,7 +11,7 @@ public class DogConfiguration : IEntityTypeConfiguration<Dog>
 
         builder.Ignore(x => x.ResponsiblesIds);
 
-        builder.HasMany(x => x.Events).WithOne().HasForeignKey(x => x.DogId);
+        builder.HasMany(x => x.Events).WithOne().HasForeignKey(x => x.DogId).OnDelete(DeleteBehavior.Cascade);
         builder.HasMany(x => x.Responsibles).WithMany().UsingEntity<Responsability>();
 
         builder.HasKey(x => x.Id);
