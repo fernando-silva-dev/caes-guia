@@ -50,7 +50,7 @@ function Login() {
         <Row className="justify-content-md-center vertical-center">
           <Col md={4}>
             <Form
-              className="shadow p-3 rounded bg-white"
+              className="shadow p-3 rounded bg-light"
               onSubmit={(e) => {
                 submitForm(e);
               }}

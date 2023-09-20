@@ -1,29 +1,30 @@
 import React, { useState, useEffect } from 'react';
 import { Button, Form, Container, Row, Col, Spinner } from 'react-bootstrap';
 import { useNavigate, useParams } from 'react-router-dom';
-import { Formik } from 'formik';
+import { FieldArray, Formik } from 'formik';
 import * as Yup from 'yup';
 import { toast } from 'react-toastify';
 
+import { Trash } from 'react-bootstrap-icons';
 import api from '~/services/api';
 import { Event } from '~/models/Event';
 import DownloadButton from '~/components/DownloadButton';
 import DeleteDialog from '~/components/DeleteDialog';
 
-function readFileAsync(file: File): Promise<string> {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onloadend = () => {
-      if (typeof reader.result === 'string') {
-        resolve(reader.result);
-      } else reject(Error('wrong type'));
-    };
-    reader.onerror = (err) => {
-      reject(err);
-    };
-    reader.readAsDataURL(file);
-  });
-}
+// function readFileAsync(file: File): Promise<string> {
+//   return new Promise((resolve, reject) => {
+//     const reader = new FileReader();
+//     reader.onloadend = () => {
+//       if (typeof reader.result === 'string') {
+//         resolve(reader.result);
+//       } else reject(Error('wrong type'));
+//     };
+//     reader.onerror = (err) => {
+//       reject(err);
+//     };
+//     reader.readAsDataURL(file);
+//   });
+// }
 
 function EventForm() {
   // get page path params
@@ -34,10 +35,12 @@ function EventForm() {
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [isFetching, setIsFetching] = useState(false);
   const [editable, setEditable] = useState(!eventId);
+  const [files, setFiles] = useState<File[]>([]);
   const [event, setEvent] = useState<Event>({
     description: '',
-    date: '',
+    date: new Date().toISOString().split('T')[0],
     dogId,
+    attachmentFiles: [],
   });
 
   // instantiate navigation controller
@@ -58,6 +61,11 @@ function EventForm() {
     }
   };
 
+  const uploadFile = async (file: File): Promise<string> => {
+    const response = await api.postForm('attachment', { file });
+    return response.data.id;
+  };
+
   const updateEvent = async (formData: Event) => {
     try {
       setIsFetching(true);
@@ -66,9 +74,9 @@ function EventForm() {
         date: new Date(formData.date).toISOString(),
         dogId,
       };
-      if (formData.attachmentFile) {
-        data.base64File = await readFileAsync(formData.attachmentFile);
-        delete data.attachmentFile;
+      if (formData.attachmentFiles) {
+        // data.base64File = await readFileAsync(formData.attachmentFiles[0]);
+        delete data.attachmentFiles;
       }
       await api.put(`event/${eventId}`, data);
       toast.success('Evento atualizado');
@@ -83,6 +91,7 @@ function EventForm() {
 
   const createEvent = async (formData: Event) => {
     try {
+      await Promise.all(files.map((file) => uploadFile(files[0])));
       setIsFetching(true);
       const data = {
         ...formData,
@@ -90,9 +99,9 @@ function EventForm() {
         dogId,
       };
 
-      if (formData.attachmentFile) {
-        data.base64File = await readFileAsync(formData.attachmentFile);
-        delete data.attachmentFile;
+      if (formData.attachmentFiles) {
+        // data.base64File = await readFileAsync(formData.attachmentFiles[0]);
+        delete data.attachmentFiles;
       }
       await api.post('event', data);
       toast.success('Evento cadastrado');
@@ -131,14 +140,7 @@ function EventForm() {
       .max(50, 'Muito comprido')
       .required('Campo obrigatório'),
     date: Yup.date().required('Campo obrigatório'),
-    attachmentFile: Yup.mixed<File>().test(
-      'fileSize',
-      'Arquivo muito grande',
-      (value) => {
-        if (value === undefined) return true; // attachment is optional
-        return value.size <= 4 * 1024 * 1024;
-      },
-    ),
+    attachmentFiles: Yup.array().of(Yup.mixed<File>()),
   });
 
   return (
@@ -166,7 +168,6 @@ function EventForm() {
             values,
             touched,
             errors,
-            setFieldValue,
           }) => (
             <Form noValidate onSubmit={handleSubmit}>
               <fieldset disabled={isFetching}>
@@ -210,34 +211,57 @@ function EventForm() {
                       </Form.Control.Feedback>
                     </Form.Group>
                     {editable ? (
-                      <Form.Group className="mb-2" controlId="attachmentFile">
-                        <Form.Label className="fw-bold">Anexo</Form.Label>
-                        <Form.Control
-                          name="attachmentFile"
-                          type="file"
-                          readOnly={!editable}
-                          plaintext={!editable}
-                          onChange={(
-                            e: React.ChangeEvent<HTMLInputElement>,
-                          ) => {
-                            const value = e.target?.files?.length
-                              ? e.target.files[0]
-                              : undefined;
+                      <FieldArray name="attachmentFiles">
+                        {({ remove, push }) => (
+                          <Form.Group className="mb-2" controlId="attachmentFiles">
+                            <Form.Label className="fw-bold">Anexo</Form.Label>
+                            <Form.Control
+                              name="attachmentFiles"
+                              type="file"
+                              readOnly={!editable}
+                              plaintext={!editable}
+                              onChange={(
+                                e: React.ChangeEvent<HTMLInputElement>,
+                              ) => {
+                                const value = e.target?.files?.length
+                                  ? e.target.files[0]
+                                  : undefined;
+                                setFiles((prevState) => {
+                                  if (value !== undefined) {
+                                    return [...prevState, value];
+                                  }
+                                  return prevState;
+                                });
+                                push(value);
+                              }}
+                              isValid={
+                                  touched.attachmentFiles && !errors.attachmentFiles
+                                }
+                              isInvalid={
+                                  touched.attachmentFiles !== undefined
+                                  && errors.attachmentFiles !== undefined
+                                }
+                            />
+                            <Form.Control.Feedback type="invalid">
+                              {errors.attachmentFiles}
+                            </Form.Control.Feedback>
 
-                            setFieldValue('attachmentFile', value);
-                          }}
-                          isValid={
-                            touched.attachmentFile && !errors.attachmentFile
-                          }
-                          isInvalid={
-                            touched.attachmentFile !== undefined
-                            && errors.attachmentFile !== undefined
-                          }
-                        />
-                        <Form.Control.Feedback type="invalid">
-                          {errors.attachmentFile}
-                        </Form.Control.Feedback>
-                      </Form.Group>
+                            { files?.map((file, index) => (
+                              <div key={`attachmentFiles.${index}`}>
+                                <p className="d-inline-block">{file.name}</p>
+                                <Button
+                                  variant="danger"
+                                  type="button"
+                                  className="m-2"
+                                  onClick={() => setFiles((prevState) => prevState.filter((_, i) => i !== index))}
+                                >
+                                  <Trash />
+                                </Button>
+                              </div>
+                            ))}
+                          </Form.Group>
+                        )}
+                      </FieldArray>
                     ) : null}
                     {!editable && eventId ? (
                       <Form.Group className="mb-2">

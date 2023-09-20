@@ -54,19 +54,23 @@ export default function NavigationBar() {
           <Nav className="d-contents me-auto">
             <CustomLink to="/">Home</CustomLink>
             <CustomLink to="/user">Usuários</CustomLink>
+            <CustomLink to="/brood">Ninhadas</CustomLink>
             <CustomLink to="/dog">Cães</CustomLink>
-            <Toggle
-              className="ms-auto"
-              defaultChecked={darkMode}
-              icons={{
-                checked: <SunFill width="10" height="10" />,
-                unchecked: <MoonStarsFill width="10" height="10" />,
-              }}
-              onChange={onDarkModeToggle}
-            />
+            <div className="px-3 py-2">
+              <Toggle
+                className="ms-auto"
+                defaultChecked={darkMode}
+                icons={{
+                  checked: <SunFill width="10" height="10" />,
+                  unchecked: <MoonStarsFill width="10" height="10" />,
+                }}
+                onChange={onDarkModeToggle}
+              />
+            </div>
+
             <NavDropdown
               id="basic-nav-dropdown"
-              className="ms-5"
+              className="px-3"
               title={(
                 <div className="d-inline-block">
                   <PersonCircle className="mb-1 me-2" />

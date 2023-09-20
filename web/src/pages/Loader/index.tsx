@@ -8,11 +8,11 @@ import './styles.css';
 
 export default function Loader() {
   return (
-    <div className="login-page">
+    <div className="login-page bg-white">
       <Container>
         <Row className="justify-content-md-center vertical-center">
           <Col md={4}>
-            <div className="shadow p-3 rounded bg-white">
+            <div className="shadow p-3 rounded">
               <Image className="d-block mx-auto mb-4" src={Logo} />
               <Loading />
             </div>

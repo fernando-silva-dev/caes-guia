@@ -6,11 +6,10 @@ import { toast } from 'react-toastify';
 
 import api from '~/services/api';
 import CustomTable, { CustomTableColumn } from '~/components/CustomTable';
-import { User } from '~/models/User';
+import { Brood } from '~/models/Brood';
 
 import './styles.css';
 
-// definição das colunas da tabela
 const COLUMNS: CustomTableColumn[] = [
   {
     key: 'name',
@@ -18,32 +17,36 @@ const COLUMNS: CustomTableColumn[] = [
     type: 'string',
   },
   {
-    key: 'username',
-    title: 'E-mail',
+    key: 'birthDate',
+    title: 'Data de Nascimento',
     type: 'string',
   },
   {
-    key: 'phone',
-    title: 'Celular',
+    key: 'motherName',
+    title: 'Mãe',
+    type: 'string',
+  },
+  {
+    key: 'fatherName',
+    title: 'Pai',
     type: 'string',
   },
 ];
 
-function UserList() {
+export default function BroodList() {
   const navigate = useNavigate();
-  // controles de paginação
+
   const [page, setPage] = useState(0);
   const [size, setSize] = useState(10);
   const [total, setTotal] = useState(0);
 
   const [isFetching, setIsFetching] = useState<boolean>(true);
-  const [tableData, setTableData] = useState<User[]>([]);
+  const [tableData, setTableData] = useState<Brood[]>([]);
 
-  // função de busca para usuários
-  const fetchUsers = async () => {
+  const fetchBroods = async () => {
     try {
       setIsFetching(true);
-      const response = await api.get('user', { params: { page, size } });
+      const response = await api.get('brood', { params: { page, size } });
       const { data, totalRecords } = response.data;
 
       setTableData(data);
@@ -56,18 +59,18 @@ function UserList() {
   };
 
   useEffect(() => {
-    fetchUsers();
+    fetchBroods();
   }, [page, size]);
 
   return (
-    <div className="user-list-page">
+    <div className="dashboard-page">
       <Container>
         <div>
-          <h1 className="d-inline-block">Usuários</h1>
+          <h1 className="d-inline-block">Ninhadas</h1>
           <Button
             className="float-end"
             onClick={() => {
-              navigate('/user/new');
+              navigate('/brood/new');
             }}
           >
             <Plus />
@@ -80,7 +83,7 @@ function UserList() {
               columns={COLUMNS}
               data={tableData}
               onRowClick={(id) => {
-                navigate(`/user/${id}`);
+                navigate(`/brood/${id}`);
               }}
               pageSize={size}
               pageNumber={page}
@@ -95,5 +98,3 @@ function UserList() {
     </div>
   );
 }
-
-export default UserList;

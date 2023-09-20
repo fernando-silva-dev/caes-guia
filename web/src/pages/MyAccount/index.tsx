@@ -47,18 +47,6 @@ export default function MyAccount() {
     fetchUser();
   }, []);
 
-  const submitForm = async (formData: UpdatePasswordForm) => {
-    setIsFetching(true);
-    try {
-      await api.patch(`user/${user.id}`, formData);
-      toast.success('Senha atualizada com sucesso');
-    } catch (error) {
-      toast.error(error.response.data.message);
-    } finally {
-      setIsFetching(false);
-    }
-  };
-
   const schema = Yup.object().shape({
     oldPassword: Yup.string().required('Campo obrigatório'),
     newPassword: Yup.string()
@@ -227,98 +215,6 @@ export default function MyAccount() {
                 </Form.Group>
               </fieldset>
             </Form>
-          </Col>
-          <Col md={6}>
-            <Formik
-              enableReinitialize
-              validationSchema={schema}
-              onSubmit={(params) => {
-                submitForm(params);
-              }}
-              initialValues={{
-                oldPassword: '',
-                newPassword: '',
-                passwordConfirmation: '',
-              }}
-              validate={(values) => {
-                const errors = {} as UpdatePasswordForm;
-                if (values.newPassword !== values.passwordConfirmation) {
-                  errors.passwordConfirmation = 'A nova senha e a confirmação devem ser iguais';
-                }
-
-                return errors;
-              }}
-            >
-              {({ handleSubmit, handleChange, values, touched, errors }) => (
-                <Form noValidate onSubmit={handleSubmit}>
-                  <h4 className="d-inline-block">Alterar Senha</h4>
-                  <fieldset disabled={isFetching}>
-                    <Form.Group className="mb-2" controlId="password">
-                      <Form.Label className="fw-bold">Senha Atual</Form.Label>
-                      <Form.Control
-                        type="password"
-                        name="oldPassword"
-                        value={values.oldPassword}
-                        onChange={handleChange}
-                        isValid={touched.oldPassword && !errors.oldPassword}
-                        isInvalid={
-                          touched.oldPassword !== undefined
-                          && errors.oldPassword !== undefined
-                        }
-                      />
-                      <Form.Control.Feedback type="invalid">
-                        {errors.oldPassword}
-                      </Form.Control.Feedback>
-                    </Form.Group>
-                    <Form.Group className="mb-2" controlId="newPassword">
-                      <Form.Label className="fw-bold">Nova Senha</Form.Label>
-                      <Form.Control
-                        type="password"
-                        name="newPassword"
-                        value={values.newPassword}
-                        onChange={handleChange}
-                        isValid={touched.newPassword && !errors.newPassword}
-                        isInvalid={
-                          touched.newPassword !== undefined
-                          && errors.newPassword !== undefined
-                        }
-                      />
-                      <Form.Control.Feedback type="invalid">
-                        {errors.newPassword}
-                      </Form.Control.Feedback>
-                    </Form.Group>
-                    <Form.Group
-                      className="mb-2"
-                      controlId="passwordConfirmation"
-                    >
-                      <Form.Label className="fw-bold">
-                        Confirmação da Nova Senha
-                      </Form.Label>
-                      <Form.Control
-                        type="password"
-                        name="passwordConfirmation"
-                        value={values.passwordConfirmation}
-                        onChange={handleChange}
-                        isValid={
-                          touched.passwordConfirmation
-                          && !errors.passwordConfirmation
-                        }
-                        isInvalid={
-                          touched.passwordConfirmation !== undefined
-                          && errors.passwordConfirmation !== undefined
-                        }
-                      />
-                      <Form.Control.Feedback type="invalid">
-                        {errors.passwordConfirmation}
-                      </Form.Control.Feedback>
-                    </Form.Group>
-                    <Button variant="primary" className="me-3" type="submit">
-                      Alterar Senha
-                    </Button>
-                  </fieldset>
-                </Form>
-              )}
-            </Formik>
           </Col>
         </Row>
       </Container>
