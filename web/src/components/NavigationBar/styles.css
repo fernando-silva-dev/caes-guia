@@ -13,15 +13,15 @@
 
 .react-toggle--checked .react-toggle-track {
   background-color: inherit !important;
-  border: 1px gray solid !important;
+  border: 1px rgb(128, 128, 128) solid !important;
 }
 
 .react-toggle--checked .react-toggle-thumb {
-  border-color: gray !important;
+  border-color: rgb(128, 128, 128) !important;
 }
 
 .react-toggle--checked .react-toggle-track-check {
-  color: gray !important;
+  color: rgb(128, 128, 128) !important;
 }
 
 .react-toggle-track-x {

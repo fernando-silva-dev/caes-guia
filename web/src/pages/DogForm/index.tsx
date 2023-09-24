@@ -26,9 +26,8 @@ function DogForm() {
     name: '',
     motherName: '',
     fatherName: '',
-    birthDate: '',
+    birthDate: new Date().toISOString().split('T')[0],
     color: '',
-    // Começar como indefinido
     status: '',
     responsibles: [],
     responsiblesIds: [],

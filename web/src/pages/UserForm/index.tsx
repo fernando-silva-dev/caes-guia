@@ -14,12 +14,12 @@ import DeleteDialog from '~/components/DeleteDialog';
 function UserForm() {
   const params = useParams();
 
-  const { id } = params;
+  const { userId } = params;
 
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [isFetching, setIsFetching] = useState(false);
-  const [editable, setEditable] = useState(!id);
-  const [tutor, setUser] = useState<User>({
+  const [editable, setEditable] = useState(!userId);
+  const [user, setUser] = useState<User>({
     role: 'Tutor',
     name: '',
     username: '',
@@ -36,37 +36,37 @@ function UserForm() {
   });
   const navigate = useNavigate();
 
-  const fetchTutor = async () => {
+  const fetchUser = async () => {
     try {
       setIsFetching(true);
-      const response = await api.get(`user/${id}`);
+      const response = await api.get(`user/${userId}`);
       setUser(response.data);
     } catch (error) {
-      toast.error('Erro ao buscar o tutor');
+      toast.error('Erro ao buscar o usuário');
     } finally {
       setIsFetching(false);
     }
   };
 
-  const updateTutor = async (formData: User) => {
+  const updateUser = async (formData: User) => {
     try {
       setIsFetching(true);
       const data = {
         ...formData,
         cpf: formData.cpf.replace(/\D/g, ''),
       };
-      const response = await api.put(`user/${id}`, data);
-      toast.success('Tutor atualizado');
+      const response = await api.put(`user/${userId}`, data);
+      toast.success('Usuário atualizado');
       setUser(response.data);
       setEditable(false);
     } catch (error) {
-      toast.error('Erro ao atualizar tutor');
+      toast.error('Erro ao atualizar usuário');
     } finally {
       setIsFetching(false);
     }
   };
 
-  const createTutor = async (formData: User) => {
+  const createUser = async (formData: User) => {
     try {
       setIsFetching(true);
       const data = {
@@ -74,31 +74,31 @@ function UserForm() {
         cpf: formData.cpf.replace(/\D/g, ''),
       };
       await api.post('user', data);
-      toast.success('Tutor cadastrado com succeso');
+      toast.success('Usuário cadastrado com succeso');
       navigate('/user');
     } catch (error) {
-      toast.error('Erro ao cadastrar tutor');
+      toast.error('Erro ao cadastrar usuário');
     } finally {
       setIsFetching(false);
     }
   };
 
-  const deleteTutor = async (tutorId: string) => {
+  const deleteUser = async (id: string) => {
     try {
       setIsFetching(true);
-      await api.delete(`user/${tutorId}`);
-      toast.success('Tutor removido');
+      await api.delete(`user/${id}`);
+      toast.success('Usuário removido');
       navigate('/user');
     } catch (error) {
-      toast.error('Erro ao deletar tutor');
+      toast.error('Erro ao deletar usuário');
     } finally {
       setIsFetching(false);
     }
   };
 
   useEffect(() => {
-    if (id) {
-      fetchTutor();
+    if (userId) {
+      fetchUser();
     }
   }, []);
 
@@ -142,24 +142,24 @@ function UserForm() {
   });
 
   return (
-    <div className="tutor-form-page">
+    <div className="user-form-page">
 
       <DeleteDialog
         show={showDeleteDialog}
-        handleConfirm={() => (id ? deleteTutor(id) : null)}
+        handleConfirm={() => (userId ? deleteUser(userId) : null)}
         handleCancel={() => setShowDeleteDialog(false)}
       />
       <Container>
         {isFetching ? <Spinner animation="border" className="me-2" /> : null}
-        <h1 className="d-inline-block">Tutor</h1>
+        <h1 className="d-inline-block">Usuário</h1>
         <Formik
           enableReinitialize
           validationSchema={schema}
           onSubmit={(params2) => {
-            if (id) updateTutor(params2);
-            else createTutor(params2);
+            if (userId) updateUser(params2);
+            else createUser(params2);
           }}
-          initialValues={tutor}
+          initialValues={user}
         >
           {({ handleSubmit, handleChange, values, touched, errors }) => (
             <Form noValidate onSubmit={handleSubmit}>
@@ -429,7 +429,7 @@ function UserForm() {
 
                 <Row>
                   <Col>
-                    {!editable && id ? (
+                    {!editable && userId ? (
                       <>
                         <Button
                           variant="warning"
@@ -477,7 +477,7 @@ function UserForm() {
                           className="me-3 mb-2"
                           type="button"
                           onClick={() => {
-                            if (id) {
+                            if (userId) {
                               setEditable(false);
                             } else {
                               navigate('/user');

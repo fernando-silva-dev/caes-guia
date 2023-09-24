@@ -7,5 +7,5 @@ export interface Event {
   dogId?: string;
   dog?: Dog;
   base64File?: string;
-  attachmentFile?: File;
+  attachmentFiles?: File[];
 }
