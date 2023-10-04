@@ -1,0 +1,14 @@
+services:
+  api:
+    build: .
+    ports:
+      - "5000:5000"
+      - "5001:5001"
+    environment:
+      default_connection: "Server=database;Port=5432;Database=caes-guia;User Id=postgres;Password=admin;"
+  database:
+    image: postgres
+    ports: 
+      - "5432:5432"
+    environment:
+      POSTGRES_PASSWORD: "admin"

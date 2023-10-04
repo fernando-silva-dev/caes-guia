@@ -21,8 +21,9 @@ public class MapperProfile : Profile
             .ConstructUsing(x => new User(x.Username, x.Password, x.Role, x.Name, x.Cpf, x.Phone, new Address(x.Cep, x.City, x.Street, x.Complement, x.State, x.District, x.Number)));
 
         CreateMap<Dog, DogViewModel>();
+        // TODO brood id
         CreateMap<DogInsertionModel, Dog>()
-            .ConstructUsing(x => new Dog(x.Name, x.MotherName, x.FatherName, x.BirthDate, x.Color, x.Status));
+            .ConstructUsing(x => new Dog(x.Name, x.BirthDate, x.Color, x.Status, null));
 
         CreateMap<Event, EventViewModel>();
         CreateMap<EventInsertModel, Event>()

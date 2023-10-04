@@ -13,7 +13,8 @@ public class EventControllerTests : BaseTests
     public EventControllerTests()
     {
         var context = Context;
-        Dog dog = new("dog name 1", "mother name 1", "father name 1", DateTime.Today, "black", Common.Enum.Status.Filhote);
+        // TODO
+        Dog dog = new("dog name 1", DateTime.Today, "black", Common.Enum.Status.Filhote, null);
         var dogId = context.Add(dog).Entity.Id;
 
         Event = new("description 1", DateTime.MaxValue, dogId);
