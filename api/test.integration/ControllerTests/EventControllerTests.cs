@@ -1,4 +1,5 @@
 using Service.Models.Event;
+using Common.Enum;
 
 namespace Test.Integration.ControllerTests;
 
@@ -14,7 +15,7 @@ public class EventControllerTests : BaseTests
     {
         var context = Context;
         // TODO
-        Dog dog = new("dog name 1", DateTime.Today, "black", Common.Enum.Status.Filhote, null);
+        Dog dog = new("dog name 1", DateTime.Today, "black", Status.Filhote, Sex.Male, null);
         var dogId = context.Add(dog).Entity.Id;
 
         Event = new("description 1", DateTime.MaxValue, dogId);

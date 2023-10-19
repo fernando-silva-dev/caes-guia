@@ -8,5 +8,6 @@ public class DogValidator : AbstractValidator<Dog>
         RuleFor(x => x.Name).NotEmpty().MaximumLength(50);
         RuleFor(x => x.Color).MaximumLength(25);
         RuleFor(x => x.BirthDate).NotEmpty();
+        RuleFor(x => x.Sex).IsInEnum();
     }
 }

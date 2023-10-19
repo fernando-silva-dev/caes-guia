@@ -1,4 +1,5 @@
 using Service.Models.Dog;
+using Common.Enum;
 
 namespace Test.Integration.ControllerTests;
 
@@ -13,13 +14,14 @@ public class DogControllerTests : BaseTests
     public DogControllerTests()
     {
         // TODO
-        Dog = new("dog name 1", DateTime.Today, "black", Common.Enum.Status.Filhote, null);
+        Dog = new("dog name 1", DateTime.Today, "black", Status.Filhote, Sex.Female, null);
         InsertionModel = new()
         {
             BirthDate = DateTime.MaxValue,
-            Status = Common.Enum.Status.Reprovado,
+            Status = Status.Reprovado,
             Color = "brown",
             Name = "dog name 2",
+            Sex = Sex.Female
         };
 
         var context = Context;

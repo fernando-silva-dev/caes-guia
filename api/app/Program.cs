@@ -48,7 +48,7 @@ public class Program
         {
             options.SerializerOptions.Converters.Add(new JsonStringEnumConverter());
         });
-        builder.Services.Configure<Microsoft.AspNetCore.Mvc.JsonOptions>(options =>
+        builder.Services.Configure<JsonOptions>(options =>
         {
             options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
         });
