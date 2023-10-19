@@ -104,7 +104,7 @@ function BroodForm() {
   }, []);
 
   const schema = Yup.object().shape({
-    name: Yup.string()
+    description: Yup.string()
       .min(2, 'Muito curto')
       .max(50, 'Muito comprido')
       .required('Campo obrigatório'),
@@ -189,10 +189,10 @@ function BroodForm() {
               <fieldset disabled={isFetching}>
                 <Row>
                   <Col md={6} className="divider">
-                    <Form.Group className="mb-2" controlId="name">
+                    <Form.Group className="mb-2" controlId="description">
                       <Form.Label className="fw-bold">Nome</Form.Label>
                       <Form.Control
-                        name="name"
+                        name="description"
                         readOnly={!editable}
                         plaintext={!editable}
                         value={values.description}
@@ -271,7 +271,7 @@ function BroodForm() {
 
                 <Row>
                   <Col className="divider">
-                    <h2 className="d-inline-block">Filhotes</h2>
+                    <h3 className="d-inline-block mt-3">Filhotes</h3>
                   </Col>
                 </Row>
                 <FieldArray name="dogs">
