@@ -1,15 +1,18 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Button, Form, Container, Row, Col, Spinner } from 'react-bootstrap';
 import { useNavigate, useParams } from 'react-router-dom';
 import { FieldArray, Formik } from 'formik';
 import * as Yup from 'yup';
 import { toast } from 'react-toastify';
+import Humanize from 'humanize-plus';
 
-import { Trash } from 'react-bootstrap-icons';
+import { Trash, Upload } from 'react-bootstrap-icons';
+import Table from 'react-bootstrap/Table';
 import api from '~/services/api';
 import { Event } from '~/models/Event';
 import DownloadButton from '~/components/DownloadButton';
 import DeleteDialog from '~/components/DeleteDialog';
+import AttachmentPreview from '~/components/AttachmentPreview';
 
 // function readFileAsync(file: File): Promise<string> {
 //   return new Promise((resolve, reject) => {
@@ -46,6 +49,8 @@ function EventForm() {
   // instantiate navigation controller
   const navigate = useNavigate();
 
+  const fileUploadRef = useRef<HTMLInputElement>(null);
+
   const fetchEvent = async () => {
     try {
       setIsFetching(true);
@@ -69,13 +74,16 @@ function EventForm() {
   const updateEvent = async (formData: Event) => {
     try {
       setIsFetching(true);
+      const attachmentIds = await Promise.all(files.map((file) => uploadFile(file)));
+
       const data = {
         ...formData,
         date: new Date(formData.date).toISOString(),
         dogId,
+        attachmentIds,
       };
+
       if (formData.attachmentFiles) {
-        // data.base64File = await readFileAsync(formData.attachmentFiles[0]);
         delete data.attachmentFiles;
       }
       await api.put(`event/${eventId}`, data);
@@ -91,12 +99,14 @@ function EventForm() {
 
   const createEvent = async (formData: Event) => {
     try {
-      await Promise.all(files.map((file) => uploadFile(files[0])));
       setIsFetching(true);
+      const attachmentIds = await Promise.all(files.map((file) => uploadFile(file)));
+
       const data = {
         ...formData,
         date: new Date(formData.date).toISOString(),
         dogId,
+        attachmentIds,
       };
 
       if (formData.attachmentFiles) {
@@ -212,14 +222,16 @@ function EventForm() {
                     </Form.Group>
                     {editable ? (
                       <FieldArray name="attachmentFiles">
-                        {({ remove, push }) => (
+                        {({ push }) => (
                           <Form.Group className="mb-2" controlId="attachmentFiles">
-                            <Form.Label className="fw-bold">Anexo</Form.Label>
+                            {/* <Form.Label className="fw-bold">Anexos</Form.Label> */}
                             <Form.Control
                               name="attachmentFiles"
                               type="file"
                               readOnly={!editable}
                               plaintext={!editable}
+                              className="d-none"
+                              ref={fileUploadRef}
                               onChange={(
                                 e: React.ChangeEvent<HTMLInputElement>,
                               ) => {
@@ -246,19 +258,49 @@ function EventForm() {
                               {errors.attachmentFiles}
                             </Form.Control.Feedback>
 
-                            { files?.map((file, index) => (
-                              <div key={`attachmentFiles.${index}`}>
-                                <p className="d-inline-block">{file.name}</p>
-                                <Button
-                                  variant="danger"
-                                  type="button"
-                                  className="m-2"
-                                  onClick={() => setFiles((prevState) => prevState.filter((_, i) => i !== index))}
-                                >
-                                  <Trash />
-                                </Button>
-                              </div>
-                            ))}
+                            <Table hover>
+                              <thead>
+                                <tr>
+                                  <th>Anexo</th>
+                                  <th />
+                                  <th />
+                                </tr>
+                              </thead>
+                              <tbody>
+
+                                { files?.map((file, index) => (
+                                  <tr key={`attachmentFiles.${file.name}`}>
+                                    <td>{file.name}</td>
+                                    <td>{Humanize.fileSize(file.size)}</td>
+                                    <td>
+                                      <Button
+                                        variant="danger"
+                                        type="button"
+                                        className="float-end"
+                                        onClick={() => setFiles(
+                                          (prevState) => prevState.filter(
+                                            (_, i) => i !== index,
+                                          ),
+                                        )}
+                                      >
+                                        <Trash />
+                                      </Button>
+                                    </td>
+                                  </tr>
+                                ))}
+                              </tbody>
+                            </Table>
+                            <Button
+                              variant="light"
+                              type="button"
+                              className=""
+                              onClick={() => {
+                                fileUploadRef?.current?.click();
+                              }}
+                            >
+                              <Upload className="me-2 mb-1" />
+                              Adicionar Arquivos
+                            </Button>
                           </Form.Group>
                         )}
                       </FieldArray>
@@ -341,6 +383,11 @@ function EventForm() {
                         </Button>
                       </>
                     ) : null}
+                    {/* <AttachmentPreview */}
+                    {/*  attachmentUUID="2e46b33e-7fe6-45ca-8162-5f75fc946ee5" */}
+                    {/*  filename="doc.pdf" */}
+                    {/*  type="pdf" */}
+                    {/* /> */}
                   </Col>
                 </Row>
               </fieldset>

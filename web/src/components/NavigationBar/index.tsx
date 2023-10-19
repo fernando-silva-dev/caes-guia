@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Container, Nav, Navbar, Image, NavDropdown } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
-import { BoxArrowLeft, MoonStarsFill, PersonCircle, SunFill } from 'react-bootstrap-icons';
+import { BoxArrowLeft, MoonStarsFill, PersonCircle, Sun } from 'react-bootstrap-icons';
 import { LinkContainer } from 'react-router-bootstrap';
 import Toggle from 'react-toggle';
 
@@ -19,7 +19,7 @@ interface CustomLinkParam {
 function CustomLink({ to, children, className = '' }: CustomLinkParam) {
   return (
     <LinkContainer to={to} className={className}>
-      <Nav.Link className="border-end border-light px-3 navigation-link">
+      <Nav.Link className="px-3 navigation-link">
         {children}
       </Nav.Link>
     </LinkContainer>
@@ -42,7 +42,7 @@ export default function NavigationBar() {
   };
 
   return (
-    <Navbar bg="white" expand="lg" className="navigation-bar shadow mb-5">
+    <Navbar expand="lg" className="navigation-bar shadow mb-5">
       <Container>
         <Navbar.Brand>
           <LinkContainer to="/service">
@@ -55,13 +55,17 @@ export default function NavigationBar() {
             <CustomLink to="/">Home</CustomLink>
             <CustomLink to="/user">Usuários</CustomLink>
             <CustomLink to="/brood">Ninhadas</CustomLink>
-            <CustomLink to="/dog">Cães</CustomLink>
-            <div className="px-3 py-2">
+            <LinkContainer to="/dog">
+              <Nav.Link className="px-3 navigation-link me-auto">
+                Cães
+              </Nav.Link>
+            </LinkContainer>
+            <div className="">
               <Toggle
-                className="ms-auto"
+                className="mt-1"
                 defaultChecked={darkMode}
                 icons={{
-                  checked: <SunFill width="10" height="10" />,
+                  checked: <Sun width="10" height="10" />,
                   unchecked: <MoonStarsFill width="10" height="10" />,
                 }}
                 onChange={onDarkModeToggle}

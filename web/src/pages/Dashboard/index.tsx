@@ -8,7 +8,7 @@ function Dashboard() {
     <div className="dashboard-page">
       <Container>
         <Row>
-          <h1>Bem vinde ao Sistema de Gestão de Cães da Escola de Cães-Guias Helen Keller</h1>
+          <h1 className="w-100 text-center">Bem vinde!</h1>
         </Row>
       </Container>
     </div>
