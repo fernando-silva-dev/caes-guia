@@ -8,7 +8,7 @@ export interface ErrorMessage {
 // TODO usar variáveis de ambiente
 const cookies = new Cookies();
 const api = axios.create({
-  baseURL: 'http://localhost:5164',
+  baseURL: 'http://localhost:5000',
   timeout: 5000,
   headers: {
     Authorization: `bearer ${cookies.get('token')}`,
