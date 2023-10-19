@@ -11,6 +11,7 @@ import EventList from '~/pages/EventList';
 import api from '~/services/api';
 
 import './styles.css';
+import { Dog } from '~/models/Dog';
 
 function BroodForm() {
   const params = useParams();
@@ -21,15 +22,16 @@ function BroodForm() {
   const [editable, setEditable] = useState(!broodId);
   const [brood, setBrood] = useState<Brood>({
     description: '',
-    motherName: '',
-    fatherName: '',
-    birthDate: new Date().toISOString().split('T')[0],
-    dogs: [{
+    motherId: '',
+    fatherId: '',
+    children: [{
       name: '',
       sex: '',
       color: '',
     }],
   });
+  const [maleDogs, setMaleDogs] = useState<Dog[]>([]);
+  const [femaleDogs, setFemaleDogs] = useState<Dog[]>([]);
   const navigate = useNavigate();
 
   const fetchBrood = async () => {
@@ -37,7 +39,6 @@ function BroodForm() {
       setIsFetching(true);
       const response = await api.get(`brood/${broodId}`);
       const broodSerialized: Brood = response.data;
-      [broodSerialized.birthDate] = broodSerialized.birthDate.split('T');
       setBrood(broodSerialized);
     } catch (error) {
       toast.error('Erro ao buscar ninhada');
@@ -52,7 +53,6 @@ function BroodForm() {
       setIsFetching(true);
       const data = {
         ...formData,
-        birthDate: new Date(formData.birthDate).toISOString(),
       };
       await api.put(`brood/${broodId}`, data);
       toast.success('Ninhada atualizada');
@@ -70,7 +70,6 @@ function BroodForm() {
       setIsFetching(true);
       const data = {
         ...formData,
-        birthDate: new Date(formData.birthDate).toISOString(),
       };
       await api.post('brood', data);
       toast.success('Ninhada cadastrada');
@@ -97,10 +96,38 @@ function BroodForm() {
     }
   };
 
+  const fetchMaleDogs = async () => {
+    try {
+      setIsFetching(true);
+      const response = await api.get('dogs/male');
+      setMaleDogs(response.data.data);
+    } catch (error) {
+      toast.error('Erro ao buscar o cães machos');
+      console.error(error);
+    } finally {
+      setIsFetching(false);
+    }
+  };
+
+  const fetchFemaleDogs = async () => {
+    try {
+      setIsFetching(true);
+      const response = await api.get('dogs/female');
+      setFemaleDogs(response.data.data);
+    } catch (error) {
+      toast.error('Erro ao buscar o cães fêmeas');
+      console.error(error);
+    } finally {
+      setIsFetching(false);
+    }
+  };
+
   useEffect(() => {
     if (broodId) {
       fetchBrood();
     }
+    fetchMaleDogs();
+    fetchFemaleDogs();
   }, []);
 
   const schema = Yup.object().shape({
@@ -108,10 +135,10 @@ function BroodForm() {
       .min(2, 'Muito curto')
       .max(50, 'Muito comprido')
       .required('Campo obrigatório'),
-    motherName: Yup.string().max(50, 'Máximo de 50 caracteres'),
-    fatherName: Yup.string().max(50, 'Máximo de 50 caracteres'),
+    motherId: Yup.string().required('Campo obrigatório'),
+    fatherId: Yup.string().required('Campo obrigatório'),
     birthDate: Yup.date().required('Campo obrigatório'),
-    dogs: Yup.array().min(1).required('Campo obrigatório').of(Yup.object().shape({
+    children: Yup.array().min(1).required('Campo obrigatório').of(Yup.object().shape({
       name: Yup.string()
         .min(2, 'Muito curto')
         .max(50, 'Muito comprido')
@@ -207,63 +234,57 @@ function BroodForm() {
                         {errors.description}
                       </Form.Control.Feedback>
                     </Form.Group>
-                    <Form.Group className="mb-2" controlId="birthDate">
-                      <Form.Label className="fw-bold">
-                        Data de Nascimento
-                      </Form.Label>
-                      <Form.Control
-                        name="birthDate"
-                        type="date"
-                        readOnly={!editable}
-                        plaintext={!editable}
-                        value={values.birthDate}
-                        onChange={handleChange}
-                        isValid={touched.birthDate && !errors.birthDate}
-                        isInvalid={
-                          touched.birthDate !== undefined
-                          && errors.birthDate !== undefined
-                        }
-                      />
-                      <Form.Control.Feedback type="invalid">
-                        {errors.birthDate}
-                      </Form.Control.Feedback>
-                    </Form.Group>
                   </Col>
                   <Col>
-                    <Form.Group className="mb-2" controlId="motherName">
-                      <Form.Label className="fw-bold">Nome da mãe</Form.Label>
-                      <Form.Control
-                        name="motherName"
-                        readOnly={!editable}
-                        plaintext={!editable}
-                        value={values.motherName}
-                        isValid={touched.motherName && !errors.motherName}
-                        isInvalid={
-                          touched.motherName !== undefined
-                          && errors.motherName !== undefined
-                        }
+                    <Form.Group className="mb-2" controlId="motherId">
+                      <Form.Label className="fw-bold">Mãe da ninhada</Form.Label>
+                      <Form.Select
+                        name="motherId"
+                        disabled={!editable}
+                        value={values.motherId}
+                        defaultValue={values.motherId}
                         onChange={handleChange}
-                      />
+                        isValid={touched.motherId && !errors.motherId}
+                        isInvalid={
+                          touched.motherId !== undefined
+                          && errors.motherId !== undefined
+                        }
+                      >
+                        <option value="">Selecione</option>
+                        {femaleDogs.map(({ id: femaleId, name }) => (
+                          <option key={femaleId} value={femaleId}>
+                            {name}
+                          </option>
+                        ))}
+                      </Form.Select>
                       <Form.Control.Feedback type="invalid">
-                        {errors.motherName}
+                        {errors.motherId}
                       </Form.Control.Feedback>
                     </Form.Group>
-                    <Form.Group className="mb-2" controlId="fatherName">
-                      <Form.Label className="fw-bold">Nome do Pai</Form.Label>
-                      <Form.Control
-                        name="fatherName"
-                        readOnly={!editable}
-                        plaintext={!editable}
-                        value={values.fatherName}
+
+                    <Form.Group className="mb-2" controlId="fatherId">
+                      <Form.Label className="fw-bold">Pai da ninhada</Form.Label>
+                      <Form.Select
+                        name="motherId"
+                        disabled={!editable}
+                        value={values.fatherId}
+                        defaultValue={values.fatherId}
                         onChange={handleChange}
-                        isValid={touched.fatherName && !errors.fatherName}
+                        isValid={touched.fatherId && !errors.fatherId}
                         isInvalid={
-                          touched.fatherName !== undefined
-                          && errors.fatherName !== undefined
+                          touched.fatherId !== undefined
+                          && errors.fatherId !== undefined
                         }
-                      />
+                      >
+                        <option value="">Selecione</option>
+                        {maleDogs.map(({ id: fatherId, name }) => (
+                          <option key={fatherId} value={fatherId}>
+                            {name}
+                          </option>
+                        ))}
+                      </Form.Select>
                       <Form.Control.Feedback type="invalid">
-                        {errors.fatherName}
+                        {errors.fatherId}
                       </Form.Control.Feedback>
                     </Form.Group>
                   </Col>
@@ -274,50 +295,50 @@ function BroodForm() {
                     <h3 className="d-inline-block mt-3">Filhotes</h3>
                   </Col>
                 </Row>
-                <FieldArray name="dogs">
+                <FieldArray name="children">
                   {({ remove, push }) => (
                     <>
-                      { values.dogs?.map((_, index) => (
-                        <Row key={`dog${index}`}>
+                      { values.children?.map((_, index) => (
+                        <Row key={`children${index}`}>
                           <Col>
-                            <Form.Group className="mb-2" controlId={`dogs.${index}.name`}>
+                            <Form.Group className="mb-2" controlId={`children.${index}.name`}>
                               <Form.Label className="fw-bold">Nome</Form.Label>
                               <Form.Control
-                                name={`dogs.${index}.name`}
+                                name={`children.${index}.name`}
                                 readOnly={!editable}
                                 plaintext={!editable}
-                                value={values.dogs[index].name}
+                                value={values.children[index].name}
                                 isValid={
-                                touched.dogs?.at(index)?.name
-                                && !(errors.dogs?.at(index) as any)?.name
+                                touched.children?.at(index)?.name
+                                && !(errors.children?.at(index) as any)?.name
                               }
                                 isInvalid={
-                                touched.dogs?.at(index)?.name !== undefined
-                                && (errors.dogs?.at(index) as any)?.name !== undefined
+                                touched.children?.at(index)?.name !== undefined
+                                && (errors.children?.at(index) as any)?.name !== undefined
                               }
                                 onChange={handleChange}
                               />
                               <Form.Control.Feedback type="invalid">
-                                {(errors.dogs?.at(index) as any)?.name}
+                                {(errors.children?.at(index) as any)?.name}
                               </Form.Control.Feedback>
                             </Form.Group>
                           </Col>
 
                           <Col>
-                            <Form.Group className="mb-2" controlId={`dogs.${index}.sex`}>
+                            <Form.Group className="mb-2" controlId={`children.${index}.sex`}>
                               <Form.Label className="fw-bold">Sexo</Form.Label>
                               <Form.Select
-                                name={`dogs.${index}.sex`}
+                                name={`children.${index}.sex`}
                                 disabled={!editable}
-                                value={values.dogs[index].sex}
+                                value={values.children[index].sex}
                                 onChange={handleChange}
                                 isValid={
-                                touched.dogs?.at(index)?.sex
-                                && !(errors.dogs?.at(index) as any)?.sex
+                                touched.children?.at(index)?.sex
+                                && !(errors.children?.at(index) as any)?.sex
                               }
                                 isInvalid={
-                                touched.dogs?.at(index)?.sex !== undefined
-                                && (errors.dogs?.at(index) as any)?.sex !== undefined
+                                touched.children?.at(index)?.sex !== undefined
+                                && (errors.children?.at(index) as any)?.sex !== undefined
                               }
                               >
                                 <option value="">Selecione</option>
@@ -325,31 +346,31 @@ function BroodForm() {
                                 <option value="F">Fêmea</option>
                               </Form.Select>
                               <Form.Control.Feedback type="invalid">
-                                {(errors.dogs?.at(index) as any)?.sex}
+                                {(errors.children?.at(index) as any)?.sex}
                               </Form.Control.Feedback>
                             </Form.Group>
                           </Col>
 
                           <Col>
-                            <Form.Group className="mb-2" controlId={`dogs.${index}.color`}>
+                            <Form.Group className="mb-2" controlId={`children.${index}.color`}>
                               <Form.Label className="fw-bold">Cor</Form.Label>
                               <Form.Control
-                                name={`dogs.${index}.color`}
+                                name={`children.${index}.color`}
                                 readOnly={!editable}
                                 plaintext={!editable}
-                                value={values.dogs?.at(index)?.color}
+                                value={values.children?.at(index)?.color}
                                 isValid={
-                                touched.dogs?.at(index)?.color
-                                && !(errors.dogs?.at(index) as any)?.color
+                                touched.children?.at(index)?.color
+                                && !(errors.children?.at(index) as any)?.color
                               }
                                 isInvalid={
-                                touched.dogs?.at(index)?.color !== undefined
-                                && (errors.dogs?.at(index) as any)?.color !== undefined
+                                touched.children?.at(index)?.color !== undefined
+                                && (errors.children?.at(index) as any)?.color !== undefined
                               }
                                 onChange={handleChange}
                               />
                               <Form.Control.Feedback type="invalid">
-                                {(errors.dogs?.at(index) as any)?.color}
+                                {(errors.children?.at(index) as any)?.color}
                               </Form.Control.Feedback>
                             </Form.Group>
                           </Col>

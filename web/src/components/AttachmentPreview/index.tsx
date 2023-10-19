@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button, Container, Modal } from 'react-bootstrap';
+import { Button, Container, Image, Modal } from 'react-bootstrap';
 import { Document, Page } from 'react-pdf';
 import type { PDFDocumentProxy } from 'pdfjs-dist';
 import 'react-pdf/dist/esm/Page/AnnotationLayer.css';
@@ -7,6 +7,7 @@ import 'react-pdf/dist/esm/Page/TextLayer.css';
 
 import './styles.css';
 import { Download, Plus, XLg } from 'react-bootstrap-icons';
+import Logo from '~/assets/helen-keller-logo.png';
 
 // pdfjs.GlobalWorkerOptions.workerSrc = new URL(
 //   'pdfjs-dist/build/pdf.worker.min.js',
@@ -64,7 +65,7 @@ export default function AttachmentPreview({
       <div className="attachment_preview">
         <header>
           <div>
-            <h1 className="d-inline-block p-3">Usuários</h1>
+            <h1 className="d-inline-block p-3">{filename}</h1>
             <Button className="float-end m-2 border-0" variant="outline-light" onClick={() => setShow(false)}>
               <XLg />
             </Button>
@@ -75,16 +76,19 @@ export default function AttachmentPreview({
         </header>
         <div className="attachment_preview_container">
           <div className="attachment_preview_container_document">
-            {type?.includes('pdf')}
-            <Document
-              file={file}
-              onLoadSuccess={(doc) => onDocumentLoadSuccess(doc)}
-              options={options}
-            >
-              {Array.from(new Array(numPages), (el, index) => (
-                <Page key={`page_${index + 1}`} pageNumber={index + 1} />
-              ))}
-            </Document>
+            {type?.includes('pdf')
+              ? (
+                <Document
+                  file={file}
+                  onLoadSuccess={(doc) => onDocumentLoadSuccess(doc)}
+                  options={options}
+                >
+                  {Array.from(new Array(numPages), (el, index) => (
+                    <Page key={`page_${index + 1}`} pageNumber={index + 1} />
+                  ))}
+                </Document>
+              )
+              : <Image className="d-block mx-auto mb-4" src={file} />}
           </div>
         </div>
       </div>

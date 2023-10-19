@@ -1,23 +1,20 @@
 // TODO: Unificar nomes e tipos com o backend
 
+import { Dog } from '~/models/Dog';
+
 export interface BroodDog {
-  // Os IDs no backend são todos UID
-  id?: number;
+  id?: string;
   name: string;
   sex: string;
   color: string;
 }
 
 export interface Brood {
-  // Os IDs no backend são todos UID
-  id?: number;
+  id?: string;
   description: string;
-  // Mother é um dog
-  motherName: string;
-  // Father é um dog
-  fatherName: string;
-  // Birthdate eu botei no cão, por que existem cães sem ninhada
-  birthDate: string;
-  // Aqui eu chamei de children
-  dogs: BroodDog[];
+  mother?: Dog;
+  motherId?: string;
+  father?: Dog;
+  fatherId?: string;
+  children: BroodDog[];
 }
