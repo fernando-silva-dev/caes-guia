@@ -12,7 +12,7 @@ public abstract class BaseRepository<T> : IBaseRepository<T> where T : BaseEntit
     }
 
     public virtual T Get(Guid id)
-        => Context.Set<T>().SingleOrDefault(x => x.Id == id);
+        => List().SingleOrDefault(x => x.Id == id);
 
     public virtual IQueryable<T> List()
         => Context.Set<T>();

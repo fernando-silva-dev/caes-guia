@@ -7,9 +7,17 @@
  - [ ] Verificar role no router
  - [x] Botar pra rodar em docker
  - [?] Launch settings para web
- - [ ] husky
+ - [?] husky
  - [x] actions
  - [x] popup de confirmação de exclusão
  - [x] padding no fundo das páginas
  - [?] bloquear item default nos selects
- - [ ] salvar sexo dos cães e filtrar por sexo para a hora de cadastrar pai e mãe
+ - [x] salvar sexo dos cães e filtrar por sexo para a hora de cadastrar pai e mãe
+ - [ ] Selects buscáveis
+ - [x] Corrigir problema com ORM que causa problemas de join
+ - [ ] Manual
+ - [ ] Actions
+ - [ ] aumentar cobertura de teste backend
+ - [ ] Começar testes frontend
+ - [ ] Testes ponta a ponta
+ - [ ] Alterar front para responsávies serem [0,n]
