@@ -20,7 +20,7 @@ function BroodForm() {
   const [isFetching, setIsFetching] = useState(false);
   const [editable, setEditable] = useState(!broodId);
   const [brood, setBrood] = useState<Brood>({
-    name: '',
+    description: '',
     motherName: '',
     fatherName: '',
     birthDate: new Date().toISOString().split('T')[0],
@@ -195,16 +195,16 @@ function BroodForm() {
                         name="name"
                         readOnly={!editable}
                         plaintext={!editable}
-                        value={values.name}
-                        isValid={touched.name && !errors.name}
+                        value={values.description}
+                        isValid={touched.description && !errors.description}
                         isInvalid={
-                          touched.name !== undefined
-                          && errors.name !== undefined
+                          touched.description !== undefined
+                          && errors.description !== undefined
                         }
                         onChange={handleChange}
                       />
                       <Form.Control.Feedback type="invalid">
-                        {errors.name}
+                        {errors.description}
                       </Form.Control.Feedback>
                     </Form.Group>
                     <Form.Group className="mb-2" controlId="birthDate">

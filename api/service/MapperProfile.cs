@@ -1,4 +1,5 @@
 using Service.Models.Attachment;
+using Service.Models.Brood;
 using Service.Models.Dog;
 using Service.Models.Event;
 using Service.Models.User;
@@ -22,7 +23,7 @@ public class MapperProfile : Profile
 
         CreateMap<Dog, DogViewModel>();
         CreateMap<DogInsertionModel, Dog>()
-            .ConstructUsing(x => new Dog(x.Name, x.MotherName, x.FatherName, x.BirthDate, x.Color, x.Status));
+            .ConstructUsing(x => new Dog(x.Name, x.BirthDate, x.Color, x.Status, null));
 
         CreateMap<Event, EventViewModel>();
         CreateMap<EventInsertModel, Event>()
@@ -33,5 +34,9 @@ public class MapperProfile : Profile
             .ConstructUsing(x => new Attachment(x.Name, x.Content, x.ContentType));
 
         CreateMap<Attachment, AttachmentModel>();
+
+        CreateMap<Brood, BroodViewModel>();
+        CreateMap<BroodInsertionModel, Brood>()
+            .ConstructUsing(m => new Brood(m.Description, m.MotherId, m.FatherId));
     }
 }

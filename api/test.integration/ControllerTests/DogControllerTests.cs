@@ -12,14 +12,13 @@ public class DogControllerTests : BaseTests
 
     public DogControllerTests()
     {
-        Dog = new("dog name 1", "mother name 1", "father name 1", DateTime.Today, "black", Common.Enum.Status.Filhote);
+        // TODO
+        Dog = new("dog name 1", DateTime.Today, "black", Common.Enum.Status.Filhote, null);
         InsertionModel = new()
         {
             BirthDate = DateTime.MaxValue,
             Status = Common.Enum.Status.Reprovado,
             Color = "brown",
-            FatherName = "father name 2",
-            MotherName = "mother name 2",
             Name = "dog name 2",
         };
 
