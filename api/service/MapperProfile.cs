@@ -23,7 +23,7 @@ public class MapperProfile : Profile
 
         CreateMap<Dog, DogViewModel>();
         CreateMap<DogInsertionModel, Dog>()
-            .ConstructUsing(x => new Dog(x.Name, x.BirthDate, x.Color, x.Status, null));
+            .ConstructUsing(x => new Dog(x.Name, x.BirthDate, x.Color, x.Status, x.Sex, null));
 
         CreateMap<Event, EventViewModel>();
         CreateMap<EventInsertModel, Event>()

@@ -8,5 +8,6 @@ public class DogInsertionModel
     public DateTime BirthDate { get; set; }
     public string Color { get; set; }
     public Status Status { get; set; }
+    public Sex Sex { get; set; }
     public virtual IEnumerable<Guid> ResponsiblesIds { get; set; }
 }

@@ -10,6 +10,7 @@ public class DogViewModel : BaseViewModel
     public DateTime? BirthDate { get; set; }
     public string Color { get; set; }
     public Status Status { get; set; }
+    public Sex Sex { get; set; }
     public virtual IEnumerable<EventViewModel> Events { get; set; }
     public virtual ICollection<UserViewModel> Responsibles { get; set; }
     // TODO brood

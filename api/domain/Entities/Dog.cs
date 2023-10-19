@@ -2,7 +2,7 @@ namespace Domain.Entities;
 
 public class Dog : BaseEntity
 {
-    public Dog(string name, DateTime birthDate, string color, Status status, Guid? broodId)
+    public Dog(string name, DateTime birthDate, string color, Status status, Sex sex, Guid? broodId)
     {
         Id = Guid.NewGuid();
 
@@ -11,6 +11,7 @@ public class Dog : BaseEntity
         Color = color;
         Status = status;
         BroodId = broodId;
+        Sex = sex;
 
         new DogValidator().ValidateAndThrow(this);
     }
@@ -21,6 +22,7 @@ public class Dog : BaseEntity
     public DateTime BirthDate { get; protected set; }
     public string Color { get; protected set; }
     public Status Status { get; protected set; }
+    public virtual Sex Sex { get; protected set; }
     public Guid? BroodId { get; protected set; }
     public virtual ICollection<Event> Events { get; protected set; }
     public virtual ICollection<User> Responsibles { get; set; }
