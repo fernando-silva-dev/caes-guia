@@ -1,19 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { Button, Form, Container, Row, Col } from 'react-bootstrap';
-import { useNavigate } from 'react-router-dom';
-import { Formik } from 'formik';
-import * as Yup from 'yup';
+import { Form, Container, Row, Col, Spinner } from 'react-bootstrap';
 import { toast } from 'react-toastify';
 
 import api from '~/services/api';
 import { User } from '~/models/User';
 import './styles.css';
-
-interface UpdatePasswordForm {
-  oldPassword: string;
-  newPassword: string;
-  passwordConfirmation: string;
-}
 
 export default function MyAccount() {
   const [user, setUser] = useState<User>({
@@ -32,14 +23,16 @@ export default function MyAccount() {
     complement: '',
   });
   const [isFetching, setIsFetching] = useState(false);
-  const navigate = useNavigate();
+
   const fetchUser = async () => {
     try {
+      setIsFetching(true);
       const response = await api.get('user/self');
       setUser(response.data);
-      navigate('/my-account');
     } catch (error) {
       toast.error(error.response.data.message);
+    } finally {
+      setIsFetching(false);
     }
   };
 
@@ -47,25 +40,16 @@ export default function MyAccount() {
     fetchUser();
   }, []);
 
-  const schema = Yup.object().shape({
-    oldPassword: Yup.string().required('Campo obrigatório'),
-    newPassword: Yup.string()
-      .min(8, 'Senha deve ter ao menos 8 caracteres')
-      .required('Campo obrigatório'),
-    passwordConfirmation: Yup.string()
-      .min(8, 'Senha deve ter ao menos 8 caracteres')
-      .required('Campo obrigatório'),
-  });
-
   return (
     <div className="my-account-page">
       <Container>
-        <h1 className="d-inline-block mb-2">Minha Conta</h1>
-        <Row>
-          <Col md={6} className="divider">
-            <Form>
+        {isFetching ? <Spinner animation="border" className="me-2" /> : null}
+        <h1 className="d-inline-block mb-4">Minha Conta</h1>
+        <Form>
+          <Row>
+            <Col md={6}>
               <fieldset>
-                <h4 className="d-inline-block">Dados pessoais</h4>
+                <h4 className="d-inline-block mb-3">Dados pessoais</h4>
                 <Form.Group className="mb-2" controlId="name">
                   <Form.Label className="fw-bold">Nome</Form.Label>
                   <Form.Control
@@ -106,8 +90,12 @@ export default function MyAccount() {
                     plaintext
                   />
                 </Form.Group>
+              </fieldset>
+            </Col>
 
-                <h4 className="d-inline-block">Endereço</h4>
+            <Col md={6}>
+              <fieldset>
+                <h4 className="d-inline-block mb-3">Endereço</h4>
                 <Row className="mb-2">
                   <Form.Group as={Col} controlId="cep">
                     <Form.Label className="fw-bold">CEP</Form.Label>
@@ -214,9 +202,9 @@ export default function MyAccount() {
                   />
                 </Form.Group>
               </fieldset>
-            </Form>
-          </Col>
-        </Row>
+            </Col>
+          </Row>
+        </Form>
       </Container>
     </div>
   );
