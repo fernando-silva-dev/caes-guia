@@ -6,7 +6,7 @@ import * as Yup from 'yup';
 import { toast } from 'react-toastify';
 
 import { Plus, Trash } from 'react-bootstrap-icons';
-import { Brood } from '~/models/Brood';
+import { Brood, BroodDog } from '~/models/Brood';
 import EventList from '~/pages/EventList';
 import api from '~/services/api';
 
@@ -23,6 +23,7 @@ function BroodForm() {
   const [brood, setBrood] = useState<Brood>({
     description: '',
     motherId: '',
+    birthDate: new Date().toISOString().split('T')[0],
     fatherId: '',
     children: [{
       name: '',
@@ -54,6 +55,13 @@ function BroodForm() {
       const data = {
         ...formData,
       };
+
+      data.children = data.children.map((dog: BroodDog) => ({
+        ...dog,
+        birthDate: new Date(data.birthDate ?? '').toISOString(),
+        status: 'Filhote',
+      }));
+
       await api.put(`brood/${broodId}`, data);
       toast.success('Ninhada atualizada');
       setEditable(false);
@@ -71,9 +79,15 @@ function BroodForm() {
       const data = {
         ...formData,
       };
+
+      data.children = data.children.map((dog: BroodDog) => ({
+        ...dog,
+        birthDate: new Date(data.birthDate ?? '').toISOString(),
+        status: 'Filhote',
+      }));
       await api.post('brood', data);
       toast.success('Ninhada cadastrada');
-      navigate('/broods');
+      navigate('/brood');
     } catch (error) {
       toast.error('Erro ao cadastras ninhada');
       console.error(error);
@@ -99,7 +113,7 @@ function BroodForm() {
   const fetchMaleDogs = async () => {
     try {
       setIsFetching(true);
-      const response = await api.get('dogs/male');
+      const response = await api.get('dog/males');
       setMaleDogs(response.data.data);
     } catch (error) {
       toast.error('Erro ao buscar o cães machos');
@@ -112,7 +126,7 @@ function BroodForm() {
   const fetchFemaleDogs = async () => {
     try {
       setIsFetching(true);
-      const response = await api.get('dogs/female');
+      const response = await api.get('dog/females');
       setFemaleDogs(response.data.data);
     } catch (error) {
       toast.error('Erro ao buscar o cães fêmeas');
@@ -143,7 +157,7 @@ function BroodForm() {
         .min(2, 'Muito curto')
         .max(50, 'Muito comprido')
         .required('Campo obrigatório'),
-      sex: Yup.string().oneOf(['M', 'F'], 'Selecione o sexo').required('Campo obrigatório'),
+      sex: Yup.string().oneOf(['Male', 'Female'], 'Selecione o sexo').required('Campo obrigatório'),
       color: Yup.string().max(50, 'Máximo de 50 caracteres').required('Campo obrigatório'),
     })),
   });
@@ -234,7 +248,29 @@ function BroodForm() {
                         {errors.description}
                       </Form.Control.Feedback>
                     </Form.Group>
+                    <Form.Group className="mb-2" controlId="birthDate">
+                      <Form.Label className="fw-bold">
+                        Data de Nascimento
+                      </Form.Label>
+                      <Form.Control
+                        name="birthDate"
+                        type="date"
+                        readOnly={!editable}
+                        plaintext={!editable}
+                        value={values.birthDate}
+                        onChange={handleChange}
+                        isValid={touched.birthDate && !errors.birthDate}
+                        isInvalid={
+                          touched.birthDate !== undefined
+                          && errors.birthDate !== undefined
+                        }
+                      />
+                      <Form.Control.Feedback type="invalid">
+                        {errors.birthDate}
+                      </Form.Control.Feedback>
+                    </Form.Group>
                   </Col>
+
                   <Col>
                     <Form.Group className="mb-2" controlId="motherId">
                       <Form.Label className="fw-bold">Mãe da ninhada</Form.Label>
@@ -251,8 +287,8 @@ function BroodForm() {
                         }
                       >
                         <option value="">Selecione</option>
-                        {femaleDogs.map(({ id: femaleId, name }) => (
-                          <option key={femaleId} value={femaleId}>
+                        {femaleDogs.map(({ id: motherId, name }) => (
+                          <option key={motherId} value={motherId}>
                             {name}
                           </option>
                         ))}
@@ -265,7 +301,7 @@ function BroodForm() {
                     <Form.Group className="mb-2" controlId="fatherId">
                       <Form.Label className="fw-bold">Pai da ninhada</Form.Label>
                       <Form.Select
-                        name="motherId"
+                        name="fatherId"
                         disabled={!editable}
                         value={values.fatherId}
                         defaultValue={values.fatherId}
@@ -342,8 +378,8 @@ function BroodForm() {
                               }
                               >
                                 <option value="">Selecione</option>
-                                <option value="M">Macho</option>
-                                <option value="F">Fêmea</option>
+                                <option value="Male">Macho</option>
+                                <option value="Female">Fêmea</option>
                               </Form.Select>
                               <Form.Control.Feedback type="invalid">
                                 {(errors.children?.at(index) as any)?.sex}

@@ -1,5 +1,3 @@
-// TODO: Unificar nomes e tipos com o backend
-
 import { Dog } from '~/models/Dog';
 
 export interface BroodDog {
@@ -7,11 +5,14 @@ export interface BroodDog {
   name: string;
   sex: string;
   color: string;
+  birthDate?: string;
+  status?: string;
 }
 
 export interface Brood {
   id?: string;
   description: string;
+  birthDate?: string;
   mother?: Dog;
   motherId?: string;
   father?: Dog;

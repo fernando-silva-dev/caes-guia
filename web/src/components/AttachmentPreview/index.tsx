@@ -41,7 +41,7 @@ export default function AttachmentPreview({
   filename,
   type,
 }: AttachmentPreviewProps) {
-  const file = `http://localhost:5164/attachment/${attachmentUUID}`;
+  const file = `http://localhost:5000/attachment/${attachmentUUID}`;
   const [numPages, setNumPages] = useState<number>();
   const [show, setShow] = useState(true);
 
