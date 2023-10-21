@@ -84,9 +84,9 @@ namespace repository.Migrations
                     b.Property<Guid?>("BroodId")
                         .HasColumnType("uuid");
 
-                    b.Property<string>("Color")
+                    b.Property<int>("Coat")
                         .HasMaxLength(25)
-                        .HasColumnType("character varying(25)");
+                        .HasColumnType("integer");
 
                     b.Property<string>("Name")
                         .HasMaxLength(50)
