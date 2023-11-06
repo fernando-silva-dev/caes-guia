@@ -35,6 +35,17 @@ export default function CustomTable({
   const rowIndexKey = (key: string | number) => `tr-${key}`;
   const cellIndexKey = (id: string | number, key: string | number) => `tr-${id}-${key}`;
 
+  const getRowValue = (row: object, key: string): string => {
+    const path = key.split('.');
+
+    let res: Object | string = row;
+    for (let i = 0; i < path.length; i++) {
+      // @ts-ignore
+      res = res[path[i]] as any;
+    }
+    return res as string;
+  };
+
   const parseValue = (
     value: string,
     type: string,
@@ -49,7 +60,7 @@ export default function CustomTable({
         return value;
     }
   };
-
+  console.log(data);
   return (
     <>
       <Table hover className="custom-table">
@@ -69,7 +80,7 @@ export default function CustomTable({
               >
                 {columns.map(({ key, type }) => (
                   <td key={cellIndexKey(row.id, key)}>
-                    {parseValue(row[key], type)}
+                    {parseValue(getRowValue(row, key), type)}
                   </td>
                 ))}
               </tr>

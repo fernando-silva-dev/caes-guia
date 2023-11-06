@@ -6,6 +6,7 @@ export interface Dog {
   motherName: string;
   fatherName: string;
   birthDate: string;
+  sex: string;
   color: string;
   status: string;
   responsibles?: User[];
