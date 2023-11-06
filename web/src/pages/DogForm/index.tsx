@@ -27,6 +27,7 @@ function DogForm() {
     motherName: '',
     fatherName: '',
     birthDate: new Date().toISOString().split('T')[0],
+    sex: '',
     color: '',
     status: '',
     responsibles: [],
@@ -132,6 +133,7 @@ function DogForm() {
       .min(2, 'Muito curto')
       .max(50, 'Muito comprido')
       .required('Campo obrigatório'),
+    sex: Yup.string().required('Campo obrigatório'),
     motherName: Yup.string().max(50, 'Máximo de 50 caracteres'),
     fatherName: Yup.string().max(50, 'Máximo de 50 caracteres'),
     birthDate: Yup.date().required('Campo obrigatório'),
@@ -235,6 +237,30 @@ function DogForm() {
                         {errors.name}
                       </Form.Control.Feedback>
                     </Form.Group>
+                    <Form.Group className="mb-2" controlId="sex">
+                      <Form.Label className="fw-bold">Sexo</Form.Label>
+                      <Form.Select
+                        name="sex"
+                        disabled={!editable}
+                        value={values.sex}
+                        onChange={handleChange}
+                        isValid={
+                            touched.sex
+                            && !errors.sex
+                          }
+                        isInvalid={
+                            touched.sex !== undefined
+                            && errors.sex !== undefined
+                          }
+                      >
+                        <option value="">Selecione</option>
+                        <option value="Male">Macho</option>
+                        <option value="Female">Fêmea</option>
+                      </Form.Select>
+                      <Form.Control.Feedback type="invalid">
+                        {errors.sex}
+                      </Form.Control.Feedback>
+                    </Form.Group>
                     <Form.Group className="mb-2" controlId="motherName">
                       <Form.Label className="fw-bold">Nome da mãe</Form.Label>
                       <Form.Control
@@ -316,6 +342,7 @@ function DogForm() {
                         {errors.status}
                       </Form.Control.Feedback>
                     </Form.Group>
+
                     <Form.Group className="mb-2" controlId="color">
                       <Form.Label className="fw-bold">Cor</Form.Label>
                       <Form.Control

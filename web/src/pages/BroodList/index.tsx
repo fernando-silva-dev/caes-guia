@@ -12,22 +12,17 @@ import './styles.css';
 
 const COLUMNS: CustomTableColumn[] = [
   {
-    key: 'name',
-    title: 'Nome',
+    key: 'description',
+    title: 'Descrição',
     type: 'string',
   },
   {
-    key: 'birthDate',
-    title: 'Data de Nascimento',
-    type: 'string',
-  },
-  {
-    key: 'motherName',
+    key: 'mother.name',
     title: 'Mãe',
     type: 'string',
   },
   {
-    key: 'fatherName',
+    key: 'father.name',
     title: 'Pai',
     type: 'string',
   },
