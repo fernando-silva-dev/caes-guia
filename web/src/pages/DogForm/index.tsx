@@ -28,7 +28,8 @@ function DogForm() {
     fatherName: '',
     birthDate: new Date().toISOString().split('T')[0],
     sex: '',
-    color: '',
+    coat: 0,
+    coatInput: '',
     status: '',
     responsibles: [],
     responsiblesIds: [],
@@ -43,6 +44,7 @@ function DogForm() {
       const response = await api.get(`dog/${dogId}`);
       const doggo: Dog = response.data;
       [doggo.birthDate] = doggo.birthDate.split('T');
+      doggo.coatInput = `${doggo.coat}`;
       if (doggo.responsibles && doggo.responsibles.length) {
         // TODO caso deva haver mais que um tutor temos que habilitar multi seleção
         doggo.responsibleId = doggo.responsibles[0].id;
@@ -76,6 +78,7 @@ function DogForm() {
         ...formData,
         responsiblesIds: [formData.responsibleId],
         birthDate: new Date(formData.birthDate).toISOString(),
+        coat: parseInt(formData.coatInput, 10),
       };
       await api.put(`dog/${dogId}`, data);
       toast.success('Cão atualizado');
@@ -95,6 +98,7 @@ function DogForm() {
         ...formData,
         responsiblesIds: [formData.responsibleId],
         birthDate: new Date(formData.birthDate).toISOString(),
+        coat: parseInt(formData.coatInput, 10),
       };
       await api.post('dog', data);
       toast.success('Cão cadastrado');
@@ -137,9 +141,7 @@ function DogForm() {
     motherName: Yup.string().max(50, 'Máximo de 50 caracteres'),
     fatherName: Yup.string().max(50, 'Máximo de 50 caracteres'),
     birthDate: Yup.date().required('Campo obrigatório'),
-    color: Yup.string()
-      .max(25, 'Máximo de 25 caracteres')
-      .required('Campo obrigatório'),
+    coatInput: Yup.string().required('Campo obrigatório'),
     status: Yup.string().required('Campo obrigatório'),
     responsibleId: Yup.string()
       .min(1, 'Campo obrigatório')
@@ -334,31 +336,40 @@ function DogForm() {
                         }
                       >
                         <option value="">Selecione</option>
+                        <option value="Filhote">Filhote</option>
                         <option value="Socializando">Socializando</option>
                         <option value="Treinando">Treinando</option>
                         <option value="Trabalhando">Trabalhando</option>
+                        <option value="Aposentado">Aposentado</option>
+                        <option value="Falecido">Falecido</option>
+                        <option value="Reprovado">Reprovado</option>
                       </Form.Select>
                       <Form.Control.Feedback type="invalid">
                         {errors.status}
                       </Form.Control.Feedback>
                     </Form.Group>
 
-                    <Form.Group className="mb-2" controlId="color">
-                      <Form.Label className="fw-bold">Cor</Form.Label>
-                      <Form.Control
-                        name="color"
-                        readOnly={!editable}
-                        plaintext={!editable}
-                        value={values.color}
+                    <Form.Group className="mb-2" controlId="coatInput">
+                      <Form.Label className="fw-bold">Pelagem</Form.Label>
+                      <Form.Select
+                        name="coatInput"
+                        disabled={!editable}
+                        value={values.coatInput}
                         onChange={handleChange}
-                        isValid={touched.color && !errors.color}
+                        isValid={touched.coatInput && !errors.coatInput}
                         isInvalid={
-                          touched.color !== undefined
-                          && errors.color !== undefined
+                          touched.coatInput !== undefined
+                          && errors.coatInput !== undefined
                         }
-                      />
+                      >
+                        <option value="">Selecione</option>
+                        <option value="1">Preta</option>
+                        <option value="2">Amarela</option>
+                        <option value="3">Marrom</option>
+                        <option value="4">Branca</option>
+                      </Form.Select>
                       <Form.Control.Feedback type="invalid">
-                        {errors.color}
+                        {errors.coat}
                       </Form.Control.Feedback>
                     </Form.Group>
                     <Form.Group className="mb-5" controlId="responsibleId">

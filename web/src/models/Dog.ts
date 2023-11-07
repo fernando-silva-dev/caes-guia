@@ -7,7 +7,8 @@ export interface Dog {
   fatherName: string;
   birthDate: string;
   sex: string;
-  color: string;
+  coat: number;
+  coatInput: string;
   status: string;
   responsibles?: User[];
   responsiblesIds: string[];
