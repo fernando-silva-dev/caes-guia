@@ -8,7 +8,7 @@ public class DogViewModel : BaseViewModel
 {
     public string Name { get; set; }
     public DateTime? BirthDate { get; set; }
-    public string Color { get; set; }
+    public Coat Coat { get; set; }
     public Status Status { get; set; }
     public Sex Sex { get; set; }
     public virtual IEnumerable<EventViewModel> Events { get; set; }

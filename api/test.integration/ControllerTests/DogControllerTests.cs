@@ -14,12 +14,12 @@ public class DogControllerTests : BaseTests
     public DogControllerTests()
     {
         // TODO
-        Dog = new("dog name 1", DateTime.Today, "black", Status.Filhote, Sex.Female, null);
+        Dog = new("dog name 1", DateTime.Today, Coat.Black, Status.Filhote, Sex.Female, null);
         InsertionModel = new()
         {
             BirthDate = DateTime.MaxValue,
             Status = Status.Reprovado,
-            Color = "brown",
+            Coat = Coat.Brown,
             Name = "dog name 2",
             Sex = Sex.Female
         };
