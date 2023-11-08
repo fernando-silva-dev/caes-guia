@@ -60,7 +60,6 @@ export default function CustomTable({
         return value;
     }
   };
-  console.log(data);
   return (
     <>
       <Table hover className="custom-table">

@@ -17,8 +17,8 @@ const COLUMNS: CustomTableColumn[] = [
     type: 'string',
   },
   {
-    key: 'color',
-    title: 'Cor',
+    key: 'coat',
+    title: 'Pelagem',
     type: 'string',
   },
   {

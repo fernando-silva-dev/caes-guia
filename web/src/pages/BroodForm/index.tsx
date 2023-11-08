@@ -28,7 +28,8 @@ function BroodForm() {
     children: [{
       name: '',
       sex: '',
-      color: '',
+      coat: 0,
+      coatInput: '',
     }],
   });
   const [maleDogs, setMaleDogs] = useState<Dog[]>([]);
@@ -84,6 +85,7 @@ function BroodForm() {
         ...dog,
         birthDate: new Date(data.birthDate ?? '').toISOString(),
         status: 'Filhote',
+        coat: parseInt(dog.coatInput, 10),
       }));
       await api.post('brood', data);
       toast.success('Ninhada cadastrada');
@@ -158,7 +160,7 @@ function BroodForm() {
         .max(50, 'Muito comprido')
         .required('Campo obrigatório'),
       sex: Yup.string().oneOf(['Male', 'Female'], 'Selecione o sexo').required('Campo obrigatório'),
-      color: Yup.string().max(50, 'Máximo de 50 caracteres').required('Campo obrigatório'),
+      coatInput: Yup.string().required('Campo obrigatório'),
     })),
   });
 
@@ -388,25 +390,31 @@ function BroodForm() {
                           </Col>
 
                           <Col>
-                            <Form.Group className="mb-2" controlId={`children.${index}.color`}>
-                              <Form.Label className="fw-bold">Cor</Form.Label>
-                              <Form.Control
-                                name={`children.${index}.color`}
-                                readOnly={!editable}
-                                plaintext={!editable}
-                                value={values.children?.at(index)?.color}
+                            <Form.Group className="mb-2" controlId={`children.${index}.coatInput`}>
+                              <Form.Label className="fw-bold">Pelagem</Form.Label>
+                              <Form.Select
+                                name={`children.${index}.coatInput`}
+                                disabled={!editable}
+                                value={values.children?.at(index)?.coatInput}
                                 isValid={
-                                touched.children?.at(index)?.color
-                                && !(errors.children?.at(index) as any)?.color
+                                touched.children?.at(index)?.coatInput
+                                && !(errors.children?.at(index) as any)?.coatInput
                               }
                                 isInvalid={
-                                touched.children?.at(index)?.color !== undefined
-                                && (errors.children?.at(index) as any)?.color !== undefined
+                                touched.children?.at(index)?.coatInput !== undefined
+                                && (errors.children?.at(index) as any)?.coatInput !== undefined
                               }
                                 onChange={handleChange}
-                              />
+                              >
+
+                                <option value="">Selecione</option>
+                                <option value="1">Preta</option>
+                                <option value="2">Amarela</option>
+                                <option value="3">Marrom</option>
+                                <option value="4">Branca</option>
+                              </Form.Select>
                               <Form.Control.Feedback type="invalid">
-                                {(errors.children?.at(index) as any)?.color}
+                                {(errors.children?.at(index) as any)?.coatInput}
                               </Form.Control.Feedback>
                             </Form.Group>
                           </Col>
