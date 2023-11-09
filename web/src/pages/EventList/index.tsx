@@ -19,9 +19,9 @@ const COLUMNS: CustomTableColumn[] = [
     type: 'string',
   },
   {
-    key: 'base64File',
-    title: 'Anexo',
-    type: 'download',
+    key: 'attachments',
+    title: 'Anexos',
+    type: 'file_preview',
   },
 ];
 

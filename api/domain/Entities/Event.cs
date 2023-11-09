@@ -17,5 +17,6 @@ public class Event : BaseEntity
     public string Description { get; protected set; }
     public DateTime Date { get; protected set; }
     public Guid DogId { get; protected set; }
+    public ICollection<Guid> AttachmentIds { get; set; }
     public virtual IList<Attachment> Attachments { get; set; }
 }

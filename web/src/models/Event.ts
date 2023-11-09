@@ -1,5 +1,10 @@
 import { Dog } from './Dog';
 
+export interface Attachment {
+  id?: string;
+  name: string;
+}
+
 export interface Event {
   id?: string;
   description: string;
@@ -8,4 +13,5 @@ export interface Event {
   dog?: Dog;
   base64File?: string;
   attachmentFiles?: File[];
+  attachments: Attachment[];
 }
