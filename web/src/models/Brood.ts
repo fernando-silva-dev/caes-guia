@@ -4,8 +4,7 @@ export interface BroodDog {
   id?: string;
   name: string;
   sex: string;
-  coat: number;
-  coatInput: string;
+  coat: string;
   birthDate?: string;
   status?: string;
 }

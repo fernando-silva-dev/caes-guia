@@ -28,8 +28,7 @@ function DogForm() {
     fatherName: '',
     birthDate: new Date().toISOString().split('T')[0],
     sex: '',
-    coat: 0,
-    coatInput: '',
+    coat: '',
     status: '',
     responsibles: [],
     responsiblesIds: [],
@@ -44,7 +43,6 @@ function DogForm() {
       const response = await api.get(`dog/${dogId}`);
       const doggo: Dog = response.data;
       [doggo.birthDate] = doggo.birthDate.split('T');
-      doggo.coatInput = `${doggo.coat}`;
       if (doggo.responsibles && doggo.responsibles.length) {
         // TODO caso deva haver mais que um tutor temos que habilitar multi seleção
         doggo.responsibleId = doggo.responsibles[0].id;
@@ -78,7 +76,6 @@ function DogForm() {
         ...formData,
         responsiblesIds: [formData.responsibleId],
         birthDate: new Date(formData.birthDate).toISOString(),
-        coat: parseInt(formData.coatInput, 10),
       };
       await api.put(`dog/${dogId}`, data);
       toast.success('Cão atualizado');
@@ -98,7 +95,6 @@ function DogForm() {
         ...formData,
         responsiblesIds: [formData.responsibleId],
         birthDate: new Date(formData.birthDate).toISOString(),
-        coat: parseInt(formData.coatInput, 10),
       };
       await api.post('dog', data);
       toast.success('Cão cadastrado');
@@ -141,7 +137,7 @@ function DogForm() {
     motherName: Yup.string().max(50, 'Máximo de 50 caracteres'),
     fatherName: Yup.string().max(50, 'Máximo de 50 caracteres'),
     birthDate: Yup.date().required('Campo obrigatório'),
-    coatInput: Yup.string().required('Campo obrigatório'),
+    coat: Yup.string().required('Campo obrigatório'),
     status: Yup.string().required('Campo obrigatório'),
     responsibleId: Yup.string()
       .min(1, 'Campo obrigatório')
@@ -349,24 +345,24 @@ function DogForm() {
                       </Form.Control.Feedback>
                     </Form.Group>
 
-                    <Form.Group className="mb-2" controlId="coatInput">
+                    <Form.Group className="mb-2" controlId="coat">
                       <Form.Label className="fw-bold">Pelagem</Form.Label>
                       <Form.Select
-                        name="coatInput"
+                        name="coat"
                         disabled={!editable}
-                        value={values.coatInput}
+                        value={values.coat}
                         onChange={handleChange}
-                        isValid={touched.coatInput && !errors.coatInput}
+                        isValid={touched.coat && !errors.coat}
                         isInvalid={
-                          touched.coatInput !== undefined
-                          && errors.coatInput !== undefined
+                          touched.coat !== undefined
+                          && errors.coat !== undefined
                         }
                       >
                         <option value="">Selecione</option>
-                        <option value="1">Preta</option>
-                        <option value="2">Amarela</option>
-                        <option value="3">Marrom</option>
-                        <option value="4">Branca</option>
+                        <option value="Preta">Preta</option>
+                        <option value="Amarela">Amarela</option>
+                        <option value="Marrom">Marrom</option>
+                        <option value="Branca">Branca</option>
                       </Form.Select>
                       <Form.Control.Feedback type="invalid">
                         {errors.coat}
