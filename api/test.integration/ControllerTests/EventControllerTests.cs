@@ -15,7 +15,7 @@ public class EventControllerTests : BaseTests
     {
         var context = Context;
         // TODO
-        Dog dog = new("dog name 1", DateTime.Today, Coat.Black, Status.Filhote, Sex.Male, null);
+        Dog dog = new("dog name 1", DateTime.Today, Coat.Preta, Status.Filhote, Sex.Male, null);
         var dogId = context.Add(dog).Entity.Id;
 
         Event = new("description 1", DateTime.MaxValue, dogId);
