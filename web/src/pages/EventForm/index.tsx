@@ -6,28 +6,12 @@ import * as Yup from 'yup';
 import { toast } from 'react-toastify';
 import Humanize from 'humanize-plus';
 
-import { Trash, Upload } from 'react-bootstrap-icons';
+import { Eye, Trash, Upload } from 'react-bootstrap-icons';
 import Table from 'react-bootstrap/Table';
 import api from '~/services/api';
-import { Event } from '~/models/Event';
-import DownloadButton from '~/components/DownloadButton';
+import { Event, Attachment } from '~/models/Event';
 import DeleteDialog from '~/components/DeleteDialog';
 import AttachmentPreview from '~/components/AttachmentPreview';
-
-// function readFileAsync(file: File): Promise<string> {
-//   return new Promise((resolve, reject) => {
-//     const reader = new FileReader();
-//     reader.onloadend = () => {
-//       if (typeof reader.result === 'string') {
-//         resolve(reader.result);
-//       } else reject(Error('wrong type'));
-//     };
-//     reader.onerror = (err) => {
-//       reject(err);
-//     };
-//     reader.readAsDataURL(file);
-//   });
-// }
 
 function EventForm() {
   // get page path params
@@ -37,9 +21,11 @@ function EventForm() {
   // create state vars
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [isFetching, setIsFetching] = useState(false);
+  const [filePreview, setFilePreview] = useState<Attachment | undefined>(undefined);
   const [editable, setEditable] = useState(!eventId);
   const [files, setFiles] = useState<File[]>([]);
   const [event, setEvent] = useState<Event>({
+    attachments: [],
     description: '',
     date: new Date().toISOString().split('T')[0],
     dogId,
@@ -74,7 +60,12 @@ function EventForm() {
   const updateEvent = async (formData: Event) => {
     try {
       setIsFetching(true);
-      const attachmentIds = await Promise.all(files.map((file) => uploadFile(file)));
+      const uploadedAttachmentIds = await Promise.all(files.map((file) => uploadFile(file)));
+
+      const currentAttachmentIds = formData.attachments.map(({ id }) => id)
+        .filter((id) => id !== undefined);
+
+      const attachmentIds = [...currentAttachmentIds, ...uploadedAttachmentIds];
 
       const data = {
         ...formData,
@@ -83,9 +74,13 @@ function EventForm() {
         attachmentIds,
       };
 
-      if (formData.attachmentFiles) {
+      if (data.attachmentFiles) {
         delete data.attachmentFiles;
       }
+      if (data.attachments) {
+        data.attachments = [];
+      }
+
       await api.put(`event/${eventId}`, data);
       toast.success('Evento atualizado');
       setEditable(false);
@@ -110,7 +105,6 @@ function EventForm() {
       };
 
       if (formData.attachmentFiles) {
-        // data.base64File = await readFileAsync(formData.attachmentFiles[0]);
         delete data.attachmentFiles;
       }
       await api.post('event', data);
@@ -220,106 +214,128 @@ function EventForm() {
                         {errors.date}
                       </Form.Control.Feedback>
                     </Form.Group>
-                    {editable ? (
-                      <FieldArray name="attachmentFiles">
-                        {({ push }) => (
-                          <Form.Group className="mb-2" controlId="attachmentFiles">
-                            {/* <Form.Label className="fw-bold">Anexos</Form.Label> */}
-                            <Form.Control
-                              name="attachmentFiles"
-                              type="file"
-                              readOnly={!editable}
-                              plaintext={!editable}
-                              className="d-none"
-                              ref={fileUploadRef}
-                              onChange={(
-                                e: React.ChangeEvent<HTMLInputElement>,
-                              ) => {
-                                const value = e.target?.files?.length
-                                  ? e.target.files[0]
-                                  : undefined;
-                                setFiles((prevState) => {
-                                  if (value !== undefined) {
-                                    return [...prevState, value];
-                                  }
-                                  return prevState;
-                                });
-                                push(value);
-                              }}
-                              isValid={
-                                  touched.attachmentFiles && !errors.attachmentFiles
-                                }
-                              isInvalid={
-                                  touched.attachmentFiles !== undefined
-                                  && errors.attachmentFiles !== undefined
-                                }
-                            />
-                            <Form.Control.Feedback type="invalid">
-                              {errors.attachmentFiles}
-                            </Form.Control.Feedback>
-
-                            <Table hover>
-                              <thead>
-                                <tr>
-                                  <th>Anexo</th>
-                                  <th />
-                                  <th />
-                                </tr>
-                              </thead>
-                              <tbody>
-
-                                { files?.map((file, index) => (
-                                  <tr key={`attachmentFiles.${file.name}`}>
-                                    <td>{file.name}</td>
-                                    <td>{Humanize.fileSize(file.size)}</td>
-                                    <td>
-                                      <Button
-                                        variant="danger"
-                                        type="button"
-                                        className="float-end"
-                                        onClick={() => setFiles(
-                                          (prevState) => prevState.filter(
-                                            (_, i) => i !== index,
-                                          ),
-                                        )}
-                                      >
-                                        <Trash />
-                                      </Button>
-                                    </td>
-                                  </tr>
-                                ))}
-                              </tbody>
-                            </Table>
-                            <Button
-                              variant="light"
-                              type="button"
-                              className=""
-                              onClick={() => {
-                                fileUploadRef?.current?.click();
-                              }}
-                            >
-                              <Upload className="me-2 mb-1" />
-                              Adicionar Arquivos
-                            </Button>
-                          </Form.Group>
-                        )}
-                      </FieldArray>
-                    ) : null}
-                    {!editable && eventId ? (
-                      <Form.Group className="mb-2">
-                        <Form.Label className="fw-bold">Anexo</Form.Label>
-                        {event.base64File ? (
-                          <DownloadButton data={event.base64File} />
-                        ) : (
+                    <FieldArray name="attachmentFiles">
+                      {({ push }) => (
+                        <Form.Group className="mb-2" controlId="attachmentFiles">
                           <Form.Control
-                            type="text"
-                            readOnly
-                            plaintext
-                            placeholder="-"
+                            name="attachmentFiles"
+                            type="file"
+                            readOnly={!editable}
+                            plaintext={!editable}
+                            className="d-none"
+                            ref={fileUploadRef}
+                            onChange={(
+                              e: React.ChangeEvent<HTMLInputElement>,
+                            ) => {
+                              const value = e.target?.files?.length
+                                ? e.target.files[0]
+                                : undefined;
+                              setFiles((prevState) => {
+                                if (value !== undefined) {
+                                  return [...prevState, value];
+                                }
+                                return prevState;
+                              });
+                              push(value);
+                            }}
+                            isValid={
+                              touched.attachmentFiles && !errors.attachmentFiles
+                            }
+                            isInvalid={
+                              touched.attachmentFiles !== undefined
+                              && errors.attachmentFiles !== undefined
+                            }
                           />
-                        )}
-                      </Form.Group>
-                    ) : null}
+                          <Form.Control.Feedback type="invalid">
+                            {errors.attachmentFiles}
+                          </Form.Control.Feedback>
+
+                          <Table hover>
+                            <thead>
+                              <tr>
+                                <th colSpan={3}>Anexos</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+
+                              {(event.attachments?.map((file, index) => (
+                                <tr key={`attachmentFiles.${file.name}`}>
+                                  <td>{file.name}</td>
+                                  <td />
+                                  <td>
+                                    {
+                                      editable
+                                        ? (
+                                          <Button
+                                            variant="danger"
+                                            type="button"
+                                            className="float-end"
+                                            onClick={() => setEvent(
+                                              (e) => {
+                                                const newEvent = { ...e };
+                                                newEvent.attachments = newEvent.attachments.filter(
+                                                  (_, i) => i !== index,
+                                                );
+                                                return newEvent;
+                                              },
+                                            )}
+                                          >
+                                            <Trash />
+                                          </Button>
+                                        )
+                                        : (
+                                          <Button
+                                            variant="light"
+                                            type="button"
+                                            className="float-end"
+                                            onClick={() => setFilePreview(file)}
+                                          >
+                                            <Eye />
+                                          </Button>
+                                        )
+                                    }
+                                  </td>
+                                </tr>
+                              )))}
+                              { editable ? files?.map((file, index) => (
+                                <tr key={`attachmentFiles.${file.name}`}>
+                                  <td>{file.name}</td>
+                                  <td>{Humanize.fileSize(file.size)}</td>
+                                  <td>
+                                    <Button
+                                      variant="danger"
+                                      type="button"
+                                      className="float-end"
+                                      onClick={() => setFiles(
+                                        (prevState) => prevState.filter(
+                                          (_, i) => i !== index,
+                                        ),
+                                      )}
+                                    >
+                                      <Trash />
+                                    </Button>
+                                  </td>
+                                </tr>
+                              )) : null}
+                            </tbody>
+                          </Table>
+                          {editable
+                            ? (
+                              <Button
+                                variant="light"
+                                type="button"
+                                className=""
+                                onClick={() => {
+                                  fileUploadRef?.current?.click();
+                                }}
+                              >
+                                <Upload className="me-2 mb-1" />
+                                Adicionar Arquivos
+                              </Button>
+                            ) : null}
+                        </Form.Group>
+                      )}
+                    </FieldArray>
                   </Col>
                 </Row>
                 <Row>
@@ -383,11 +399,14 @@ function EventForm() {
                         </Button>
                       </>
                     ) : null}
-                    {/* <AttachmentPreview */}
-                    {/*  attachmentUUID="2e46b33e-7fe6-45ca-8162-5f75fc946ee5" */}
-                    {/*  filename="doc.pdf" */}
-                    {/*  type="pdf" */}
-                    {/* /> */}
+                    {filePreview && filePreview.id
+                      ? (
+                        <AttachmentPreview
+                          attachmentUUID={filePreview.id}
+                          filename={filePreview.name}
+                          onClose={() => setFilePreview(undefined)}
+                        />
+                      ) : null}
                   </Col>
                 </Row>
               </fieldset>
