@@ -1,14 +1,13 @@
 import { User } from './User';
 
 export interface Dog {
-  id?: number;
+  id?: string;
   name: string;
   motherName: string;
   fatherName: string;
   birthDate: string;
   sex: string;
-  coat: number;
-  coatInput: string;
+  coat: string;
   status: string;
   responsibles?: User[];
   responsiblesIds: string[];

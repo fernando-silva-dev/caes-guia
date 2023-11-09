@@ -28,8 +28,7 @@ function BroodForm() {
     children: [{
       name: '',
       sex: '',
-      coat: 0,
-      coatInput: '',
+      coat: '',
     }],
   });
   const [maleDogs, setMaleDogs] = useState<Dog[]>([]);
@@ -41,6 +40,10 @@ function BroodForm() {
       setIsFetching(true);
       const response = await api.get(`brood/${broodId}`);
       const broodSerialized: Brood = response.data;
+
+      broodSerialized.motherId = broodSerialized?.mother?.id;
+      broodSerialized.fatherId = broodSerialized?.father?.id;
+
       setBrood(broodSerialized);
     } catch (error) {
       toast.error('Erro ao buscar ninhada');
@@ -85,7 +88,6 @@ function BroodForm() {
         ...dog,
         birthDate: new Date(data.birthDate ?? '').toISOString(),
         status: 'Filhote',
-        coat: parseInt(dog.coatInput, 10),
       }));
       await api.post('brood', data);
       toast.success('Ninhada cadastrada');
@@ -160,7 +162,7 @@ function BroodForm() {
         .max(50, 'Muito comprido')
         .required('Campo obrigatório'),
       sex: Yup.string().oneOf(['Male', 'Female'], 'Selecione o sexo').required('Campo obrigatório'),
-      coatInput: Yup.string().required('Campo obrigatório'),
+      coat: Yup.string().required('Campo obrigatório'),
     })),
   });
 
@@ -390,31 +392,30 @@ function BroodForm() {
                           </Col>
 
                           <Col>
-                            <Form.Group className="mb-2" controlId={`children.${index}.coatInput`}>
+                            <Form.Group className="mb-2" controlId={`children.${index}.coat`}>
                               <Form.Label className="fw-bold">Pelagem</Form.Label>
                               <Form.Select
-                                name={`children.${index}.coatInput`}
+                                name={`children.${index}.coat`}
                                 disabled={!editable}
-                                value={values.children?.at(index)?.coatInput}
+                                value={values.children?.at(index)?.coat}
                                 isValid={
-                                touched.children?.at(index)?.coatInput
-                                && !(errors.children?.at(index) as any)?.coatInput
+                                touched.children?.at(index)?.coat
+                                && !(errors.children?.at(index) as any)?.coat
                               }
                                 isInvalid={
-                                touched.children?.at(index)?.coatInput !== undefined
-                                && (errors.children?.at(index) as any)?.coatInput !== undefined
+                                touched.children?.at(index)?.coat !== undefined
+                                && (errors.children?.at(index) as any)?.coat !== undefined
                               }
                                 onChange={handleChange}
                               >
-
                                 <option value="">Selecione</option>
-                                <option value="1">Preta</option>
-                                <option value="2">Amarela</option>
-                                <option value="3">Marrom</option>
-                                <option value="4">Branca</option>
+                                <option value="Preta">Preta</option>
+                                <option value="Amarela">Amarela</option>
+                                <option value="Marrom">Marrom</option>
+                                <option value="Branca">Branca</option>
                               </Form.Select>
                               <Form.Control.Feedback type="invalid">
-                                {(errors.children?.at(index) as any)?.coatInput}
+                                {(errors.children?.at(index) as any)?.coat}
                               </Form.Control.Feedback>
                             </Form.Group>
                           </Col>
@@ -480,11 +481,11 @@ function BroodForm() {
           )}
         </Formik>
 
-        {broodId && !editable ? (
-          <Row>
-            <EventList />
-          </Row>
-        ) : null}
+        {/* {broodId && !editable ? ( */}
+        {/*  <Row> */}
+        {/*    <EventList /> */}
+        {/*  </Row> */}
+        {/* ) : null} */}
       </Container>
     </div>
   );
