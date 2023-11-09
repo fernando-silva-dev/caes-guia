@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Table from 'react-bootstrap/Table';
 
 import Loader from '~/components/Loader';
@@ -6,6 +6,10 @@ import DownloadButton from '~/components/DownloadButton';
 
 import Pagination, { PaginationParams } from './Pagination';
 import './styles.css';
+import { Button, OverlayTrigger, Tooltip } from 'react-bootstrap';
+import { Paperclip } from 'react-bootstrap-icons';
+import AttachmentPreview from '~/components/AttachmentPreview';
+import { Attachment } from '~/models/Event';
 
 export interface CustomTableColumn {
   key: string;
@@ -19,6 +23,15 @@ export interface CustomTableProps extends PaginationParams {
   onRowClick: (id: string | number) => void;
   isFetching: boolean;
 }
+
+const renderTooltip = (text: string) => function (props: any) {
+  return (
+    // eslint-disable-next-line react/jsx-props-no-spreading
+    <Tooltip id="button-tooltip" {...props}>
+      {text}
+    </Tooltip>
+  );
+};
 
 export default function CustomTable({
   columns = [],
@@ -34,6 +47,8 @@ export default function CustomTable({
   const columnIndexKey = (key: string | number) => `th-${key}`;
   const rowIndexKey = (key: string | number) => `tr-${key}`;
   const cellIndexKey = (id: string | number, key: string | number) => `tr-${id}-${key}`;
+
+  const [filePreview, setFilePreview] = useState<Attachment | undefined>(undefined);
 
   const getRowValue = (row: object, key: string): string => {
     const path = key.split('.');
@@ -55,6 +70,34 @@ export default function CustomTable({
         return new Date(value).toLocaleDateString('pt-BR');
       case 'download':
         return value ? <DownloadButton data={value} /> : null;
+
+      case 'file_preview':
+        // eslint-disable-next-line no-case-declarations
+        const files = value as unknown as Attachment[];
+
+        return (
+          <>
+            {files.map((file) => (
+              <OverlayTrigger
+                placement="top"
+                delay={{ show: 250, hide: 400 }}
+                overlay={renderTooltip(file.name)}
+              >
+                <Button
+                  variant="light"
+                  type="button"
+                  className="ms-2 "
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setFilePreview(file);
+                  }}
+                >
+                  <Paperclip />
+                </Button>
+              </OverlayTrigger>
+            ))}
+          </>
+        );
       case 'string':
       default:
         return value;
@@ -108,6 +151,15 @@ export default function CustomTable({
         onSizeChange={onSizeChange}
         total={total}
       />
+
+      {filePreview && filePreview.id
+        ? (
+          <AttachmentPreview
+            attachmentUUID={filePreview.id}
+            filename={filePreview.name}
+            onClose={() => setFilePreview(undefined)}
+          />
+        ) : null}
     </>
   );
 }

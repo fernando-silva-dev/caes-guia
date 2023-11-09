@@ -1,13 +1,12 @@
 import React, { useState } from 'react';
-import { Button, Container, Image, Modal } from 'react-bootstrap';
+import { Button, Image, Modal } from 'react-bootstrap';
 import { Document, Page } from 'react-pdf';
 import type { PDFDocumentProxy } from 'pdfjs-dist';
 import 'react-pdf/dist/esm/Page/AnnotationLayer.css';
 import 'react-pdf/dist/esm/Page/TextLayer.css';
 
 import './styles.css';
-import { Download, Plus, XLg } from 'react-bootstrap-icons';
-import Logo from '~/assets/helen-keller-logo.png';
+import { Download, XLg } from 'react-bootstrap-icons';
 
 // pdfjs.GlobalWorkerOptions.workerSrc = new URL(
 //   'pdfjs-dist/build/pdf.worker.min.js',
@@ -33,32 +32,29 @@ function downloadURI(uri: string, name: string) {
 interface AttachmentPreviewProps {
   attachmentUUID: string
   filename: string
-  type: string
+  onClose: () => void
 }
 
 export default function AttachmentPreview({
   attachmentUUID,
   filename,
-  type,
+  onClose,
 }: AttachmentPreviewProps) {
   const file = `http://localhost:5000/attachment/${attachmentUUID}`;
   const [numPages, setNumPages] = useState<number>();
   const [show, setShow] = useState(true);
 
-  const handleClose = () => setShow(false);
-  // const handleShow = () => setShow(true);
-
-  // function onFileChange(event: React.ChangeEvent<HTMLInputElement>): void {
-  //   const { files } = event.target;
-  //
-  //   if (files && files[0]) {
-  //     setFile(files[0] || null);
-  //   }
-  // }
+  const handleClose = () => {
+    setShow(false);
+    onClose();
+  };
 
   function onDocumentLoadSuccess({ numPages: nextNumPages }: PDFDocumentProxy): void {
     setNumPages(nextNumPages);
   }
+
+  const isPDF = (n: string) => n?.endsWith('.pdf');
+  const isImage = (n: string) => n?.endsWith('.png') || n?.endsWith('.jpg') || n?.endsWith('.jpeg') || n?.endsWith('.svg') || n?.endsWith('.gif');
 
   return (
     <Modal size="lg" show={show} onHide={handleClose} className="attachment_preview_modal">
@@ -66,7 +62,7 @@ export default function AttachmentPreview({
         <header>
           <div>
             <h1 className="d-inline-block p-3">{filename}</h1>
-            <Button className="float-end m-2 border-0" variant="outline-light" onClick={() => setShow(false)}>
+            <Button className="float-end m-2 border-0" variant="outline-light" onClick={handleClose}>
               <XLg />
             </Button>
             <Button className="float-end m-2" variant="outline-light" onClick={() => downloadURI(file, filename)}>
@@ -76,8 +72,8 @@ export default function AttachmentPreview({
         </header>
         <div className="attachment_preview_container">
           <div className="attachment_preview_container_document">
-            {type?.includes('pdf')
-              ? (
+            {
+              isPDF(filename) ? (
                 <Document
                   file={file}
                   onLoadSuccess={(doc) => onDocumentLoadSuccess(doc)}
@@ -87,8 +83,10 @@ export default function AttachmentPreview({
                     <Page key={`page_${index + 1}`} pageNumber={index + 1} />
                   ))}
                 </Document>
-              )
-              : <Image className="d-block mx-auto mb-4" src={file} />}
+              ) : null
+            }
+            {isImage(filename) ? <Image className="d-block mx-auto mb-4 mw-100" src={file} /> : null}
+            {isPDF(filename) || isImage(filename) ? null : <h4 className="text-center w-100">Pré-vizualização não é possível</h4>}
           </div>
         </div>
       </div>
