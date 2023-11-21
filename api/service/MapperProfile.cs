@@ -27,7 +27,7 @@ public class MapperProfile : Profile
 
         CreateMap<Event, EventViewModel>();
         CreateMap<EventInsertModel, Event>()
-            .ConstructUsing(x => new Event(x.Description, x.Date, x.DogId));
+            .ConstructUsing(x => new Event(x.Description, x.Observations, x.Date, x.DogId));
 
         CreateMap<Attachment, AttachmentViewModel>();
         CreateMap<AttachmentInsertionModel, Attachment>()

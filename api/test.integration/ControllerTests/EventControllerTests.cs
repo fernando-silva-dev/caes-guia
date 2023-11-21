@@ -14,15 +14,15 @@ public class EventControllerTests : BaseTests
     public EventControllerTests()
     {
         var context = Context;
-        // TODO
         Dog dog = new("dog name 1", DateTime.Today, Coat.Preta, Status.Filhote, Sex.Male, null);
         var dogId = context.Add(dog).Entity.Id;
 
-        Event = new("description 1", DateTime.MaxValue, dogId);
+        Event = new("description 1", "observations 1", DateTime.MaxValue, dogId);
         InsertionModel = new EventInsertModel()
         {
             Date = DateTime.Today,
             Description = "description 2",
+            Observations = "observations 2",
             DogId = dogId,
         };
 

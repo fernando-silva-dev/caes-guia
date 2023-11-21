@@ -121,6 +121,9 @@ namespace repository.Migrations
                     b.Property<Guid>("DogId")
                         .HasColumnType("uuid");
 
+                    b.Property<string>("Observations")
+                        .HasColumnType("text");
+
                     b.HasKey("Id");
 
                     b.HasIndex("DogId");
