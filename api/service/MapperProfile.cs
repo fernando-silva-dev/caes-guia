@@ -45,6 +45,7 @@ public class MapperProfile : Profile
         CreateMap<BroodEventInsertionModel, BroodEvent>();
         
         CreateMap<BroodEventTemplate, BroodEventTemplateViewModel>();
+        // OBS.: não seria usado a princípio
         CreateMap<BroodEventTemplateInsertionModel, BroodEventTemplate>()
             .ConstructUsing(m => new BroodEventTemplate(m.RecurrenceRule, m.Description));
     }
