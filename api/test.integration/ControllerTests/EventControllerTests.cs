@@ -17,7 +17,7 @@ public class EventControllerTests : BaseTests
         Dog dog = new("dog name 1", DateTime.Today, Coat.Preta, Status.Filhote, Sex.Male, null);
         var dogId = context.Add(dog).Entity.Id;
 
-        Event = new("description 1", "observations 1", DateTime.MaxValue, dogId);
+        Event = new("description 1", "observations 1", DateTime.MaxValue, dogId, null);
         InsertionModel = new EventInsertModel()
         {
             Date = DateTime.Today,

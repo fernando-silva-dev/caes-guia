@@ -1,5 +1,7 @@
 using Service.Models.Attachment;
 using Service.Models.Brood;
+using Service.Models.BroodEvent;
+using Service.Models.BroodEventTemplate;
 using Service.Models.Dog;
 using Service.Models.Event;
 using Service.Models.User;
@@ -27,7 +29,7 @@ public class MapperProfile : Profile
 
         CreateMap<Event, EventViewModel>();
         CreateMap<EventInsertModel, Event>()
-            .ConstructUsing(x => new Event(x.Description, x.Observations, x.Date, x.DogId));
+            .ConstructUsing(x => new Event(x.Description, x.Observations, x.Date, x.DogId, x.BroodEventId));
 
         CreateMap<Attachment, AttachmentViewModel>();
         CreateMap<AttachmentInsertionModel, Attachment>()
@@ -38,5 +40,12 @@ public class MapperProfile : Profile
         CreateMap<Brood, BroodViewModel>();
         CreateMap<BroodInsertionModel, Brood>()
             .ConstructUsing(m => new Brood(m.Description, m.MotherId, m.FatherId));
+
+        CreateMap<BroodEvent, BroodEventViewModel>();
+        CreateMap<BroodEventInsertionModel, BroodEvent>();
+        
+        CreateMap<BroodEventTemplate, BroodEventTemplateViewModel>();
+        CreateMap<BroodEventTemplateInsertionModel, BroodEventTemplate>()
+            .ConstructUsing(m => new BroodEventTemplate(m.RecurrenceRule, m.Description));
     }
 }
