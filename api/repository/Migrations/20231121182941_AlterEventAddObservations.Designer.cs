@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Repository;
@@ -11,9 +12,11 @@ using Repository;
 namespace repository.Migrations
 {
     [DbContext(typeof(Context))]
-    partial class ContextModelSnapshot : ModelSnapshot
+    [Migration("20231121182941_AlterEventAddObservations")]
+    partial class AlterEventAddObservations
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -72,44 +75,6 @@ namespace repository.Migrations
                     b.ToTable("Broods");
                 });
 
-            modelBuilder.Entity("Domain.Entities.BroodEvent", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid>("BroodEventTemplateId")
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid>("BroodId")
-                        .HasColumnType("uuid");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("BroodEventTemplateId");
-
-                    b.HasIndex("BroodId");
-
-                    b.ToTable("BroodEvents");
-                });
-
-            modelBuilder.Entity("Domain.Entities.BroodEventTemplate", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("Description")
-                        .HasColumnType("text");
-
-                    b.Property<string>("RecurrenceRule")
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("BroodEventTemplates");
-                });
-
             modelBuilder.Entity("Domain.Entities.Dog", b =>
                 {
                     b.Property<Guid>("Id")
@@ -149,12 +114,6 @@ namespace repository.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<Guid?>("BroodEventId")
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid?>("BroodEventId1")
-                        .HasColumnType("uuid");
-
                     b.Property<DateTime>("Date")
                         .HasColumnType("timestamp with time zone");
 
@@ -169,10 +128,6 @@ namespace repository.Migrations
                         .HasColumnType("text");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("BroodEventId");
-
-                    b.HasIndex("BroodEventId1");
 
                     b.HasIndex("DogId");
 
@@ -253,25 +208,6 @@ namespace repository.Migrations
                     b.Navigation("Mother");
                 });
 
-            modelBuilder.Entity("Domain.Entities.BroodEvent", b =>
-                {
-                    b.HasOne("Domain.Entities.BroodEventTemplate", "BroodEventTemplate")
-                        .WithMany()
-                        .HasForeignKey("BroodEventTemplateId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Domain.Entities.Brood", "Brood")
-                        .WithMany()
-                        .HasForeignKey("BroodId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Brood");
-
-                    b.Navigation("BroodEventTemplate");
-                });
-
             modelBuilder.Entity("Domain.Entities.Dog", b =>
                 {
                     b.HasOne("Domain.Entities.Brood", "Brood")
@@ -283,21 +219,11 @@ namespace repository.Migrations
 
             modelBuilder.Entity("Domain.Entities.Event", b =>
                 {
-                    b.HasOne("Domain.Entities.BroodEvent", "BroodEvent")
-                        .WithMany()
-                        .HasForeignKey("BroodEventId");
-
-                    b.HasOne("Domain.Entities.BroodEvent", null)
-                        .WithMany("Events")
-                        .HasForeignKey("BroodEventId1");
-
                     b.HasOne("Domain.Entities.Dog", null)
                         .WithMany("Events")
                         .HasForeignKey("DogId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("BroodEvent");
                 });
 
             modelBuilder.Entity("Domain.Entities.Responsability", b =>
@@ -357,11 +283,6 @@ namespace repository.Migrations
             modelBuilder.Entity("Domain.Entities.Brood", b =>
                 {
                     b.Navigation("Children");
-                });
-
-            modelBuilder.Entity("Domain.Entities.BroodEvent", b =>
-                {
-                    b.Navigation("Events");
                 });
 
             modelBuilder.Entity("Domain.Entities.Dog", b =>

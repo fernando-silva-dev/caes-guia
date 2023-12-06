@@ -4,6 +4,7 @@ public class EventViewModel : BaseViewModel
 {
     public string Description { get; set; }
     public DateTime Date { get; set; }
+    public string Observations { get; set; }
     public IEnumerable<AttachmentModel> Attachments { get; set; }
     public Guid DogId { get; set; }
 }
