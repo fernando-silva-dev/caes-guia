@@ -21,6 +21,6 @@ jobs:
     - name: Build and push
       uses: docker/build-push-action@v5
       with:
-        context: ./api
+        context: {{defaultContext}}:api
         push: true
         tags: ${{ secrets.DOCKERHUB_USERNAME }}/caes-guia-backend:${{github.ref_name}}
