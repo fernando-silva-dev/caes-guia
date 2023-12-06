@@ -17,10 +17,19 @@ jobs:
       with:
         username: ${{ secrets.DOCKERHUB_USERNAME }}
         password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+    - name: Checkout
+      uses: actions/checkout@v3
+  
+    - name: Set up QEMU
+      uses: docker/setup-qemu-action@v3
+  
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3
         
     - name: Build and push
       uses: docker/build-push-action@v5
       with:
-        context: ./web
+        context: "{{defaultContext}}:web"
         push: true
         tags: ${{ secrets.DOCKERHUB_USERNAME }}/caes-guia-frontend:${{github.ref_name}}
