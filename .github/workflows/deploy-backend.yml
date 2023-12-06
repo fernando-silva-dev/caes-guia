@@ -1,4 +1,4 @@
-name: Update docker registry
+name: Update backend docker registry
 
 on:
   push:
