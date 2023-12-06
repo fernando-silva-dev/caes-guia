@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import Table from 'react-bootstrap/Table';
 
-import Loader from '~/components/Loader';
 import DownloadButton from '~/components/DownloadButton';
 
 import Pagination, { PaginationParams } from './Pagination';
 import './styles.css';
 import { Button, OverlayTrigger, Tooltip } from 'react-bootstrap';
+import Loader from '~/components/Loader';
 import { Paperclip } from 'react-bootstrap-icons';
 import AttachmentPreview from '~/components/AttachmentPreview';
 import { Attachment } from '~/models/Event';
@@ -54,7 +54,7 @@ export default function CustomTable({
     const path = key.split('.');
 
     let res: Object | string = row;
-    for (let i = 0; i < path.length; i++) {
+    for (let i = 0; i < path.length; i += 1) {
       // @ts-ignore
       res = res[path[i]] as any;
     }
@@ -127,7 +127,7 @@ export default function CustomTable({
                 ))}
               </tr>
             ))
-          ) : null }
+          ) : null}
 
           {!isFetching && data.length === 0 ? (
             <td className="text-center p-4 border-bottom" colSpan={columns.length}>

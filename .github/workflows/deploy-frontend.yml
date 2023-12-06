@@ -24,8 +24,8 @@ jobs:
     - uses: actions/checkout@v3
     - name: Build the Docker image
       working-directory: ./web
-      run: docker build . --file Dockerfile --tag caes-guia-frontend:${{github.ref_name}}
+      run: docker build . --file Dockerfile --tag fernandoss/caes-guia-frontend:${{github.ref_name}}
 
     - uses: actions/checkout@v3
     - name: Push the docker image
-      run: docker push caes-guia-frontend:${{github.ref_name}}
+      run: docker push fernandoss/caes-guia-frontend:${{github.ref_name}}
