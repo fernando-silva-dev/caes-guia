@@ -494,7 +494,7 @@ function BroodForm() {
             id="brood-tabs"
             className="mb-3"
           >
-            <Tab eventKey="history" title="Eventos da Ninhada">
+            <Tab eventKey="events" title="Eventos da Ninhada">
               <Row>
                 <BroodEventList brood={brood} />
               </Row>

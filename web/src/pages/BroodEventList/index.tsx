@@ -46,24 +46,25 @@ export default function BroodEventList(props: BroodEventListProps) {
           12,
           undefined,
         );
-
-        console.log(dates, brood.birthDate);
         if (!dates) {
           return undefined;
         }
 
-        const startDate = new Date(dates[0]);
-        startDate.setHours(0, 0, 0);
+        return dates.map((date) => {
+          const startDate = new Date(date);
+          startDate.setHours(0, 0, 0);
 
-        const endDate = new Date(dates[0]);
-        endDate.setHours(0, 0, 0);
-        return {
-          Id: id,
-          Subject: description,
-          StartTime: startDate,
-          EndTime: endDate,
-        };
-      }).filter((value) => value !== undefined);
+          const endDate = new Date(date);
+          endDate.setHours(0, 0, 0);
+
+          return {
+            Id: id,
+            Subject: description,
+            StartTime: startDate,
+            EndTime: endDate,
+          };
+        });
+      }).flat().filter((value) => value !== undefined);
     console.log(values);
     return setDataSource(values);
   }, [broodEventTemplates]);
@@ -89,7 +90,7 @@ export default function BroodEventList(props: BroodEventListProps) {
   return (
     <Container>
       <div>
-        <h4 className="d-inline-block">Eventos de Ninhada</h4>
+        {/* <h4 className="d-inline-block">Eventos de Ninhada</h4> */}
       </div>
 
       <ScheduleComponent
