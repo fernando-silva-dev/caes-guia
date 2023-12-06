@@ -62,9 +62,8 @@ export default function EventList() {
   return (
     <Container>
       <div>
-        <h4 className="d-inline-block">Eventos</h4>
         <Button
-          className="float-end"
+          className="float-start"
           onClick={() => {
             navigate(`/dog/${dogId}/event/new`);
           }}

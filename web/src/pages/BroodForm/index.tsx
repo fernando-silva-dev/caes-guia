@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Button, Form, Container, Row, Col, Spinner } from 'react-bootstrap';
+import { Button, Form, Container, Row, Col, Spinner, Tabs, Tab } from 'react-bootstrap';
 import { useNavigate, useParams } from 'react-router-dom';
 import { FieldArray, Formik } from 'formik';
 import * as Yup from 'yup';
@@ -7,7 +7,7 @@ import { toast } from 'react-toastify';
 
 import { Plus, Trash } from 'react-bootstrap-icons';
 import { Brood, BroodDog } from '~/models/Brood';
-import EventList from '~/pages/EventList';
+import BroodEventList from '~/pages/BroodEventList';
 import api from '~/services/api';
 
 import './styles.css';
@@ -421,29 +421,36 @@ function BroodForm() {
                           </Col>
                           <Col xs={1} lg={1} md={1} sm={2}>
                             <Form.Label className="fw-bold">&nbsp;</Form.Label>
-                            <Button
-                              variant="danger"
-                              className="w-100"
-                              type="button"
-                              onClick={() => remove(index)}
-                            >
-                              <Trash />
-                            </Button>
+
+                            {editable
+                              ? (
+                                <Button
+                                  variant="danger"
+                                  className="w-100"
+                                  type="button"
+                                  onClick={() => remove(index)}
+                                >
+                                  <Trash />
+                                </Button>
+                              ) : null}
                           </Col>
                         </Row>
                       ))}
-                      <Row>
-                        <Col xs={1} lg={1} md={1} sm={2} className="ms-auto">
-                          <Button
-                            variant="success"
-                            type="button"
-                            className="w-100 "
-                            onClick={() => push({ name: '', sex: '', color: '' })}
-                          >
-                            <Plus />
-                          </Button>
-                        </Col>
-                      </Row>
+                      {editable
+                        ? (
+                          <Row>
+                            <Col xs={1} lg={1} md={1} sm={2} className="ms-auto">
+                              <Button
+                                variant="success"
+                                type="button"
+                                className="w-100 "
+                                onClick={() => push({ name: '', sex: '', color: '' })}
+                              >
+                                <Plus />
+                              </Button>
+                            </Col>
+                          </Row>
+                        ) : null}
                     </>
                   )}
                 </FieldArray>
@@ -481,11 +488,19 @@ function BroodForm() {
           )}
         </Formik>
 
-        {/* {broodId && !editable ? ( */}
-        {/*  <Row> */}
-        {/*    <EventList /> */}
-        {/*  </Row> */}
-        {/* ) : null} */}
+        {broodId && !editable ? (
+          <Tabs
+            defaultActiveKey="events"
+            id="brood-tabs"
+            className="mb-3"
+          >
+            <Tab eventKey="history" title="Eventos da Ninhada">
+              <Row>
+                <BroodEventList brood={brood} />
+              </Row>
+            </Tab>
+          </Tabs>
+        ) : null}
       </Container>
     </div>
   );

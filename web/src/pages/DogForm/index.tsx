@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Button, Form, Container, Row, Col, Spinner } from 'react-bootstrap';
+import { Button, Form, Container, Row, Col, Spinner, Tabs, Tab } from 'react-bootstrap';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
@@ -432,9 +432,17 @@ function DogForm() {
         </Formik>
 
         {dogId && !editable ? (
-          <Row>
-            <EventList />
-          </Row>
+          <Tabs
+            defaultActiveKey="history"
+            id="dogs-tabs"
+            className="mb-3"
+          >
+            <Tab eventKey="history" title="Histórico">
+              <Row>
+                <EventList />
+              </Row>
+            </Tab>
+          </Tabs>
         ) : null}
       </Container>
     </div>
