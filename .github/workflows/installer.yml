@@ -22,19 +22,19 @@ jobs:
     - name: Build
       run: dotnet publish -c Release -r win-x64
       working-directory: ./installer
-
-  - name: Install zip
-    uses: montudor/action-zip@v1
-
-  - name: Zip output
-    run: zip -qq -r windows-x64.zip -d /home/runner/work/caes-guia/caes-guia/installer/bin/Release/net7.0/win-x64/
-
-  - name: upload windows artifact
-    uses: actions/upload-release-asset@v1
-    env:
-      GITHUB_TOKEN: ${{ github.token }}
-    with:
-      upload_url: ${{ steps.create_release.outputs.upload_url }}
-      asset_path: windows-x64.zip
-      asset_name: installer.windows-x64.zip
-      asset_content_type: application/zip
+  
+    - name: Install zip
+      uses: montudor/action-zip@v1
+  
+    - name: Zip output
+      run: zip -qq -r windows-x64.zip -d /home/runner/work/caes-guia/caes-guia/installer/bin/Release/net7.0/win-x64/
+  
+    - name: upload windows artifact
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ github.token }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: windows-x64.zip
+        asset_name: installer.windows-x64.zip
+        asset_content_type: application/zip
