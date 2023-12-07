@@ -1,0 +1,15 @@
+F:\projects\caes-guia\installer\bin\Debug\net7.0\installer.exe
+F:\projects\caes-guia\installer\bin\Debug\net7.0\installer.deps.json
+F:\projects\caes-guia\installer\bin\Debug\net7.0\installer.runtimeconfig.json
+F:\projects\caes-guia\installer\bin\Debug\net7.0\installer.dll
+F:\projects\caes-guia\installer\bin\Debug\net7.0\installer.pdb
+F:\projects\caes-guia\installer\obj\Debug\net7.0\installer.csproj.AssemblyReference.cache
+F:\projects\caes-guia\installer\obj\Debug\net7.0\installer.GeneratedMSBuildEditorConfig.editorconfig
+F:\projects\caes-guia\installer\obj\Debug\net7.0\installer.AssemblyInfoInputs.cache
+F:\projects\caes-guia\installer\obj\Debug\net7.0\installer.AssemblyInfo.cs
+F:\projects\caes-guia\installer\obj\Debug\net7.0\installer.csproj.CoreCompileInputs.cache
+F:\projects\caes-guia\installer\obj\Debug\net7.0\installer.dll
+F:\projects\caes-guia\installer\obj\Debug\net7.0\refint\installer.dll
+F:\projects\caes-guia\installer\obj\Debug\net7.0\installer.pdb
+F:\projects\caes-guia\installer\obj\Debug\net7.0\installer.genruntimeconfig.cache
+F:\projects\caes-guia\installer\obj\Debug\net7.0\ref\installer.dll
