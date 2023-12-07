@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics;
 
-Process cmd = new Process();
+Process cmd = new();
 cmd.StartInfo.FileName = "cmd.exe";
 cmd.StartInfo.RedirectStandardInput = true;
 cmd.StartInfo.RedirectStandardOutput = true;
