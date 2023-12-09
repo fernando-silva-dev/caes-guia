@@ -39,7 +39,7 @@ export default function BroodEventList(props: BroodEventListProps) {
     const values: CalendarBook[] = broodEventTemplates
       .map(({ id, recurrenceRule, description }) => {
         const dates = recObject?.current?.getRecurrenceDates(
-        // @ts-ignore
+          // @ts-ignore
           new Date(),
           recurrenceRule,
           undefined,
@@ -65,7 +65,7 @@ export default function BroodEventList(props: BroodEventListProps) {
           };
         });
       }).flat().filter((value) => value !== undefined);
-    console.log(values);
+    // console.log(values);
     return setDataSource(values);
   }, [broodEventTemplates]);
 
@@ -99,11 +99,12 @@ export default function BroodEventList(props: BroodEventListProps) {
         height="550px"
         selectedDate={new Date()}
         eventSettings={{ dataSource }}
-        eventClick={async ({ event }:{ event: CalendarBook }) => {
+        eventClick={async ({ event }: { event: CalendarBook }) => {
           await api.post('BroodEvent', {
             date: new Date().toISOString(),
             broodId: brood.id,
-            broodEventTemplateId: event.Id });
+            broodEventTemplateId: event.Id,
+          });
 
           toast.success('Evento gerado com sucesso!');
         }}

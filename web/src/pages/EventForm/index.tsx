@@ -46,7 +46,7 @@ function EventForm() {
       setEvent(ev);
     } catch (error) {
       toast.error('Erro ao buscar evento');
-      console.error(error);
+      // console.error(error);
     } finally {
       setIsFetching(false);
     }
@@ -86,7 +86,7 @@ function EventForm() {
       setEditable(false);
     } catch (error) {
       toast.error('Erro ao atualizar evento');
-      console.error(error);
+      // console.error(error);
     } finally {
       setIsFetching(false);
     }
@@ -112,7 +112,7 @@ function EventForm() {
       navigate(`/dog/${dogId}`);
     } catch (error) {
       toast.error('Erro ao cadastar evento');
-      console.error(error);
+      // console.error(error);
     } finally {
       setIsFetching(false);
     }
@@ -126,7 +126,7 @@ function EventForm() {
       navigate(`/dog/${dogId}`);
     } catch (error) {
       toast.error('Erro ao remove cão');
-      console.error(error);
+      // console.error(error);
     } finally {
       setIsFetching(false);
     }
@@ -297,7 +297,7 @@ function EventForm() {
                                   </td>
                                 </tr>
                               )))}
-                              { editable ? files?.map((file, index) => (
+                              {editable ? files?.map((file, index) => (
                                 <tr key={`attachmentFiles.${file.name}`}>
                                   <td>{file.name}</td>
                                   <td>{Humanize.fileSize(file.size)}</td>

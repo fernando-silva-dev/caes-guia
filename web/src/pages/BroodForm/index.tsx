@@ -47,7 +47,7 @@ function BroodForm() {
       setBrood(broodSerialized);
     } catch (error) {
       toast.error('Erro ao buscar ninhada');
-      console.error(error);
+      // console.error(error);
     } finally {
       setIsFetching(false);
     }
@@ -71,7 +71,7 @@ function BroodForm() {
       setEditable(false);
     } catch (error) {
       toast.error('Erro ao atualizar ninhada');
-      console.error(error);
+      // console.error(error);
     } finally {
       setIsFetching(false);
     }
@@ -94,7 +94,7 @@ function BroodForm() {
       navigate('/brood');
     } catch (error) {
       toast.error('Erro ao cadastras ninhada');
-      console.error(error);
+      // console.error(error);
     } finally {
       setIsFetching(false);
     }
@@ -108,7 +108,7 @@ function BroodForm() {
       navigate('/dog');
     } catch (error) {
       toast.error('Erro ao remover ninhada');
-      console.error(error);
+      // console.error(error);
     } finally {
       setIsFetching(false);
     }
@@ -121,7 +121,7 @@ function BroodForm() {
       setMaleDogs(response.data.data);
     } catch (error) {
       toast.error('Erro ao buscar o cães machos');
-      console.error(error);
+      // console.error(error);
     } finally {
       setIsFetching(false);
     }
@@ -134,7 +134,7 @@ function BroodForm() {
       setFemaleDogs(response.data.data);
     } catch (error) {
       toast.error('Erro ao buscar o cães fêmeas');
-      console.error(error);
+      // console.error(error);
     } finally {
       setIsFetching(false);
     }

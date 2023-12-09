@@ -50,7 +50,7 @@ function DogForm() {
       setDog(doggo);
     } catch (error) {
       toast.error('Erro ao buscar o cães');
-      console.error(error);
+      // console.error(error);
     } finally {
       setIsFetching(false);
     }
@@ -63,7 +63,7 @@ function DogForm() {
       setTutores(response.data.data);
     } catch (error) {
       toast.error('Erro ao buscar o cães');
-      console.error(error);
+      // console.error(error);
     } finally {
       setIsFetching(false);
     }
@@ -82,7 +82,7 @@ function DogForm() {
       setEditable(false);
     } catch (error) {
       toast.error('Erro ao atualizar cão');
-      console.error(error);
+      // console.error(error);
     } finally {
       setIsFetching(false);
     }
@@ -101,7 +101,7 @@ function DogForm() {
       navigate('/dog');
     } catch (error) {
       toast.error('Erro ao cadastar cão');
-      console.error(error);
+      // console.error(error);
     } finally {
       setIsFetching(false);
     }
@@ -115,7 +115,7 @@ function DogForm() {
       navigate('/dog');
     } catch (error) {
       toast.error('Erro ao remove cão');
-      console.error(error);
+      // console.error(error);
     } finally {
       setIsFetching(false);
     }

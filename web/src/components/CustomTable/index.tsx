@@ -23,7 +23,7 @@ export interface CustomTableProps extends PaginationParams {
   onRowClick: (id: string | number) => void;
   isFetching: boolean;
 }
-
+// eslint-disable-next-line func-names
 const renderTooltip = (text: string) => function (props: any) {
   return (
     // eslint-disable-next-line react/jsx-props-no-spreading
