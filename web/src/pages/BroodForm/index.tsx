@@ -338,7 +338,8 @@ function BroodForm() {
                 <FieldArray name="children">
                   {({ remove, push }) => (
                     <>
-                      { values.children?.map((_, index) => (
+                      {values.children?.map((_, index) => (
+                        // eslint-disable-next-line react/no-array-index-key
                         <Row key={`children${index}`}>
                           <Col>
                             <Form.Group className="mb-2" controlId={`children.${index}.name`}>
@@ -349,13 +350,13 @@ function BroodForm() {
                                 plaintext={!editable}
                                 value={values.children[index].name}
                                 isValid={
-                                touched.children?.at(index)?.name
-                                && !(errors.children?.at(index) as any)?.name
-                              }
+                                  touched.children?.at(index)?.name
+                                  && !(errors.children?.at(index) as any)?.name
+                                }
                                 isInvalid={
-                                touched.children?.at(index)?.name !== undefined
-                                && (errors.children?.at(index) as any)?.name !== undefined
-                              }
+                                  touched.children?.at(index)?.name !== undefined
+                                  && (errors.children?.at(index) as any)?.name !== undefined
+                                }
                                 onChange={handleChange}
                               />
                               <Form.Control.Feedback type="invalid">
@@ -373,13 +374,13 @@ function BroodForm() {
                                 value={values.children[index].sex}
                                 onChange={handleChange}
                                 isValid={
-                                touched.children?.at(index)?.sex
-                                && !(errors.children?.at(index) as any)?.sex
-                              }
+                                  touched.children?.at(index)?.sex
+                                  && !(errors.children?.at(index) as any)?.sex
+                                }
                                 isInvalid={
-                                touched.children?.at(index)?.sex !== undefined
-                                && (errors.children?.at(index) as any)?.sex !== undefined
-                              }
+                                  touched.children?.at(index)?.sex !== undefined
+                                  && (errors.children?.at(index) as any)?.sex !== undefined
+                                }
                               >
                                 <option value="">Selecione</option>
                                 <option value="Male">Macho</option>
@@ -399,13 +400,13 @@ function BroodForm() {
                                 disabled={!editable}
                                 value={values.children?.at(index)?.coat}
                                 isValid={
-                                touched.children?.at(index)?.coat
-                                && !(errors.children?.at(index) as any)?.coat
-                              }
+                                  touched.children?.at(index)?.coat
+                                  && !(errors.children?.at(index) as any)?.coat
+                                }
                                 isInvalid={
-                                touched.children?.at(index)?.coat !== undefined
-                                && (errors.children?.at(index) as any)?.coat !== undefined
-                              }
+                                  touched.children?.at(index)?.coat !== undefined
+                                  && (errors.children?.at(index) as any)?.coat !== undefined
+                                }
                                 onChange={handleChange}
                               >
                                 <option value="">Selecione</option>

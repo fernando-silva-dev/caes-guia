@@ -26,7 +26,7 @@ interface CalendarBook {
 export default function BroodEventList(props: BroodEventListProps) {
   const { brood } = props;
 
-  const [isFetching, setIsFetching] = useState<boolean>(true);
+  const [, setIsFetching] = useState<boolean>(true);
   const [broodEventTemplates, setBroodEventTemplates] = useState<BroodEventTemplate[]>([]);
 
   const scheduleObj = useRef<ScheduleComponent>(null);

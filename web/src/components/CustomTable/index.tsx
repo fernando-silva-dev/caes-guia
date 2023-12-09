@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import Table from 'react-bootstrap/Table';
+import { Button, OverlayTrigger, Tooltip } from 'react-bootstrap';
+import { Paperclip } from 'react-bootstrap-icons';
 
 import DownloadButton from '~/components/DownloadButton';
 
 import Pagination, { PaginationParams } from './Pagination';
 import './styles.css';
-import { Button, OverlayTrigger, Tooltip } from 'react-bootstrap';
 import Loader from '~/components/Loader';
-import { Paperclip } from 'react-bootstrap-icons';
 import AttachmentPreview from '~/components/AttachmentPreview';
 import { Attachment } from '~/models/Event';
 
